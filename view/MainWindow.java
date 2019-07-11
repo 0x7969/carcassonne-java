@@ -145,11 +145,12 @@ public class MainWindow extends JFrame {
 
 		gameboardPanel.addMouseListener(new MouseAdapter() {
 			public void mouseClicked(MouseEvent event) {
+				// TODO ist die direkte referenz auf gameboardPanel innerhalb des controllers eigentlich erlaubt?
 				Tile tile = gameboardPanel.findTileAt(event.getPoint());
 				if (tile != null) {
 					if (SwingUtilities.isLeftMouseButton(event)) {
 						if (tile.getID() == "FLIPSIDE") {
-							gameboard.newTile(tilestack.pop().getType(), tile.getGridX(), tile.getGridY());
+							gameboard.newTile(tilestack.pop().getType(), gameboardPanel.getGridX(tile), gameboardPanel.getGridY(tile));
 							repaint(); // !
 						}
 					} else if ((SwingUtilities.isRightMouseButton(event))) {

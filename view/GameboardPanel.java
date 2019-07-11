@@ -75,6 +75,14 @@ public class GameboardPanel extends JPanel implements GameboardObserver {
 		return false;
 	}
 
+	int getGridX(Tile t) {
+		return gbl.getConstraints(t).gridx;
+	}
+
+	int getGridY(Tile t) {
+		return gbl.getConstraints(t).gridy;
+	}
+
 	public void tilePlaced(Tile tile) {
 		int x = gbl.getConstraints(tile).gridx;
 		int y = gbl.getConstraints(tile).gridy;
@@ -114,7 +122,8 @@ public class GameboardPanel extends JPanel implements GameboardObserver {
 		Component c = findComponentAt(p);
 		if (c instanceof Tile)
 			return (Tile) c;
-		else return null;
+		else
+			return null;
 	}
 
 	@Override

@@ -100,14 +100,5 @@ public class Tile extends JLabel {
 	public void setRotation(int rotation) {
 		this.rotation = rotation;
 	}
-	
-	public int getGridX() {
-		System.out.println("X: " + getX());
-		return ((getX() + 50) / size);
-	}
-	
-	public int getGridY() {
-		System.out.println("Y: " + getY());
-		return ((getY() + 50) / size);
-	}
+
 }
