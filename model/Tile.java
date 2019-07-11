@@ -15,28 +15,28 @@ public class Tile {
 	private final boolean coatOfArms;
 	private int rotation;
 
-	public Tile(String id) {
-		this.type = id;
+	public Tile(String type) {
+		this.type = type;
 		nodes = new ArrayList<FeatureNode>();
-        edges = new LinkedList<Edge>();
-        coatOfArms = false;
+		edges = new LinkedList<Edge>();
+		coatOfArms = false;
 	}
-	
+
 	public Tile(String id, boolean coatOfArms) {
 		this.type = id;
 		nodes = new ArrayList<FeatureNode>();
-        edges = new LinkedList<Edge>();
-        this.coatOfArms = coatOfArms;
+		edges = new LinkedList<Edge>();
+		this.coatOfArms = coatOfArms;
 	}
-	
+
 	public String getType() {
 		return type;
 	}
-	
+
 	public boolean addNode(FeatureNode node) {
 		return nodes.add(node);
 	}
-	
+
 	public boolean addEdge(Edge edge) {
 		return edges.add(edge);
 	}
@@ -51,10 +51,10 @@ public class Tile {
 	}
 
 	public FeatureType featureAtPositionComingFromDirection(Position p, Direction d) {
-		return nodes.stream().filter(n -> n.getPosition() == p && n.getDirection() == d).findFirst()
-				.orElse(null).getType();
+		return nodes.stream().filter(n -> n.getPosition() == p && n.getDirection() == d).findFirst().orElse(null)
+				.getType();
 	}
-	
+
 	public void rotate() {
 		rotation += 90;
 	}

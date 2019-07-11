@@ -43,6 +43,8 @@ public class TileStack implements Observable<TileStack> {
 
 	public void rotateTile() {
 		cardstack.get(0).rotate();
+		for (Observer<TileStack> o : observers)
+			o.update(this);
 	}
 
 	@Override

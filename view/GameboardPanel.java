@@ -40,6 +40,16 @@ public class GameboardPanel extends JPanel implements GameboardObserver {
 //			}
 //		}
 //	}
+	
+	public Tile newTemporaryTile(String id, int x, int y) {
+		// TODO Check if there already is a tile on x, y
+		Tile tile = new Tile(id, zoom);
+		gbc.gridx = x;
+		gbc.gridy = y;
+		add(tile, gbc);
+		repaint(); // nsin
+		return tile;
+	}
 
 	public void newTile(String id, int x, int y) {
 		// TODO Check if there already is a tile on x, y
@@ -101,9 +111,6 @@ public class GameboardPanel extends JPanel implements GameboardObserver {
 		if (!hasTile(gbc.gridx, gbc.gridy))
 			add(new Tile("FLIPSIDE", zoom), gbc);
 		repaint(); // not sure if necessary
-		System.out.println("X: " + tile.getX());
-		System.out.println("Y: " + tile.getY());
-		System.out.println(getBounds());
 	}
 
 	public void setTileID(String id, int x, int y) {

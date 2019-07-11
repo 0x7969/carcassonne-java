@@ -32,7 +32,7 @@ public class MainWindow extends JFrame {
 		toolbarPanel.addToolbarActionListener((event) -> {
 			switch (event.getActionCommand()) {
 			case "New tile":
-				gameboard.newTile("FLIPSIDE", toolbarPanel.getXValue(), toolbarPanel.getYValue());
+				gameboardPanel.newTemporaryTile("B", toolbarPanel.getXValue(), toolbarPanel.getYValue());
 				revalidate(); // nsin
 				repaint();
 				break;
@@ -80,55 +80,87 @@ public class MainWindow extends JFrame {
 
 		gameboardPanel.addMouseMotionListener(new MouseAdapter() {
 
-			Tile lastTileWithOverlay;
+			Tile tileWithOverlay;
+			Tile overlayedTile;
 
 			@Override
 			public void mouseMoved(MouseEvent event) {
 
-				Tile tile = gameboardPanel.findTileAt(event.getPoint());
+				Point p = event.getPoint();
+				Tile tile = gameboardPanel.findTileAt(p);
 
-				event.translatePoint(0, 82); // TODO Irgendwie hat das immer ein Offset von ~82 (die Höhe der
-												// Fensterdekoration?). Bin gerade zu faul dem nachzugehen.
-				gameboardPanel.anchorPoint = event.getPoint();
-
-				boolean mouseOverTile = false;
-
-				if (tile != null) {
-					if (lastTileWithOverlay != null && !tile.equals(lastTileWithOverlay))
-						lastTileWithOverlay.unsetOverlayedTile();
-
-					if (tile.getID() == "FLIPSIDE") {
-						tile.setOverlayedTileType(tilestack.peek().getType());
-						repaint();
-						lastTileWithOverlay = tile;
-					}
-
-					mouseOverTile = true;
-				}
-
-//				for (Component child : gameboardPanel.getComponents()) {
-//					if (new Rectangle(child.getLocationOnScreen(), new Dimension(child.getWidth(), child.getHeight()))
-//							.contains(event.getLocationOnScreen())) {
-//						if (lastTileWithOverlay != null && !((Tile) child).equals(lastTileWithOverlay))
-//							lastTileWithOverlay.unsetOverlayedTile();
-//
-//						if (((Tile) child).getID() == "FLIPSIDE") {
-//							((Tile) child).setOverlayedTileType(tilestack.peekTile().getType());
-//							repaint();
-//							lastTileWithOverlay = (Tile) child;
-//						}
-//
-//						mouseOverTile = true;
-//					}
-//				}
-
-				if (lastTileWithOverlay != null && mouseOverTile == false) {
-					lastTileWithOverlay.unsetOverlayedTile();
-					lastTileWithOverlay = null;
+				if (overlayedTile != null && !overlayedTile.getBounds().contains(p)) {
+					tileStackPanel.remove(overlayedTile);
+					tileWithOverlay.setVisible(true);
+					tileWithOverlay = null;
+					overlayedTile = null;
 					repaint();
 				}
 
+				if (tile != null && tile.getID() == "FLIPSIDE") {
+					tileWithOverlay = tile;
+					tileWithOverlay.setVisible(false);
+					overlayedTile = gameboardPanel.newTemporaryTile(tilestack.peek().getType(),
+							gameboardPanel.getGridX(tile), gameboardPanel.getGridY(tile));
+					overlayedTile.setRotation(tilestack.peek().getRotation());
+					repaint();
+				}
+
+				// Hier wird die letzte Position des Mauszeigers zwischengespeichert. Benötigt
+				// von mouseDragged().
+				event.translatePoint(0, 82); // TODO Irgendwie hat das immer ein Offset von ~82 (die Höhe der
+												// Fensterdekoration?). Bin gerade zu faul dem nachzugehen.
+				gameboardPanel.anchorPoint = event.getPoint();
 			}
+
+//			@Override
+//			public void mouseMoved(MouseEvent event) {
+//
+//				Tile tile = gameboardPanel.findTileAt(event.getPoint());
+//
+//				event.translatePoint(0, 82); // TODO Irgendwie hat das immer ein Offset von ~82 (die Höhe der
+//												// Fensterdekoration?). Bin gerade zu faul dem nachzugehen.
+//				gameboardPanel.anchorPoint = event.getPoint();
+//
+//				boolean mouseOverTile = false;
+//
+//				if (tile != null) {
+//					if (lastTileWithOverlay != null && !tile.equals(lastTileWithOverlay))
+//						lastTileWithOverlay.unsetOverlayedTile();
+//
+//					if (tile.getID() == "FLIPSIDE") {
+//						tile.setOverlayedTileType(tilestack.peek().getType());
+//						tile.setRotation(tilestack.peek().getRotation());
+//						repaint();
+//						lastTileWithOverlay = tile;
+//					}
+//
+//					mouseOverTile = true;
+//				}
+//
+////				for (Component child : gameboardPanel.getComponents()) {
+////					if (new Rectangle(child.getLocationOnScreen(), new Dimension(child.getWidth(), child.getHeight()))
+////							.contains(event.getLocationOnScreen())) {
+////						if (lastTileWithOverlay != null && !((Tile) child).equals(lastTileWithOverlay))
+////							lastTileWithOverlay.unsetOverlayedTile();
+////
+////						if (((Tile) child).getID() == "FLIPSIDE") {
+////							((Tile) child).setOverlayedTileType(tilestack.peekTile().getType());
+////							repaint();
+////							lastTileWithOverlay = (Tile) child;
+////						}
+////
+////						mouseOverTile = true;
+////					}
+////				}
+//
+//				if (lastTileWithOverlay != null && mouseOverTile == false) {
+//					lastTileWithOverlay.unsetOverlayedTile();
+//					lastTileWithOverlay = null;
+//					repaint();
+//				}
+//
+//			}
 
 			@Override
 			public void mouseDragged(MouseEvent event) {
@@ -145,16 +177,19 @@ public class MainWindow extends JFrame {
 
 		gameboardPanel.addMouseListener(new MouseAdapter() {
 			public void mouseClicked(MouseEvent event) {
-				// TODO ist die direkte referenz auf gameboardPanel innerhalb des controllers eigentlich erlaubt?
+				// TODO ist die direkte referenz auf gameboardPanel innerhalb des controllers
+				// eigentlich erlaubt?
 				Tile tile = gameboardPanel.findTileAt(event.getPoint());
 				if (tile != null) {
 					if (SwingUtilities.isLeftMouseButton(event)) {
 						if (tile.getID() == "FLIPSIDE") {
-							gameboard.newTile(tilestack.pop().getType(), gameboardPanel.getGridX(tile), gameboardPanel.getGridY(tile));
+							gameboard.newTile(tilestack.pop().getType(), gameboardPanel.getGridX(tile),
+									gameboardPanel.getGridY(tile));
 							repaint(); // !
 						}
 					} else if ((SwingUtilities.isRightMouseButton(event))) {
-						tilestack.peek().rotate();
+						tilestack.rotateTile();
+						tile.setRotation(tilestack.peek().getRotation());
 						repaint();
 					}
 				}
