@@ -17,7 +17,7 @@ public class Tile extends JLabel {
 	private String overlayedTileID;
 	private int size; // both height and width in pixels
 	private static final String folder = "resources/tiles_/";
-	private int rotation;
+	private int rotation; // TODO rotation überall als deg speichern, damit sie sich nicht unendlich addieren lässt...
 	
 	public Tile(String id, int size) {
 		this.rotation = 0;
@@ -102,10 +102,12 @@ public class Tile extends JLabel {
 	}
 	
 	public int getGridX() {
-		return getX() / size;
+		System.out.println("X: " + getX());
+		return ((getX() + 50) / size);
 	}
 	
 	public int getGridY() {
-		return getY() / size;
+		System.out.println("Y: " + getY());
+		return ((getY() + 50) / size);
 	}
 }

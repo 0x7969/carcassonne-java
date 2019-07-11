@@ -25,7 +25,7 @@ public class TileStack implements Observable<TileStack> {
 		System.out.println("Ammount of tiles in tilestack: " + cardstack.size());
 	}
 
-	public Tile pickupTile() {
+	public Tile pop() {
 		Tile topTile = cardstack.get(0);
 		cardstack.remove(0);
 		for (Observer<TileStack> o : observers)
@@ -33,7 +33,7 @@ public class TileStack implements Observable<TileStack> {
 		return topTile;
 	}
 
-	public Tile peekTile() {
+	public Tile peek() {
 		return cardstack.get(0);
 	}
 

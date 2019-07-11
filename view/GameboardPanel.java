@@ -43,19 +43,11 @@ public class GameboardPanel extends JPanel implements GameboardObserver {
 
 	public void newTile(String id, int x, int y) {
 		// TODO Check if there already is a tile on x, y
+		Tile tile = new Tile(id, zoom);
 		gbc.gridx = x;
 		gbc.gridy = y;
-		add(new Tile(id, zoom), gbc);
-		gbc.gridx = x - 1;
-		add(new Tile("FLIPSIDE", zoom), gbc);
-		gbc.gridx = x + 1;
-		add(new Tile("FLIPSIDE", zoom), gbc);
-		gbc.gridx = x;
-		gbc.gridy = y + 1;
-		add(new Tile("FLIPSIDE", zoom), gbc);
-		gbc.gridy = y - 1;
-		add(new Tile("FLIPSIDE", zoom), gbc);
-		revalidate(); // not sure if necessary
+		add(tile, gbc);
+		tilePlaced(tile);
 	}
 
 	public void zoom(int pixels) {
@@ -63,11 +55,8 @@ public class GameboardPanel extends JPanel implements GameboardObserver {
 		if (nextZoom < 50 || nextZoom > 150)
 			return;
 		else {
-			for (Component c : getComponents()) {
-				System.out.println("Before: " + ((Tile) c).getTileSize());
+			for (Component c : getComponents())
 				((Tile) c).resizeTile(((Tile) c).getTileSize() + pixels);
-				System.out.println("After: " + ((Tile) c).getTileSize());
-			}
 			zoom = nextZoom;
 			revalidate(); // nsin
 		}
@@ -103,14 +92,20 @@ public class GameboardPanel extends JPanel implements GameboardObserver {
 		gbc.gridy = y - 1;
 		if (!hasTile(gbc.gridx, gbc.gridy))
 			add(new Tile("FLIPSIDE", zoom), gbc);
-		revalidate(); // not sure if necessary
+		repaint(); // not sure if necessary
+		System.out.println("X: " + tile.getX());
+		System.out.println("Y: " + tile.getY());
+		System.out.println(getBounds());
 	}
 
 	public void setTileID(String id, int x, int y) {
+		System.out.println("tryna CLICC on " + x + "/" + y);
 		for (Component c : getComponents()) {
 			if (gbl.getConstraints(c).gridx == x)
 				if (gbl.getConstraints(c).gridy == y) {
 					((Tile) c).setID(id);
+					tilePlaced((Tile) c);
+					System.out.println("CONNECC");
 				}
 		}
 	}

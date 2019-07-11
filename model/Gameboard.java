@@ -17,11 +17,13 @@ public class Gameboard implements Observable<Gameboard> {
 
 	// kann nicht im konstrukor erfolgen, weil erst observer gesetzt werden muss
 	public void initGameboard() {
-		placeTile("D", 500, 500);
+		for (GameboardObserver o : observers)
+			o.newTile("D", 500, 500);
 	}
 
-	public void placeTile(String id, int x, int y) {
-		board[x][y] = new Tile(id);
+	public void newTile(String id, int x, int y) {
+		Tile t = new Tile(id);
+		board[x][y] = t;
 		for (GameboardObserver o : observers)
 			o.setTileID(id, x, y);
 	}

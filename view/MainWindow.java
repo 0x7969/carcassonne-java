@@ -1,10 +1,7 @@
 package view;
 
 import java.awt.BorderLayout;
-import java.awt.Component;
-import java.awt.Dimension;
 import java.awt.Point;
-import java.awt.Rectangle;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
@@ -35,7 +32,7 @@ public class MainWindow extends JFrame {
 		toolbarPanel.addToolbarActionListener((event) -> {
 			switch (event.getActionCommand()) {
 			case "New tile":
-				gameboard.placeTile("FLIPSIDE", toolbarPanel.getXValue(), toolbarPanel.getYValue());
+				gameboard.newTile("FLIPSIDE", toolbarPanel.getXValue(), toolbarPanel.getYValue());
 				revalidate(); // nsin
 				repaint();
 				break;
@@ -62,10 +59,14 @@ public class MainWindow extends JFrame {
 		gameboardWrapper.setLayout(null); // (gameboard selbst hat ein layout, das selbst für seine dimensionen sorgt
 											// und deshalb nicht verschiebbar ist)
 		gameboardPanel = new GameboardPanel();
+		gameboardPanel.setBounds(-50000 + getWidth() / 2, -50000 + getHeight() / 2, 100000, 100000);
 
 		gameboard = new Gameboard();
 		gameboard.addObserver(gameboardPanel);
 		gameboard.initGameboard();
+
+		gameboardWrapper.add(gameboardPanel);
+		this.add(gameboardWrapper);
 
 		gameboardPanel.addMouseWheelListener((event) -> {
 			int notches = event.getWheelRotation();
@@ -86,8 +87,8 @@ public class MainWindow extends JFrame {
 
 				Tile tile = gameboardPanel.findTileAt(event.getPoint());
 
-				event.translatePoint(0, 82); // Irgendwie hat das immer ein Offset von ~82. Bin gerade zu faul dem
-												// nachzugehen.
+				event.translatePoint(0, 82); // TODO Irgendwie hat das immer ein Offset von ~82 (die Höhe der
+												// Fensterdekoration?). Bin gerade zu faul dem nachzugehen.
 				gameboardPanel.anchorPoint = event.getPoint();
 
 				boolean mouseOverTile = false;
@@ -97,7 +98,7 @@ public class MainWindow extends JFrame {
 						lastTileWithOverlay.unsetOverlayedTile();
 
 					if (tile.getID() == "FLIPSIDE") {
-						tile.setOverlayedTileType(tilestack.peekTile().getType());
+						tile.setOverlayedTileType(tilestack.peek().getType());
 						repaint();
 						lastTileWithOverlay = tile;
 					}
@@ -145,22 +146,20 @@ public class MainWindow extends JFrame {
 		gameboardPanel.addMouseListener(new MouseAdapter() {
 			public void mouseClicked(MouseEvent event) {
 				Tile tile = gameboardPanel.findTileAt(event.getPoint());
-
-				if (SwingUtilities.isLeftMouseButton(event)) {
-					if (tile.getID() == "FLIPSIDE") {
-						gameboard.placeTile(tilestack.pickupTile().getType(), tile.getGridX(), tile.getGridY());
-						gameboardPanel.tilePlaced((Tile) tile);
-						repaint(); // !
+				if (tile != null) {
+					if (SwingUtilities.isLeftMouseButton(event)) {
+						if (tile.getID() == "FLIPSIDE") {
+							gameboard.newTile(tilestack.pop().getType(), tile.getGridX(), tile.getGridY());
+							repaint(); // !
+						}
+					} else if ((SwingUtilities.isRightMouseButton(event))) {
+						tilestack.peek().rotate();
+						repaint();
 					}
-				} else if ((SwingUtilities.isRightMouseButton(event))) {
-					tilestack.peekTile().rotate();
-					repaint();
 				}
 			}
 		});
-		gameboardPanel.setBounds(-5000 + getWidth() / 2, -5050 + getHeight() / 2, 10000, 10000);
-		gameboardWrapper.add(gameboardPanel);
-		this.add(gameboardWrapper);
+
 	}
 
 	public void gameboardChanged(model.Tile[][] board) {
