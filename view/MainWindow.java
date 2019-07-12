@@ -32,7 +32,7 @@ public class MainWindow extends JFrame {
 		toolbarPanel.addToolbarActionListener((event) -> {
 			switch (event.getActionCommand()) {
 			case "New tile":
-				gameboardPanel.newTemporaryTile("B", toolbarPanel.getXValue(), toolbarPanel.getYValue());
+				gameboardPanel.newOverlayedTile("B", toolbarPanel.getXValue(), toolbarPanel.getYValue());
 				revalidate(); // nsin
 				repaint();
 				break;
@@ -87,20 +87,20 @@ public class MainWindow extends JFrame {
 			public void mouseMoved(MouseEvent event) {
 
 				Point p = event.getPoint();
-				Tile tile = gameboardPanel.findTileAt(p);
+				Tile tile = gameboardPanel.getTileAt(p);
 
 				if (overlayedTile != null && !overlayedTile.getBounds().contains(p)) {
-					tileStackPanel.remove(overlayedTile);
+					gameboardPanel.remove(overlayedTile);
 					tileWithOverlay.setVisible(true);
 					tileWithOverlay = null;
 					overlayedTile = null;
 					repaint();
 				}
 
-				if (tile != null && tile.getID() == "FLIPSIDE") {
+				if (tile != null && overlayedTile == null && tile.getType() == "FLIPSIDE") {
 					tileWithOverlay = tile;
 					tileWithOverlay.setVisible(false);
-					overlayedTile = gameboardPanel.newTemporaryTile(tilestack.peek().getType(),
+					overlayedTile = gameboardPanel.newOverlayedTile(tilestack.peek().getType(),
 							gameboardPanel.getGridX(tile), gameboardPanel.getGridY(tile));
 					overlayedTile.setRotation(tilestack.peek().getRotation());
 					repaint();
@@ -179,20 +179,23 @@ public class MainWindow extends JFrame {
 			public void mouseClicked(MouseEvent event) {
 				// TODO ist die direkte referenz auf gameboardPanel innerhalb des controllers
 				// eigentlich erlaubt?
-				Tile tile = gameboardPanel.findTileAt(event.getPoint());
+				Tile tile = gameboardPanel.getTileAt(event.getPoint());
 				if (tile != null) {
 					if (SwingUtilities.isLeftMouseButton(event)) {
-						if (tile.getID() == "FLIPSIDE") {
+						if (tile.getType() == "FLIPSIDE") {
 							gameboard.newTile(tilestack.pop().getType(), gameboardPanel.getGridX(tile),
 									gameboardPanel.getGridY(tile));
 							repaint(); // !
 						}
 					} else if ((SwingUtilities.isRightMouseButton(event))) {
+						tile = gameboardPanel.findTileAt(event.getPoint());
+						System.out.println(tile.getType());
 						tilestack.rotateTile();
 						tile.setRotation(tilestack.peek().getRotation());
 						repaint();
 					}
 				}
+				System.out.println(gameboardPanel.getComponentCount());
 			}
 		});
 

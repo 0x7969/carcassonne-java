@@ -25,7 +25,7 @@ public class Gameboard implements Observable<Gameboard> {
 		Tile t = new Tile(id);
 		board[x][y] = t;
 		for (GameboardObserver o : observers)
-			o.setTileID(id, x, y);
+			o.setTileType(id, x, y);
 	}
 
 	public Tile[][] getBoard() {

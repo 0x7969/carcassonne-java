@@ -19,7 +19,7 @@ public class TileStackPanel extends JPanel implements Observer<TileStack> {
 	}
 
 	public void update(TileStack tilestack) {
-		topTile.setID(tilestack.peek().getType());
+		topTile.setType(tilestack.peek().getType());
 		topTile.setRotation(tilestack.peek().getRotation());
 		tileCounter.setText(Integer.toString(tilestack.remainingTiles()));
 	}

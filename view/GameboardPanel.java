@@ -41,8 +41,7 @@ public class GameboardPanel extends JPanel implements GameboardObserver {
 //		}
 //	}
 	
-	public Tile newTemporaryTile(String id, int x, int y) {
-		// TODO Check if there already is a tile on x, y
+	public Tile newOverlayedTile(String id, int x, int y) {
 		Tile tile = new Tile(id, zoom);
 		gbc.gridx = x;
 		gbc.gridy = y;
@@ -113,20 +112,29 @@ public class GameboardPanel extends JPanel implements GameboardObserver {
 		repaint(); // not sure if necessary
 	}
 
-	public void setTileID(String id, int x, int y) {
-		System.out.println("tryna CLICC on " + x + "/" + y);
+	public void setTileType(String type, int x, int y) {
 		for (Component c : getComponents()) {
 			if (gbl.getConstraints(c).gridx == x)
 				if (gbl.getConstraints(c).gridy == y) {
-					((Tile) c).setID(id);
+					((Tile) c).setType(type);
 					tilePlaced((Tile) c);
-					System.out.println("CONNECC");
+					return;
 				}
 		}
 	}
-
+	
 	public Tile findTileAt(Point p) {
 		Component c = findComponentAt(p);
+		if (c instanceof Tile)
+			return (Tile) c;
+		else
+			return null;
+	}
+
+	// getComponentAt gibt im Gegensatz zu findComponentAt die unterste/älteste? tile zurück. kann man sich darauf verlassen?
+	// ist nicht direkt teil der spezifikation...
+	public Tile getTileAt(Point p) {
+		Component c = getComponentAt(p);
 		if (c instanceof Tile)
 			return (Tile) c;
 		else

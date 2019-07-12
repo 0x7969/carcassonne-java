@@ -56,7 +56,10 @@ public class Tile {
 	}
 
 	public void rotate() {
-		rotation += 90;
+		if (rotation == 270)
+			rotation = 0;
+		else
+			rotation += 90;
 	}
 
 	public int getRotation() {
