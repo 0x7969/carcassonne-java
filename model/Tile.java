@@ -55,6 +55,10 @@ public class Tile {
 				.getType();
 	}
 
+	public List<FeatureNode> getNodes() {
+		return nodes;
+	}
+
 	public void rotate() {
 		if (rotation == 270)
 			rotation = 0;

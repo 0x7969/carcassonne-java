@@ -63,7 +63,7 @@ public class MainWindow extends JFrame {
 
 		gameboard = new Gameboard();
 		gameboard.addObserver(gameboardPanel);
-		gameboard.initGameboard();
+		gameboard.initGameboard(tilestack.pop()); // The topmost tile of the tilestack is always the start tile.
 
 		gameboardWrapper.add(gameboardPanel);
 		this.add(gameboardWrapper);
@@ -98,6 +98,8 @@ public class MainWindow extends JFrame {
 				}
 
 				if (tile != null && overlayedTile == null && tile.getType() == "FLIPSIDE") {
+					System.out.println(gameboard.isAllowed(tilestack.peek(), gameboardPanel.getGridX(tile),
+							gameboardPanel.getGridY(tile)));
 					tileWithOverlay = tile;
 					tileWithOverlay.setVisible(false);
 					overlayedTile = gameboardPanel.newOverlayedTile(tilestack.peek().getType(),
@@ -183,7 +185,7 @@ public class MainWindow extends JFrame {
 				if (tile != null) {
 					if (SwingUtilities.isLeftMouseButton(event)) {
 						if (tile.getType() == "FLIPSIDE") {
-							gameboard.newTile(tilestack.pop().getType(), gameboardPanel.getGridX(tile),
+							gameboard.newTile(tilestack.pop(), gameboardPanel.getGridX(tile),
 									gameboardPanel.getGridY(tile));
 							repaint(); // !
 						}

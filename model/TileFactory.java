@@ -10,11 +10,12 @@ import base.Edge;
 
 // TODO da wider erwarten keine unterklassen von tile gebraucht werden, ist das hier eigtl. auch keine factory...
 public class TileFactory {
-	
+
 	private List<Tile> tiles;
+	Tile startTile;
 
 	public TileFactory() {
-		
+
 		tiles = new LinkedList<Tile>();
 
 		Tile tile = new Tile("B"); // Tile B
@@ -36,7 +37,7 @@ public class TileFactory {
 		tiles.add(tile);
 		tiles.add(tile);
 		tiles.add(tile);
-		
+
 		tile = new Tile("C", true); // Tile C
 		top = new FeatureNode(CASTLE, TOP);
 		left = new FeatureNode(CASTLE, LEFT);
@@ -53,9 +54,28 @@ public class TileFactory {
 		tile.addNode(right);
 		tile.addNode(bottom);
 		tiles.add(tile);
-		
+
+		tile = new Tile("D", false); // Tile D
+		top = new FeatureNode(CASTLE, TOP);
+		left = new FeatureNode(ROAD, LEFT);
+		center = new FeatureNode(ROAD, CENTER);
+		right = new FeatureNode(ROAD, RIGHT);
+		bottom = new FeatureNode(FIELDS, BOTTOM);
+		tile.addEdge(new Edge<FeatureType>(left, right));
+		tile.addNode(top);
+		tile.addNode(left);
+		tile.addNode(center);
+		tile.addNode(right);
+		tile.addNode(bottom);
+		tiles.add(tile);
+		tiles.add(tile);
+		tiles.add(tile);
+		startTile = tile;
+		// There are four tiles of type D but one is the starting tile, which is
+		// generated upon initialising the gameboard.
+
 		tile = new Tile("E"); // Tile E
-		top = new FeatureNode(ROAD, TOP);
+		top = new FeatureNode(CASTLE, TOP);
 		left = new FeatureNode(FIELDS, LEFT);
 		center = new FeatureNode(FIELDS, CENTER);
 		right = new FeatureNode(FIELDS, RIGHT);
@@ -73,11 +93,16 @@ public class TileFactory {
 		tiles.add(tile);
 		tiles.add(tile);
 		tiles.add(tile);
-		
+
 	}
-	
+
 	public List<Tile> getTiles() {
 		return tiles;
+	}
+	
+	public Tile getStartTile() {
+		System.out.println("Delivering a start tile. Its type is: " + startTile.getType());
+		return startTile;
 	}
 
 }

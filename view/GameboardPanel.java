@@ -50,7 +50,7 @@ public class GameboardPanel extends JPanel implements GameboardObserver {
 		return tile;
 	}
 
-	public void newTile(String id, int x, int y) {
+	public void initGameboard(String id, int x, int y) {
 		// TODO Check if there already is a tile on x, y
 		Tile tile = new Tile(id, zoom);
 		gbc.gridx = x;

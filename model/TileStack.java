@@ -4,6 +4,8 @@ import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
+import static model.Position.*;
+
 import view.Observer;
 
 public class TileStack implements Observable<TileStack> {
@@ -15,21 +17,25 @@ public class TileStack implements Observable<TileStack> {
 		cardstack = new LinkedList<Tile>();
 		factory = new TileFactory();
 		observers = new LinkedList<Observer<TileStack>>();
-		
+
 		for (Tile tile : factory.getTiles()) {
-			cardstack.add(tile);
+			cardstack.add(0, tile);
 		}
-		
+
 		Collections.shuffle(cardstack);
-		
+
+		cardstack.add(0, factory.getStartTile());
+
 		System.out.println("Ammount of tiles in tilestack: " + cardstack.size());
 	}
 
 	public Tile pop() {
 		Tile topTile = cardstack.get(0);
+		System.out.println("The first tile \"" + peek().getType() + "\" has a " + peek().featureAtPosition(TOP) + " on its top, a " + peek().featureAtPosition(LEFT) + " on its left, a " + peek().featureAtPosition(RIGHT) + " on its right and a " + peek().featureAtPosition(BOTTOM) + " on its bottom.");
 		cardstack.remove(0);
 		for (Observer<TileStack> o : observers)
 			o.update(this);
+		System.out.println("The next tile has \"" + peek().getType() + "\" a " + peek().featureAtPosition(TOP) + " on its top, a " + peek().featureAtPosition(LEFT) + " on its left, a " + peek().featureAtPosition(RIGHT) + " on its right and a " + peek().featureAtPosition(BOTTOM) + " on its bottom.");
 		return topTile;
 	}
 
@@ -56,5 +62,5 @@ public class TileStack implements Observable<TileStack> {
 	public boolean removeObserver(Observer<TileStack> o) {
 		return observers.remove(o);
 	}
-	
+
 }
