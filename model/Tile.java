@@ -11,21 +11,21 @@ import static model.Direction.*;
 public class Tile {
 	private String type;
 	private final List<FeatureNode> nodes;
-	private final List<Edge> edges;
+	private final List<Edge<FeatureType>> edges;
 	private final boolean coatOfArms;
 	private int rotation;
 
 	public Tile(String type) {
 		this.type = type;
 		nodes = new ArrayList<FeatureNode>();
-		edges = new LinkedList<Edge>();
+		edges = new LinkedList<Edge<FeatureType>>();
 		coatOfArms = false;
 	}
 
 	public Tile(String id, boolean coatOfArms) {
 		this.type = id;
 		nodes = new ArrayList<FeatureNode>();
-		edges = new LinkedList<Edge>();
+		edges = new LinkedList<Edge<FeatureType>>();
 		this.coatOfArms = coatOfArms;
 	}
 
@@ -37,7 +37,7 @@ public class Tile {
 		return nodes.add(node);
 	}
 
-	public boolean addEdge(Edge edge) {
+	public boolean addEdge(Edge<FeatureType> edge) {
 		return edges.add(edge);
 	}
 
@@ -59,7 +59,11 @@ public class Tile {
 		return nodes;
 	}
 
-	public void rotate() {
+	public void rotateRight() {
+		for (FeatureNode n : nodes) {
+			n.switchDirection();
+			n.rotatePositionRight();
+		}
 		if (rotation == 270)
 			rotation = 0;
 		else

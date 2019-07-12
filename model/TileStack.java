@@ -25,8 +25,6 @@ public class TileStack implements Observable<TileStack> {
 		Collections.shuffle(cardstack);
 
 		cardstack.add(0, factory.getStartTile());
-
-		System.out.println("Ammount of tiles in tilestack: " + cardstack.size());
 	}
 
 	public Tile pop() {
@@ -35,7 +33,6 @@ public class TileStack implements Observable<TileStack> {
 		cardstack.remove(0);
 		for (Observer<TileStack> o : observers)
 			o.update(this);
-		System.out.println("The next tile has \"" + peek().getType() + "\" a " + peek().featureAtPosition(TOP) + " on its top, a " + peek().featureAtPosition(LEFT) + " on its left, a " + peek().featureAtPosition(RIGHT) + " on its right and a " + peek().featureAtPosition(BOTTOM) + " on its bottom.");
 		return topTile;
 	}
 
@@ -47,8 +44,8 @@ public class TileStack implements Observable<TileStack> {
 		return cardstack.size();
 	}
 
-	public void rotateTile() {
-		cardstack.get(0).rotate();
+	public void rotateTopTile() {
+		cardstack.get(0).rotateRight();
 		for (Observer<TileStack> o : observers)
 			o.update(this);
 	}

@@ -4,11 +4,10 @@ public enum Direction {
 	
 	X, Y, BOTH;
 	
-	// TODO unbenutzt
-	public Direction getOpposite(Direction d) {
-		if (d == BOTH)
+	public Direction getOpposite() {
+		if (this == BOTH)
 			throw new IllegalArgumentException("Direction BOTH does not have an opposite direction.");
-		else return d == X ? Y : X;
+		else return this == X ? Y : X;
 	}
 	
 }

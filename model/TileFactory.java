@@ -101,7 +101,6 @@ public class TileFactory {
 	}
 	
 	public Tile getStartTile() {
-		System.out.println("Delivering a start tile. Its type is: " + startTile.getType());
 		return startTile;
 	}
 

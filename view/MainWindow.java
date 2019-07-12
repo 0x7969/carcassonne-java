@@ -86,6 +86,10 @@ public class MainWindow extends JFrame {
 			@Override
 			public void mouseMoved(MouseEvent event) {
 
+				// TODO bei jeder mausbewegung wird alles neu berechnet. vielleicht am anfang
+				// fragen, ob es die gleiche tile wie letztes mal ist (oder gar keine) und wenn
+				// ja sofort return. das erübrigt vllt. auch spätere abfragen davon.
+
 				Point p = event.getPoint();
 				Tile tile = gameboardPanel.getTileAt(p);
 
@@ -100,12 +104,26 @@ public class MainWindow extends JFrame {
 				if (tile != null && overlayedTile == null && tile.getType() == "FLIPSIDE") {
 					System.out.println(gameboard.isAllowed(tilestack.peek(), gameboardPanel.getGridX(tile),
 							gameboardPanel.getGridY(tile)));
-					tileWithOverlay = tile;
-					tileWithOverlay.setVisible(false);
-					overlayedTile = gameboardPanel.newOverlayedTile(tilestack.peek().getType(),
-							gameboardPanel.getGridX(tile), gameboardPanel.getGridY(tile));
-					overlayedTile.setRotation(tilestack.peek().getRotation());
-					repaint();
+
+					for (int i = 0; i < 4; i++) {
+						if (gameboard.isAllowed(tilestack.peek(), gameboardPanel.getGridX(tile),
+								gameboardPanel.getGridY(tile))) {
+							tileWithOverlay = tile;
+							tileWithOverlay.setVisible(false);
+							overlayedTile = gameboardPanel.newOverlayedTile(tilestack.peek().getType(),
+									gameboardPanel.getGridX(tile), gameboardPanel.getGridY(tile));
+							overlayedTile.setRotation(tilestack.peek().getRotation());
+							repaint();
+							return;
+						} else {
+							tile = gameboardPanel.findTileAt(event.getPoint());
+							System.out.println(tile.getType());
+							tilestack.rotateTopTile();
+							tile.setRotation(tilestack.peek().getRotation());
+							repaint();
+						}
+					}
+
 				}
 
 				// Hier wird die letzte Position des Mauszeigers zwischengespeichert. Benötigt
@@ -192,7 +210,7 @@ public class MainWindow extends JFrame {
 					} else if ((SwingUtilities.isRightMouseButton(event))) {
 						tile = gameboardPanel.findTileAt(event.getPoint());
 						System.out.println(tile.getType());
-						tilestack.rotateTile();
+						tilestack.rotateTopTile();
 						tile.setRotation(tilestack.peek().getRotation());
 						repaint();
 					}
