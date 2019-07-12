@@ -4,8 +4,6 @@ import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
-import static model.Position.*;
-
 import view.Observer;
 
 public class TileStack implements Observable<TileStack> {
@@ -27,9 +25,8 @@ public class TileStack implements Observable<TileStack> {
 		cardstack.add(0, factory.getStartTile());
 	}
 
-	public Tile pop() {
+	public Tile drawTile() {
 		Tile topTile = cardstack.get(0);
-		System.out.println("The first tile \"" + peek().getType() + "\" has a " + peek().featureAtPosition(TOP) + " on its top, a " + peek().featureAtPosition(LEFT) + " on its left, a " + peek().featureAtPosition(RIGHT) + " on its right and a " + peek().featureAtPosition(BOTTOM) + " on its bottom.");
 		cardstack.remove(0);
 		for (Observer<TileStack> o : observers)
 			o.update(this);

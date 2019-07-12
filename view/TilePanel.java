@@ -10,7 +10,7 @@ import java.io.IOException;
 import javax.imageio.ImageIO;
 import javax.swing.JLabel;
 
-public class Tile extends JLabel {
+public class TilePanel extends JLabel {
 
 	private BufferedImage tileImage;
 	private String type;
@@ -19,7 +19,7 @@ public class Tile extends JLabel {
 	private static final String folder = "resources/tiles_/";
 	private int rotation;
 
-	public Tile(String id, int size) {
+	public TilePanel(String id, int size) {
 		this.rotation = 0;
 		this.size = size;
 		setType(id);
@@ -29,7 +29,7 @@ public class Tile extends JLabel {
 		return size;
 	}
 
-	public void resizeTile(int size) {
+	public void setTileSize(int size) {
 		this.size = size;
 //		setIcon(new ImageIcon(tileImage.getScaledInstance(size, size, Image.SCALE_SMOOTH)));
 	}
@@ -94,6 +94,11 @@ public class Tile extends JLabel {
 
 	public void setRotation(int rotation) {
 		this.rotation = rotation;
+	}
+	
+	// TODO nur debug
+	public int getRotation() {
+		return rotation;
 	}
 
 }

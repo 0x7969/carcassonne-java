@@ -26,35 +26,52 @@ public class Gameboard implements Observable<Gameboard> {
 
 	public void newTile(Tile t, int x, int y) {
 		board[x][y] = t;
+		System.out.println(t.getRotation());
 		for (GameboardObserver o : observers)
-			o.setTileType(t.getType(), x, y);
+			o.setTileTypeAndRotation(t.getType(), t.getRotation(), x, y);
 	}
-	
+
 	public boolean isAllowed(Tile t, int x, int y) {
 		// Check top tile
-		if (board[x][y - 1] != null)
+		if (board[x][y - 1] != null) {
+			System.out.println("Their bottom: " + board[x][y - 1].featureAtPosition(BOTTOM) + ", my top: "
+					+ t.featureAtPosition(TOP));
 			if (board[x][y - 1].featureAtPosition(BOTTOM) != t.featureAtPosition(TOP)) {
-				System.out.println("Their bottom: " + board[x][y - 1].featureAtPosition(BOTTOM) + ", my top: " + t.featureAtPosition(TOP));
 				return false;
 			}
+		}
+
 		// Check left tile
-		if (board[x - 1][y] != null)
+		if (board[x - 1][y] != null) {
+			System.out.println("Their right: " + board[x - 1][y].featureAtPosition(RIGHT) + ", my left: "
+					+ t.featureAtPosition(LEFT));
 			if (board[x - 1][y].featureAtPosition(RIGHT) != t.featureAtPosition(LEFT)) {
-				System.out.println("Their right: " + board[x - 1][y].featureAtPosition(RIGHT) + ", my left: " + t.featureAtPosition(LEFT));
 				return false;
 			}
+		}
+
 		// Check right tile
-		if (board[x + 1][y] != null)
+		if (board[x + 1][y] != null) {
+			System.out.println("Their left: " + board[x + 1][y].featureAtPosition(LEFT) + ", my right: "
+					+ t.featureAtPosition(RIGHT));
 			if (board[x + 1][y].featureAtPosition(LEFT) != t.featureAtPosition(RIGHT)) {
-				System.out.println("Their left: " + board[x + 1][y].featureAtPosition(LEFT) + ", my right: " + t.featureAtPosition(RIGHT));
 				return false;
 			}
+		}
+
 		// Check bottom tile
-		if (board[x][y + 1] != null)
+		if (board[x][y + 1] != null) {
+			System.out.println("Their top: " + board[x][y + 1].featureAtPosition(TOP) + ", my bottom: "
+					+ t.featureAtPosition(BOTTOM));
 			if (board[x][y + 1].featureAtPosition(TOP) != t.featureAtPosition(BOTTOM)) {
-				System.out.println("Their top: " + board[x][y + 1].featureAtPosition(TOP) + ", my bottom: " + t.featureAtPosition(BOTTOM));
 				return false;
 			}
+		}
+
+		System.out.println(t.getType() + ": Has a " + t.featureAtPosition(TOP) + " on its top, a "
+				+ t.featureAtPosition(LEFT) + " on its left, a " + t.featureAtPosition(RIGHT) + " on its right and a "
+				+ t.featureAtPosition(BOTTOM) + " on its bottom.");
+
 		return true;
 	}
 
@@ -71,5 +88,5 @@ public class Gameboard implements Observable<Gameboard> {
 	public boolean removeObserver(Observer<Gameboard> o) {
 		return observers.remove((GameboardObserver) o);
 	}
-	
+
 }

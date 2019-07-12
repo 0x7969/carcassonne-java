@@ -17,6 +17,10 @@ public class GameboardPanel extends JPanel implements GameboardObserver {
 	GridBagConstraints gbc;
 	int zoom = 100; // in pixels of each tile
 
+	private TilePanel tileInFocus;
+	private TilePanel tileWithOverlay;
+	private TilePanel overlayedTile;
+
 	public GameboardPanel() {
 		gbl = new GridBagLayout();
 		setLayout(gbl);
@@ -40,9 +44,10 @@ public class GameboardPanel extends JPanel implements GameboardObserver {
 //			}
 //		}
 //	}
-	
-	public Tile newOverlayedTile(String id, int x, int y) {
-		Tile tile = new Tile(id, zoom);
+
+	// TODO das sollte von selbst gleich overlayedTile setzen...
+	public TilePanel newOverlayedTile(String type, int x, int y) {
+		TilePanel tile = new TilePanel(type, zoom);
 		gbc.gridx = x;
 		gbc.gridy = y;
 		add(tile, gbc);
@@ -52,11 +57,11 @@ public class GameboardPanel extends JPanel implements GameboardObserver {
 
 	public void initGameboard(String id, int x, int y) {
 		// TODO Check if there already is a tile on x, y
-		Tile tile = new Tile(id, zoom);
+		TilePanel tile = new TilePanel(id, zoom);
 		gbc.gridx = x;
 		gbc.gridy = y;
 		add(tile, gbc);
-		tilePlaced(tile);
+		addSurroundingFlipsides(tile);
 	}
 
 	public void zoom(int pixels) {
@@ -65,7 +70,7 @@ public class GameboardPanel extends JPanel implements GameboardObserver {
 			return;
 		else {
 			for (Component c : getComponents())
-				((Tile) c).resizeTile(((Tile) c).getTileSize() + pixels);
+				((TilePanel) c).setTileSize(((TilePanel) c).getTileSize() + pixels);
 			zoom = nextZoom;
 			revalidate(); // nsin
 		}
@@ -84,59 +89,61 @@ public class GameboardPanel extends JPanel implements GameboardObserver {
 		return false;
 	}
 
-	int getGridX(Tile t) {
+	int getGridX(TilePanel t) {
 		return gbl.getConstraints(t).gridx;
 	}
 
-	int getGridY(Tile t) {
+	int getGridY(TilePanel t) {
 		return gbl.getConstraints(t).gridy;
 	}
 
-	public void tilePlaced(Tile tile) {
+	public void addSurroundingFlipsides(TilePanel tile) {
 		int x = gbl.getConstraints(tile).gridx;
 		int y = gbl.getConstraints(tile).gridy;
 		gbc.gridy = y;
 		gbc.gridx = x - 1;
 		if (!hasTile(gbc.gridx, gbc.gridy))
-			add(new Tile("FLIPSIDE", zoom), gbc);
+			add(new TilePanel("FLIPSIDE", zoom), gbc);
 		gbc.gridx = x + 1;
 		if (!hasTile(gbc.gridx, gbc.gridy))
-			add(new Tile("FLIPSIDE", zoom), gbc);
+			add(new TilePanel("FLIPSIDE", zoom), gbc);
 		gbc.gridx = x;
 		gbc.gridy = y + 1;
 		if (!hasTile(gbc.gridx, gbc.gridy))
-			add(new Tile("FLIPSIDE", zoom), gbc);
+			add(new TilePanel("FLIPSIDE", zoom), gbc);
 		gbc.gridy = y - 1;
 		if (!hasTile(gbc.gridx, gbc.gridy))
-			add(new Tile("FLIPSIDE", zoom), gbc);
+			add(new TilePanel("FLIPSIDE", zoom), gbc);
 		repaint(); // not sure if necessary
 	}
 
-	public void setTileType(String type, int x, int y) {
+	public void setTileTypeAndRotation(String type, int rotation, int x, int y) {
 		for (Component c : getComponents()) {
 			if (gbl.getConstraints(c).gridx == x)
 				if (gbl.getConstraints(c).gridy == y) {
-					((Tile) c).setType(type);
-					tilePlaced((Tile) c);
+					((TilePanel) c).setType(type);
+					((TilePanel) c).setRotation(rotation);
+					addSurroundingFlipsides((TilePanel) c);
 					return;
 				}
 		}
 	}
-	
-	public Tile findTileAt(Point p) {
+
+	public TilePanel findTileAt(Point p) {
 		Component c = findComponentAt(p);
-		if (c instanceof Tile)
-			return (Tile) c;
+		if (c instanceof TilePanel)
+			return (TilePanel) c;
 		else
 			return null;
 	}
 
-	// getComponentAt gibt im Gegensatz zu findComponentAt die unterste/älteste? tile zurück. kann man sich darauf verlassen?
+	// getComponentAt gibt im Gegensatz zu findComponentAt die unterste/älteste?
+	// tile zurück. kann man sich darauf verlassen?
 	// ist nicht direkt teil der spezifikation...
-	public Tile getTileAt(Point p) {
+	public TilePanel getTileAt(Point p) {
 		Component c = getComponentAt(p);
-		if (c instanceof Tile)
-			return (Tile) c;
+		if (c instanceof TilePanel)
+			return (TilePanel) c;
 		else
 			return null;
 	}
@@ -145,6 +152,30 @@ public class GameboardPanel extends JPanel implements GameboardObserver {
 	public void update(Gameboard o) {
 		// TODO Auto-generated method stub
 
+	}
+
+	public void setTileInFocus(TilePanel lastTileInFocus) {
+		this.tileInFocus = lastTileInFocus;
+	}
+
+	public TilePanel getTileInFocus() {
+		return tileInFocus;
+	}
+
+	public void setTileWithOverlay(TilePanel tileWithOverlay) {
+		this.tileWithOverlay = tileWithOverlay;
+	}
+
+	public TilePanel getTileWithOverlay() {
+		return tileWithOverlay;
+	}
+
+	public void setOverlayedTile(TilePanel overlayedTile) {
+		this.overlayedTile = overlayedTile;
+	}
+
+	public TilePanel getOverlayedTile() {
+		return overlayedTile;
 	}
 
 }

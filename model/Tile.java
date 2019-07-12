@@ -7,6 +7,7 @@ import java.util.List;
 import base.Edge;
 
 import static model.Direction.*;
+import static model.Position.*;
 
 public class Tile {
 	private String type;
@@ -60,6 +61,7 @@ public class Tile {
 	}
 
 	public void rotateRight() {
+		System.out.println("IS SPINNIN BISH");
 		for (FeatureNode n : nodes) {
 			n.switchDirection();
 			n.rotatePositionRight();
@@ -72,6 +74,15 @@ public class Tile {
 
 	public int getRotation() {
 		return rotation;
+	}
+
+	public String toString() {
+		return "Type: " + type +
+				", top feature: " + featureAtPosition(TOP) + 
+				", left feature: " + featureAtPosition(LEFT) +
+				", right feature: " + featureAtPosition(RIGHT) +
+				", bottom feature: " + featureAtPosition(BOTTOM) +   
+				", rotation: " + rotation;
 	}
 
 }

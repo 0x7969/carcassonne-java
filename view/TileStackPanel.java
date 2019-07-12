@@ -7,12 +7,12 @@ import javax.swing.JPanel;
 import model.TileStack;
 
 public class TileStackPanel extends JPanel implements Observer<TileStack> {
-	Tile topTile;
+	TilePanel topTile;
 	JLabel tileCounter;
 	
 	public TileStackPanel(TileStack tilestack) {
 		setBorder(BorderFactory.createTitledBorder("Stack"));
-		topTile = new Tile(tilestack.peek().getType(), 100);
+		topTile = new TilePanel(tilestack.peek().getType(), 100);
 		add(topTile);
 		tileCounter = new JLabel(Integer.toString(tilestack.remainingTiles()));
 		add(tileCounter);
