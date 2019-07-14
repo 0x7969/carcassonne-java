@@ -28,11 +28,11 @@ public class TileFactory {
 		tile.addEdge(new Edge<FeatureType>(top, center));
 		tile.addEdge(new Edge<FeatureType>(right, center));
 		tile.addEdge(new Edge<FeatureType>(bottom, center));
-		tile.addNode(top);
-		tile.addNode(left);
-		tile.addNode(center);
-		tile.addNode(right);
-		tile.addNode(bottom);
+		tile.addNode(TOP, top);
+		tile.addNode(LEFT, left);
+		tile.addNode(CENTER, center);
+		tile.addNode(RIGHT, right);
+		tile.addNode(BOTTOM, bottom);
 		tiles.add(tile);
 		tiles.add(tile);
 		tiles.add(tile);
@@ -48,11 +48,11 @@ public class TileFactory {
 		tile.addEdge(new Edge<FeatureType>(top, center));
 		tile.addEdge(new Edge<FeatureType>(right, center));
 		tile.addEdge(new Edge<FeatureType>(bottom, center));
-		tile.addNode(top);
-		tile.addNode(left);
-		tile.addNode(center);
-		tile.addNode(right);
-		tile.addNode(bottom);
+		tile.addNode(TOP, top);
+		tile.addNode(LEFT, left);
+		tile.addNode(CENTER, center);
+		tile.addNode(RIGHT, right);
+		tile.addNode(BOTTOM, bottom);
 		tiles.add(tile);
 
 		tile = new Tile("D", false); // Tile D
@@ -62,12 +62,38 @@ public class TileFactory {
 		right = new FeatureNode(ROAD, RIGHT);
 		bottom = new FeatureNode(FIELDS, BOTTOM);
 		tile.addEdge(new Edge<FeatureType>(left, right));
-		tile.addNode(top);
-		tile.addNode(left);
-		tile.addNode(center);
-		tile.addNode(right);
-		tile.addNode(bottom);
+		tile.addNode(TOP, top);
+		tile.addNode(LEFT, left);
+		tile.addNode(CENTER, center);
+		tile.addNode(RIGHT, right);
+		tile.addNode(BOTTOM, bottom);
 		tiles.add(tile);
+
+		tile = new Tile("D", false); // Tile D
+		top = new FeatureNode(CASTLE, TOP);
+		left = new FeatureNode(ROAD, LEFT);
+		center = new FeatureNode(ROAD, CENTER);
+		right = new FeatureNode(ROAD, RIGHT);
+		bottom = new FeatureNode(FIELDS, BOTTOM);
+		tile.addEdge(new Edge<FeatureType>(left, right));
+		tile.addNode(TOP, top);
+		tile.addNode(LEFT, left);
+		tile.addNode(CENTER, center);
+		tile.addNode(RIGHT, right);
+		tile.addNode(BOTTOM, bottom);
+
+		tile = new Tile("D", false); // Tile D
+		top = new FeatureNode(CASTLE, TOP);
+		left = new FeatureNode(ROAD, LEFT);
+		center = new FeatureNode(ROAD, CENTER);
+		right = new FeatureNode(ROAD, RIGHT);
+		bottom = new FeatureNode(FIELDS, BOTTOM);
+		tile.addEdge(new Edge<FeatureType>(left, right));
+		tile.addNode(TOP, top);
+		tile.addNode(LEFT, left);
+		tile.addNode(CENTER, center);
+		tile.addNode(RIGHT, right);
+		tile.addNode(BOTTOM, bottom);
 		
 		tile = new Tile("D", false); // Tile D
 		top = new FeatureNode(CASTLE, TOP);
@@ -76,42 +102,14 @@ public class TileFactory {
 		right = new FeatureNode(ROAD, RIGHT);
 		bottom = new FeatureNode(FIELDS, BOTTOM);
 		tile.addEdge(new Edge<FeatureType>(left, right));
-		tile.addNode(top);
-		tile.addNode(left);
-		tile.addNode(center);
-		tile.addNode(right);
-		tile.addNode(bottom);
-		tiles.add(tile);
-		
-		tile = new Tile("D", false); // Tile D
-		top = new FeatureNode(CASTLE, TOP);
-		left = new FeatureNode(ROAD, LEFT);
-		center = new FeatureNode(ROAD, CENTER);
-		right = new FeatureNode(ROAD, RIGHT);
-		bottom = new FeatureNode(FIELDS, BOTTOM);
-		tile.addEdge(new Edge<FeatureType>(left, right));
-		tile.addNode(top);
-		tile.addNode(left);
-		tile.addNode(center);
-		tile.addNode(right);
-		tile.addNode(bottom);
-		tiles.add(tile);
-		
-		tile = new Tile("D", false); // Tile D
-		top = new FeatureNode(CASTLE, TOP);
-		left = new FeatureNode(ROAD, LEFT);
-		center = new FeatureNode(ROAD, CENTER);
-		right = new FeatureNode(ROAD, RIGHT);
-		bottom = new FeatureNode(FIELDS, BOTTOM);
-		tile.addEdge(new Edge<FeatureType>(left, right));
-		tile.addNode(top);
-		tile.addNode(left);
-		tile.addNode(center);
-		tile.addNode(right);
-		tile.addNode(bottom);
+		tile.addNode(TOP, top);
+		tile.addNode(LEFT, left);
+		tile.addNode(CENTER, center);
+		tile.addNode(RIGHT, right);
+		tile.addNode(BOTTOM, bottom);
 		startTile = tile;
-		// There are four tiles of type D but one is the starting tile, which is
-		// generated upon initialising the gameboard.
+//		 There are four tiles of type D but one is the starting tile, which is
+//		 generated upon initialising the gameboard.
 
 		tile = new Tile("E"); // Tile E
 		top = new FeatureNode(CASTLE, TOP);
@@ -122,11 +120,11 @@ public class TileFactory {
 		tile.addEdge(new Edge<FeatureType>(top, center));
 		tile.addEdge(new Edge<FeatureType>(right, center));
 		tile.addEdge(new Edge<FeatureType>(bottom, center));
-		tile.addNode(top);
-		tile.addNode(left);
-		tile.addNode(center);
-		tile.addNode(right);
-		tile.addNode(bottom);
+		tile.addNode(TOP, top);
+		tile.addNode(LEFT, left);
+		tile.addNode(CENTER, center);
+		tile.addNode(RIGHT, right);
+		tile.addNode(BOTTOM, bottom);
 		tiles.add(tile);
 		tiles.add(tile);
 		tiles.add(tile);
@@ -138,7 +136,7 @@ public class TileFactory {
 	public List<Tile> getTiles() {
 		return tiles;
 	}
-	
+
 	public Tile getStartTile() {
 		return startTile;
 	}

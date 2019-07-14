@@ -1,31 +1,39 @@
 package model;
 
-import java.util.ArrayList;
+import static model.Position.BOTTOM;
+import static model.Position.BOTTOMLEFT;
+import static model.Position.BOTTOMRIGHT;
+import static model.Position.LEFT;
+import static model.Position.RIGHT;
+import static model.Position.TOP;
+import static model.Position.TOPLEFT;
+import static model.Position.TOPRIGHT;
+
+import java.util.Collection;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 import base.Edge;
 
-import static model.Direction.*;
-import static model.Position.*;
-
 public class Tile {
 	private String type;
-	private final List<FeatureNode> nodes;
+	private Map<Position, FeatureNode> nodes;
 	private final List<Edge<FeatureType>> edges;
 	private final boolean coatOfArms;
 	private int rotation;
 
 	public Tile(String type) {
 		this.type = type;
-		nodes = new ArrayList<FeatureNode>();
+		nodes = new HashMap<Position, FeatureNode>();
 		edges = new LinkedList<Edge<FeatureType>>();
 		coatOfArms = false;
 	}
 
 	public Tile(String id, boolean coatOfArms) {
 		this.type = id;
-		nodes = new ArrayList<FeatureNode>();
+		nodes = new HashMap<Position, FeatureNode>();
 		edges = new LinkedList<Edge<FeatureType>>();
 		this.coatOfArms = coatOfArms;
 	}
@@ -34,38 +42,70 @@ public class Tile {
 		return type;
 	}
 
-	public boolean addNode(FeatureNode node) {
-		return nodes.add(node);
+	public void addNode(Position position, FeatureNode node) {
+		nodes.put(position, node);
 	}
 
 	public boolean addEdge(Edge<FeatureType> edge) {
 		return edges.add(edge);
 	}
 
-	public FeatureNode top(Position p) {
-		return nodes.stream().filter(n -> n.getPosition() == p).findFirst().orElse(null);
-	}
 
 	public FeatureType featureAtPosition(Position p) {
-		return nodes.stream().filter(n -> n.getPosition() == p && n.getDirection() == BOTH).findFirst().orElse(null)
-				.getType();
+		return nodes.get(p).getType();
 	}
 
 	public FeatureType featureAtPositionComingFromDirection(Position p, Direction d) {
-		return nodes.stream().filter(n -> n.getPosition() == p && n.getDirection() == d).findFirst().orElse(null)
-				.getType();
+		FeatureNode n = nodes.get(p);
+		if(n != null && n.getDirection() == d)
+			return n.getType();
+		else
+			return null;
 	}
 
-	public List<FeatureNode> getNodes() {
-		return nodes;
+	public Collection<FeatureNode> getNodes() {
+		return nodes.values();
 	}
 
 	public void rotateRight() {
-		System.out.println("IS SPINNIN BISH");
-		for (FeatureNode n : nodes) {
-			n.switchDirection();
-			n.rotatePositionRight();
+		Map<Position, FeatureNode> rotatedNodes = new HashMap<Position, FeatureNode>();
+		for (Position p : nodes.keySet()) {
+			switch (p) {
+			case TOPLEFT:
+				rotatedNodes.put(TOPRIGHT, nodes.get(p));
+				break;
+			case TOP:
+				rotatedNodes.put(RIGHT, nodes.get(p));
+				break;
+			case TOPRIGHT:
+				rotatedNodes.put(BOTTOMRIGHT, nodes.get(p));
+				break;
+			case LEFT:
+				rotatedNodes.put(TOP, nodes.get(p));
+				break;
+			case CENTER:
+				break;
+			case RIGHT:
+				rotatedNodes.put(BOTTOM, nodes.get(p));
+				break;
+			case BOTTOMLEFT:
+				rotatedNodes.put(TOPLEFT, nodes.get(p));
+				break;
+			case BOTTOM:
+				rotatedNodes.put(LEFT, nodes.get(p));
+				break;
+			case BOTTOMRIGHT:
+				rotatedNodes.put(BOTTOMLEFT, nodes.get(p));
+				break;
+			}
 		}
+		nodes = rotatedNodes;
+		
+		for (FeatureNode n : nodes.values()) {
+			n.switchDirection();
+//			n.rotatePositionRight(); // Wird jetzt über die Map gemacht. TODO entfernen.
+		}
+		
 		if (rotation == 270)
 			rotation = 0;
 		else
