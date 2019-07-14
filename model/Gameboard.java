@@ -13,22 +13,19 @@ public class Gameboard implements Observable<Gameboard> {
 	private List<GameboardObserver> observers;
 
 	public Gameboard() {
-		board = new Tile[1000][1000];
+		board = new Tile[1000][1000]; // TODO variabel je nach anzahl an tiles?
 		observers = new LinkedList<GameboardObserver>();
 	}
 
 	// kann nicht im konstrukor erfolgen, weil erst observer gesetzt werden muss
 	public void initGameboard(Tile t) {
-		board[500][500] = t;
-		for (GameboardObserver o : observers)
-			o.initGameboard(t.getType(), 500, 500);
+		newTile(t, 500, 500); // TODO variabel je nach anzahl an tiles?
 	}
 
 	public void newTile(Tile t, int x, int y) {
 		board[x][y] = t;
-		System.out.println(t.getRotation());
 		for (GameboardObserver o : observers)
-			o.setTileTypeAndRotation(t.getType(), t.getRotation(), x, y);
+			o.newTile(t.getType(), t.getRotation(), x, y);
 	}
 
 	public boolean isAllowed(Tile t, int x, int y) {

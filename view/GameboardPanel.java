@@ -4,6 +4,7 @@ import java.awt.Component;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Point;
+import java.util.Arrays;
 
 import javax.swing.JPanel;
 
@@ -29,7 +30,7 @@ public class GameboardPanel extends JPanel implements GameboardObserver {
 
 	/**
 	 * das hier war ein anfang, um statt gridbaglayout eine eigene zeichenmethode zu
-	 * schreiben, die die bilder selbst anhand der pixel setzt.
+	 * schreiben, die die bilder selbst anhand der pixelkoordinaten setzt.
 	 **/
 
 //	public void paintComponent(Graphics g) {
@@ -45,59 +46,47 @@ public class GameboardPanel extends JPanel implements GameboardObserver {
 //		}
 //	}
 
-	// TODO das sollte von selbst gleich overlayedTile setzen...
-	public TilePanel newOverlayedTile(String type, int x, int y) {
-		TilePanel tile = new TilePanel(type, zoom);
-		gbc.gridx = x;
-		gbc.gridy = y;
-		add(tile, gbc);
-		repaint(); // nsin
-		return tile;
-	}
+//	public void initGameboard(String type, int x, int y) {
+//		TilePanel tile = new TilePanel(type, zoom);
+//		gbc.gridx = x;
+//		gbc.gridy = y;
+//		add(tile, gbc);
+//		addSurroundingFlipsides(tile);
+//	}
 
-	public void initGameboard(String id, int x, int y) {
-		// TODO Check if there already is a tile on x, y
-		TilePanel tile = new TilePanel(id, zoom);
+	/**
+	 * Adds a tile to the gameboard panel at given position (x, y). Actually it just
+	 * updates the type and rotation of the tile at the given position, as there
+	 * must already be a TilePanel (of type FLIPSIDE) on the same position.
+	 * 
+	 * @param t
+	 * @param x
+	 * @param y
+	 */
+	public void newTile(String type, int rotation, int x, int y) {
+		for (TilePanel t : getTiles()) {
+			if (gbl.getConstraints(t).gridx == x)
+				if (gbl.getConstraints(t).gridy == y) {
+					t.setType(type);
+					t.setRotation(rotation);
+					addSurroundingFlipsides(t);
+					return;
+				}
+		}
+
+		/**
+		 * This part is only reached if there was no TilePanel at given position, which
+		 * should only be the case once at game initialization.
+		 */
+		TilePanel tile = new TilePanel(type, zoom);
+		tile.setRotation(rotation);
 		gbc.gridx = x;
 		gbc.gridy = y;
 		add(tile, gbc);
 		addSurroundingFlipsides(tile);
 	}
 
-	public void zoom(int pixels) {
-		int nextZoom = zoom + pixels;
-		if (nextZoom < 50 || nextZoom > 150)
-			return;
-		else {
-			for (Component c : getComponents())
-				((TilePanel) c).setTileSize(((TilePanel) c).getTileSize() + pixels);
-			zoom = nextZoom;
-			revalidate(); // nsin
-		}
-	}
-
-	public int getZoom() {
-		return zoom;
-	}
-
-	private boolean hasTile(int x, int y) {
-		for (Component c : getComponents()) {
-			if (gbl.getConstraints(c).gridx == x)
-				if (gbl.getConstraints(c).gridy == y)
-					return true;
-		}
-		return false;
-	}
-
-	int getGridX(TilePanel t) {
-		return gbl.getConstraints(t).gridx;
-	}
-
-	int getGridY(TilePanel t) {
-		return gbl.getConstraints(t).gridy;
-	}
-
-	public void addSurroundingFlipsides(TilePanel tile) {
+	private void addSurroundingFlipsides(TilePanel tile) {
 		int x = gbl.getConstraints(tile).gridx;
 		int y = gbl.getConstraints(tile).gridy;
 		gbc.gridy = y;
@@ -117,16 +106,44 @@ public class GameboardPanel extends JPanel implements GameboardObserver {
 		repaint(); // not sure if necessary
 	}
 
-	public void setTileTypeAndRotation(String type, int rotation, int x, int y) {
+	public TilePanel newOverlayedTile(String type, int x, int y) {
+		overlayedTile = new TilePanel(type, zoom);
+		gbc.gridx = x;
+		gbc.gridy = y;
+		add(overlayedTile, gbc);
+		repaint(); // nsin
+		return overlayedTile;
+	}
+
+	/**
+	 * Checks if the gameboard has a tile at (x, y). Strictly speaking, it just
+	 * checks if there is _any_ component at (x, y). As we are exclusively adding
+	 * TilePanel components to the gameboard, we may assume the component is a tile.
+	 * 
+	 * @param x
+	 * @param y
+	 * @return
+	 */
+	private boolean hasTile(int x, int y) {
 		for (Component c : getComponents()) {
 			if (gbl.getConstraints(c).gridx == x)
-				if (gbl.getConstraints(c).gridy == y) {
-					((TilePanel) c).setType(type);
-					((TilePanel) c).setRotation(rotation);
-					addSurroundingFlipsides((TilePanel) c);
-					return;
-				}
+				if (gbl.getConstraints(c).gridy == y)
+					return true;
 		}
+		return false;
+	}
+
+	int getGridX(TilePanel t) {
+		return gbl.getConstraints(t).gridx;
+	}
+
+	int getGridY(TilePanel t) {
+		return gbl.getConstraints(t).gridy;
+	}
+
+	private TilePanel[] getTiles() {
+		return Arrays.stream(getComponents()).filter(c -> c instanceof TilePanel).map(c -> (TilePanel) c)
+				.toArray(TilePanel[]::new);
 	}
 
 	public TilePanel findTileAt(Point p) {
@@ -152,6 +169,22 @@ public class GameboardPanel extends JPanel implements GameboardObserver {
 	public void update(Gameboard o) {
 		// TODO Auto-generated method stub
 
+	}
+
+	public void zoom(int pixels) {
+		int nextZoom = zoom + pixels;
+		if (nextZoom < 50 || nextZoom > 150)
+			return;
+		else {
+			for (TilePanel t : getTiles())
+				t.setTileSize(t.getTileSize() + pixels);
+			zoom = nextZoom;
+			revalidate(); // nsin
+		}
+	}
+
+	public int getZoom() {
+		return zoom;
 	}
 
 	public void setTileInFocus(TilePanel lastTileInFocus) {

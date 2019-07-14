@@ -115,8 +115,8 @@ public class MainWindow extends JFrame {
 								gameboardPanel.getGridY(tile))) {
 							gameboardPanel.setTileWithOverlay(tile);
 							gameboardPanel.getTileWithOverlay().setVisible(false);
-							gameboardPanel.setOverlayedTile(gameboardPanel.newOverlayedTile(tilestack.peek().getType(),
-									gameboardPanel.getGridX(tile), gameboardPanel.getGridY(tile)));
+							gameboardPanel.newOverlayedTile(tilestack.peek().getType(),
+									gameboardPanel.getGridX(tile), gameboardPanel.getGridY(tile));
 							gameboardPanel.getOverlayedTile().setRotation(tilestack.peek().getRotation());
 							repaint();
 							return;
@@ -127,55 +127,6 @@ public class MainWindow extends JFrame {
 					}
 				}
 			}
-
-//			@Override
-//			public void mouseMoved(MouseEvent event) {
-//
-//				Tile tile = gameboardPanel.findTileAt(event.getPoint());
-//
-//				event.translatePoint(0, 82); // TODO Irgendwie hat das immer ein Offset von ~82 (die Höhe der
-//												// Fensterdekoration?). Bin gerade zu faul dem nachzugehen.
-//				gameboardPanel.anchorPoint = event.getPoint();
-//
-//				boolean mouseOverTile = false;
-//
-//				if (tile != null) {
-//					if (lastTileWithOverlay != null && !tile.equals(lastTileWithOverlay))
-//						lastTileWithOverlay.unsetOverlayedTile();
-//
-//					if (tile.getID() == "FLIPSIDE") {
-//						tile.setOverlayedTileType(tilestack.peek().getType());
-//						tile.setRotation(tilestack.peek().getRotation());
-//						repaint();
-//						lastTileWithOverlay = tile;
-//					}
-//
-//					mouseOverTile = true;
-//				}
-//
-////				for (Component child : gameboardPanel.getComponents()) {
-////					if (new Rectangle(child.getLocationOnScreen(), new Dimension(child.getWidth(), child.getHeight()))
-////							.contains(event.getLocationOnScreen())) {
-////						if (lastTileWithOverlay != null && !((Tile) child).equals(lastTileWithOverlay))
-////							lastTileWithOverlay.unsetOverlayedTile();
-////
-////						if (((Tile) child).getID() == "FLIPSIDE") {
-////							((Tile) child).setOverlayedTileType(tilestack.peekTile().getType());
-////							repaint();
-////							lastTileWithOverlay = (Tile) child;
-////						}
-////
-////						mouseOverTile = true;
-////					}
-////				}
-//
-//				if (lastTileWithOverlay != null && mouseOverTile == false) {
-//					lastTileWithOverlay.unsetOverlayedTile();
-//					lastTileWithOverlay = null;
-//					repaint();
-//				}
-//
-//			}
 
 			@Override
 			public void mouseDragged(MouseEvent event) {

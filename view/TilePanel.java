@@ -43,11 +43,13 @@ public class TilePanel extends JLabel {
 		return type;
 	}
 
+	// TODO unused?
 	public void setOverlayedTileType(String id) {
 		overlayedTileID = id;
 		updateIcon();
 	}
 
+	// TODO unused?
 	public void unsetOverlayedTile() {
 		overlayedTileID = null;
 		updateIcon();

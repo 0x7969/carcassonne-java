@@ -1,15 +1,19 @@
 package controller;
 
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 import javax.swing.JFrame;
 
 import model.Gameboard;
 
-public class GameController {
+public class MainController {
 //	startingTile Tile;
 	private Gameboard board;
 	private JFrame view;
+	private final static Logger LOGGER = Logger.getLogger("Carcassonne");
 
-	public GameController() {
+	public MainController() {
 		board = new Gameboard();
 		// hier werden dann tatsächlich die actionlistener erstellt
 		// man holt sich die components von view (getToolbar oä) und
@@ -20,9 +24,12 @@ public class GameController {
 		// implementierren eher ein setupGameview, setupMenuview und closeGameview und
 		// closeMenuview bereitstellt. und dann ein changeGameState(STATE), das view
 		// schließt und entsprechend eine neue view öffnet
+
+		LOGGER.setLevel(Level.INFO);
+
 	}
 
 	public static void main(String[] args) {
-		GameController game = new GameController();
+		MainController game = new MainController();
 	}
 }
