@@ -2,6 +2,7 @@ package base;
 
 import java.util.ArrayDeque;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.function.Function;
@@ -39,6 +40,11 @@ public class Graph<T> {
         return node;
     }
 
+    // TODO könnte man hier jetzt eigentlich auch ein Node<T> einfügen oder muss es eine klasse sein, die von Node<T> erbt?
+    public boolean addAllNodes(Collection<? extends Node<T>> nodes) {
+    	return this.nodes.addAll(nodes);
+    }
+    
     /**
      * Eine neue Kante zwischen zwei Knoten hinzufügen. Sollte die Kante schon existieren, wird die vorhandene Kante zurückgegeben.
      * @param nodeA Der erste Knoten
@@ -54,6 +60,21 @@ public class Graph<T> {
         edge = new Edge<>(nodeA, nodeB);
         this.edges.add(edge);
         return edge;
+    }
+    
+    public Edge<T> addEdge(Node<T> nodeA, Node<T> nodeB, int weight) {
+        Edge<T> edge = getEdge(nodeA, nodeB);
+        if(edge != null) {
+            return edge;
+        }
+
+        edge = new Edge<>(nodeA, nodeB, weight);
+        this.edges.add(edge);
+        return edge;
+    }
+    
+    public boolean addAllEdges(Collection<Edge<T>> edges) {
+    	return this.edges.addAll(edges); // TODO kann das probleme machen? die methode addEdge prüft vorher noch ob sie bereits vorhanden ist.
     }
 
     /**

@@ -1,20 +1,30 @@
 package model;
 
+import static model.Position.BOTTOM;
+import static model.Position.LEFT;
+import static model.Position.RIGHT;
+import static model.Position.TOP;
+
+import java.util.ArrayDeque;
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
+import base.Edge;
+import base.Graph;
+import base.Node;
 import view.GameboardObserver;
 import view.Observer;
-
-import static model.Position.*;
 
 public class Gameboard implements Observable<Gameboard> {
 	private Tile[][] board;
 	private List<GameboardObserver> observers;
+	private final Graph<FeatureType> graph;
 
 	public Gameboard() {
 		board = new Tile[1000][1000]; // TODO variabel je nach anzahl an tiles?
 		observers = new LinkedList<GameboardObserver>();
+		graph = new Graph<FeatureType>();
 	}
 
 	// kann nicht im konstrukor erfolgen, weil erst observer gesetzt werden muss
@@ -24,8 +34,45 @@ public class Gameboard implements Observable<Gameboard> {
 
 	public void newTile(Tile t, int x, int y) {
 		board[x][y] = t;
+		
+		connectNodesOfNewTile(x, y);
+		
 		for (GameboardObserver o : observers)
 			o.newTile(t.getType(), t.getRotation(), x, y);
+	}
+	
+	/**
+	 * Connects the nodes of all neighbouring tiles facing the tile at coordinates x, y.
+	 * It is assumed that the tile is placed according to the rules.
+	 * 
+	 * @param x coordinate
+	 * @param y coordinate
+	 */
+	private void connectNodesOfNewTile(int x, int y) {
+		graph.addAllNodes(board[x][y].getNodes());
+		graph.addAllEdges(board[x][y].getEdges());
+		
+		Tile t = board[x][y];
+		
+		// Check top tile
+		if (board[x][y - 1] != null) {
+			graph.addEdge(board[x][y - 1].getNode(BOTTOM), t.getNode(TOP), 1);
+		}
+
+		// Check left tile
+		if (board[x - 1][y] != null) {
+			graph.addEdge(board[x - 1][y].getNode(RIGHT), t.getNode(LEFT), 1);
+		}
+
+		// Check right tile
+		if (board[x + 1][y] != null) {
+			graph.addEdge(board[x + 1][y].getNode(LEFT), t.getNode(RIGHT), 1);
+		}
+
+		// Check bottom tile
+		if (board[x][y + 1] != null) {
+			graph.addEdge(board[x][y + 1].getNode(TOP), t.getNode(BOTTOM), 1);
+		}
 	}
 
 	public boolean isAllowed(Tile t, int x, int y) {

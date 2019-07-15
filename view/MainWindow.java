@@ -147,10 +147,6 @@ public class MainWindow extends JFrame {
 				// eigentlich erlaubt?
 				TilePanel tile = gameboardPanel.getOverlayedTile();
 
-				System.out.println(gameboard.getBoard()[gameboardPanel
-						.getGridX(gameboardPanel.findTileAt(event.getPoint()))][gameboardPanel
-								.getGridY(gameboardPanel.findTileAt(event.getPoint()))]);
-
 				if (tile != null) {
 					if (SwingUtilities.isLeftMouseButton(event)) {
 						gameboard.newTile(tilestack.drawTile(), gameboardPanel.getGridX(tile),

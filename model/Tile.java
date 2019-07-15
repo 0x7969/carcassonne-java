@@ -31,8 +31,8 @@ public class Tile {
 		coatOfArms = false;
 	}
 
-	public Tile(String id, boolean coatOfArms) {
-		this.type = id;
+	public Tile(String type, boolean coatOfArms) {
+		this.type = type;
 		nodes = new HashMap<Position, FeatureNode>();
 		edges = new LinkedList<Edge<FeatureType>>();
 		this.coatOfArms = coatOfArms;
@@ -46,10 +46,13 @@ public class Tile {
 		nodes.put(position, node);
 	}
 
+	public FeatureNode getNode(Position position) {
+		return nodes.get(position);
+	}
+
 	public boolean addEdge(Edge<FeatureType> edge) {
 		return edges.add(edge);
 	}
-
 
 	public FeatureType featureAtPosition(Position p) {
 		return nodes.get(p).getType();
@@ -57,7 +60,7 @@ public class Tile {
 
 	public FeatureType featureAtPositionComingFromDirection(Position p, Direction d) {
 		FeatureNode n = nodes.get(p);
-		if(n != null && n.getDirection() == d)
+		if (n != null && n.getDirection() == d)
 			return n.getType();
 		else
 			return null;
@@ -65,6 +68,10 @@ public class Tile {
 
 	public Collection<FeatureNode> getNodes() {
 		return nodes.values();
+	}
+	
+	public List<Edge<FeatureType>> getEdges() {
+		return edges;
 	}
 
 	public void rotateRight() {
@@ -100,12 +107,12 @@ public class Tile {
 			}
 		}
 		nodes = rotatedNodes;
-		
+
 		for (FeatureNode n : nodes.values()) {
 			n.switchDirection();
 //			n.rotatePositionRight(); // Wird jetzt über die Map gemacht. TODO entfernen.
 		}
-		
+
 		if (rotation == 270)
 			rotation = 0;
 		else
@@ -117,12 +124,13 @@ public class Tile {
 	}
 
 	public String toString() {
-		return "Type: " + type +
-				", top feature: " + featureAtPosition(TOP) + 
-				", left feature: " + featureAtPosition(LEFT) +
-				", right feature: " + featureAtPosition(RIGHT) +
-				", bottom feature: " + featureAtPosition(BOTTOM) +   
-				", rotation: " + rotation;
+		return "Type: " + type + ", top feature: " + featureAtPosition(TOP) + ", left feature: "
+				+ featureAtPosition(LEFT) + ", right feature: " + featureAtPosition(RIGHT) + ", bottom feature: "
+				+ featureAtPosition(BOTTOM) + ", rotation: " + rotation;
+	}
+	
+	public boolean hasCoatOfArms() {
+		return coatOfArms;
 	}
 
 }

@@ -7,6 +7,7 @@ package base;
 public class Edge<T> {
 
     private Node<T> nodeA, nodeB;
+    private int weight;
 
     /**
      * Erstellt eine neue Kante zwischen zwei gegebenen Knoten
@@ -16,6 +17,13 @@ public class Edge<T> {
     public Edge(Node<T> nodeA, Node<T> nodeB) {
         this.nodeA = nodeA;
         this.nodeB = nodeB;
+        this.weight = 0;
+    }
+    
+    public Edge(Node<T> nodeA, Node<T> nodeB, int weight) {
+        this.nodeA = nodeA;
+        this.nodeB = nodeB;
+        this.weight = weight;
     }
 
     /**
@@ -50,5 +58,9 @@ public class Edge<T> {
      */
     public Node<T> getOtherNode(Node<T> source) {
         return (nodeA == source ? nodeB : nodeA);
+    }
+    
+    public int getWeight() {
+    	return weight;
     }
 }
