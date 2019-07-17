@@ -9,6 +9,7 @@ public class FeatureNode extends Node<FeatureType> {
 
 	private Position position;
 	private Direction direction;
+	private boolean connectsTiles;
 
 	/**
 	 * Creates a new FeatureNode. It is only present when coming from the given
@@ -22,6 +23,7 @@ public class FeatureNode extends Node<FeatureType> {
 		super(type);
 		this.position = position;
 		this.direction = direction;
+		this.connectsTiles = false;
 	}
 
 	/**
@@ -35,6 +37,7 @@ public class FeatureNode extends Node<FeatureType> {
 		super(type);
 		this.position = position;
 		this.direction = BOTH;
+		this.connectsTiles = false;
 	}
 
 	public FeatureType getType() {
@@ -85,6 +88,14 @@ public class FeatureNode extends Node<FeatureType> {
 			position = BOTTOMLEFT;
 			break;
 		}
+	}
+	
+	public void setConnectsTiles() {
+		connectsTiles = true;
+	}
+	
+	public boolean isConnectingTiles() {
+		return connectsTiles;
 	}
 
 }

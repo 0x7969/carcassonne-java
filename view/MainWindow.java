@@ -31,19 +31,8 @@ public class MainWindow extends JFrame {
 		toolbarPanel = new ToolbarPanel();
 		toolbarPanel.addToolbarActionListener((event) -> {
 			switch (event.getActionCommand()) {
-			case "New tile":
-				gameboardPanel.newOverlayedTile("B", toolbarPanel.getXValue(), toolbarPanel.getYValue());
-				revalidate(); // nsin
-				repaint();
-				break;
 			case "Quit":
 				dispose();
-				break;
-			case "+":
-				gameboardPanel.zoom(5);
-				break;
-			case "-":
-				gameboardPanel.zoom(-5);
 				break;
 			}
 		});
@@ -115,8 +104,8 @@ public class MainWindow extends JFrame {
 								gameboardPanel.getGridY(tile))) {
 							gameboardPanel.setTileWithOverlay(tile);
 							gameboardPanel.getTileWithOverlay().setVisible(false);
-							gameboardPanel.newOverlayedTile(tilestack.peek().getType(),
-									gameboardPanel.getGridX(tile), gameboardPanel.getGridY(tile));
+							gameboardPanel.newOverlayedTile(tilestack.peek().getType(), gameboardPanel.getGridX(tile),
+									gameboardPanel.getGridY(tile));
 							gameboardPanel.getOverlayedTile().setRotation(tilestack.peek().getRotation());
 							repaint();
 							return;

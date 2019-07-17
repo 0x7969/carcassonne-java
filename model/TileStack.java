@@ -8,6 +8,7 @@ import view.Observer;
 
 public class TileStack implements Observable<TileStack> {
 	private List<Tile> cardstack; // stack wäre natürlich naheliegender aber eignet sich weniger gut zum mischen
+	// TODO in stack umwandeln. einfach vorher factory.gettiles.. und das shufflen. danach erst auf stack legen.
 	private TileFactory factory;
 	private List<Observer<TileStack>> observers;
 

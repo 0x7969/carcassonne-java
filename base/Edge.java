@@ -63,4 +63,8 @@ public class Edge<T> {
     public int getWeight() {
     	return weight;
     }
+    
+    public String toString() {
+    	return nodeA.getValue().toString() + " connecting " + nodeB.getValue().toString();
+    }
 }

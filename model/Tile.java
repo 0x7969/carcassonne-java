@@ -5,6 +5,7 @@ import static model.Position.BOTTOMLEFT;
 import static model.Position.BOTTOMRIGHT;
 import static model.Position.LEFT;
 import static model.Position.RIGHT;
+import static model.Position.CENTER;
 import static model.Position.TOP;
 import static model.Position.TOPLEFT;
 import static model.Position.TOPRIGHT;
@@ -91,6 +92,7 @@ public class Tile {
 				rotatedNodes.put(TOP, nodes.get(p));
 				break;
 			case CENTER:
+				rotatedNodes.put(CENTER, nodes.get(p));
 				break;
 			case RIGHT:
 				rotatedNodes.put(BOTTOM, nodes.get(p));
