@@ -1,6 +1,7 @@
 package view;
 
 import java.awt.Component;
+import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Point;
@@ -25,6 +26,7 @@ public class GameboardPanel extends JPanel implements GameboardObserver {
 	private TilePanel tileInFocus;
 	private TilePanel tileWithOverlay;
 	private TilePanel overlayedTile;
+	private MeepleOverlayPanel meepleOverlayPanel;
 
 	public GameboardPanel(GameController gc) {
 		gbl = new GridBagLayout();
@@ -38,20 +40,7 @@ public class GameboardPanel extends JPanel implements GameboardObserver {
 						gc.newTile(gc.pickUpTile(), getGridX(overlayedTile), getGridY(overlayedTile));
 						repaint(); // !
 					} else if ((SwingUtilities.isRightMouseButton(event))) {
-						if (overlayedTile != null) {
-							gc.rotateNextTile();
-
-							for (int i = 0; i < 3; i++) {
-								if (gc.isTileAllowed(gc.peekTile(), getGridX(overlayedTile), getGridY(overlayedTile))) {
-									overlayedTile.setRotation(gc.peekTile().getRotation());
-									repaint();
-									return;
-								} else {
-									gc.rotateNextTile();
-									repaint();
-								}
-							}
-						}
+						rotateUntilAllowed(gc);
 					}
 				}
 			}
@@ -65,15 +54,12 @@ public class GameboardPanel extends JPanel implements GameboardObserver {
 				Point p = event.getPoint();
 
 				// save current cursor position, used by mouseDragged()
-				anchorPoint = event.getPoint();
+				anchorPoint = p;
 
 				TilePanel tile = getTileAt(p);
-				if (tile != null && tile == getTileInFocus())
+				if (tile != null && tile == tileInFocus)
 					return;
-				setTileInFocus(tile);
-
-				if (tile != null) // debug
-					getTileInFocus().toString();
+				tileInFocus = tile;
 
 				if (overlayedTile != null && !overlayedTile.contains(p)) {
 					remove(overlayedTile);
@@ -138,7 +124,7 @@ public class GameboardPanel extends JPanel implements GameboardObserver {
 				if (gbl.getConstraints(t).gridy == y) {
 					t.setType(type);
 					t.setRotation(rotation);
-					addSurroundingFlipsides(t);
+					addSurroundingFlipsides(x, y);
 					return;
 				}
 		}
@@ -151,17 +137,16 @@ public class GameboardPanel extends JPanel implements GameboardObserver {
 		tile.setRotation(rotation);
 		gbc.gridx = x;
 		gbc.gridy = y;
-		add(new MeepleOverlayPanel(scale), gbc, 0);
+		meepleOverlayPanel = new MeepleOverlayPanel(scale);
+		add(meepleOverlayPanel, gbc, 0);
 
 		add(tile, gbc, -1);
 
-		addSurroundingFlipsides(tile);
+		addSurroundingFlipsides(x, y);
 		repaint(); // not necessary
 	}
 
-	private void addSurroundingFlipsides(TilePanel tile) {
-		int x = gbl.getConstraints(tile).gridx;
-		int y = gbl.getConstraints(tile).gridy;
+	private void addSurroundingFlipsides(int x, int y) {
 		gbc.gridy = y;
 		gbc.gridx = x - 1;
 		if (!hasTile(gbc.gridx, gbc.gridy))
@@ -177,6 +162,21 @@ public class GameboardPanel extends JPanel implements GameboardObserver {
 		if (!hasTile(gbc.gridx, gbc.gridy))
 			add(new TilePanel("FLIPSIDE", scale), gbc);
 		repaint(); // not sure if necessary
+	}
+	
+	private void rotateUntilAllowed(GameController gc) {
+		gc.rotateNextTile();
+
+		for (int i = 0; i < 3; i++) {
+			if (gc.isTileAllowed(gc.peekTile(), getGridX(overlayedTile), getGridY(overlayedTile))) {
+				overlayedTile.setRotation(gc.peekTile().getRotation());
+				repaint();
+				return;
+			} else {
+				gc.rotateNextTile();
+				repaint();
+			}
+		}
 	}
 
 	public TilePanel newOverlayedTile(String type, int x, int y) {
@@ -250,6 +250,7 @@ public class GameboardPanel extends JPanel implements GameboardObserver {
 		else {
 			for (TilePanel t : getTiles())
 				t.setTileSize(t.getTileSize() + pixels);
+			meepleOverlayPanel.setPreferredSize(new Dimension(scale + pixels, scale + pixels));
 			scale += pixels;
 			revalidate(); // !
 		}
@@ -257,14 +258,6 @@ public class GameboardPanel extends JPanel implements GameboardObserver {
 
 	public int getScale() {
 		return scale;
-	}
-
-	public void setTileInFocus(TilePanel lastTileInFocus) {
-		this.tileInFocus = lastTileInFocus;
-	}
-
-	public TilePanel getTileInFocus() {
-		return tileInFocus;
 	}
 
 }

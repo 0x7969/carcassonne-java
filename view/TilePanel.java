@@ -12,15 +12,14 @@ import javax.swing.JPanel;
 
 public class TilePanel extends JPanel {
 	
-	private static final String folder = "resources/tiles_/";
+	private static final String FOLDER = "resources/tiles_/";
 
 	private BufferedImage tileImage;
 	private String type;
-	private String overlayedTileID; // TODO unused?
 	private int size; // both height and width in pixels
 	private int rotation; // in degrees
 
-	public TilePanel(String id, int size) {
+	TilePanel(String id, int size) {
 		this.rotation = 0;
 		this.size = size;
 		setType(id);
@@ -32,7 +31,6 @@ public class TilePanel extends JPanel {
 
 	public void setTileSize(int size) { // TODO kann man stattdessen auch das setSize von JLabel nutzen? mal auschecken
 		this.size = size;
-//		setIcon(new ImageIcon(tileImage.getScaledInstance(size, size, Image.SCALE_SMOOTH)));
 	}
 
 	public void setType(String id) {
@@ -45,20 +43,11 @@ public class TilePanel extends JPanel {
 	}
 
 	private void updateIcon() {
-		String filename = null;
-
-		if (overlayedTileID != null)
-			filename = overlayedTileID + ".jpg";
-		else
-			filename = type + ".jpg";
-
 		try {
-			tileImage = ImageIO.read(new File(folder + filename));
-//			setIcon(new ImageIcon(tileImage.getScaledInstance(size, size, Image.SCALE_SMOOTH)));
+			tileImage = ImageIO.read(new File(FOLDER + type + ".jpg"));
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		revalidate();
 	}
 
 	@Override
@@ -80,7 +69,6 @@ public class TilePanel extends JPanel {
 		Graphics2D g2d = (Graphics2D) g;
 		g2d.rotate(Math.toRadians(rotation), size / 2, size / 2);
 		g2d.drawImage(tileImage, 0, 0, size, size, null);
-		revalidate(); // nsin
 	}
 
 	public void setRotation(int rotation) {

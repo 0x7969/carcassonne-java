@@ -10,12 +10,8 @@ import static model.Position.TOP;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Set;
-import java.util.logging.ConsoleHandler;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import base.Edge;
@@ -179,31 +175,6 @@ public class Gameboard implements Observable<Gameboard> {
 		}
 		return scores;
 
-//		System.out.println("+++++++");
-//		return points;
-//        List<Node<FeatureType>> nodeList = new ArrayList<>(graph.getNodes());
-//        int points = 0;
-//        
-//        ArrayDeque<Node<FeatureType>> queue = new ArrayDeque<>();
-//        queue.push(nodeList.remove(0));
-//
-//        while(!queue.isEmpty()) {
-//            Node<FeatureType> node = queue.pop();
-//            List<Edge<FeatureType>> edges = graph.getEdges(node);
-//            for(Edge<FeatureType> edge : edges) {
-//                Node<FeatureType> nextNode = edge.getOtherNode(node);
-//                if(nodeList.contains(nextNode)) {
-//                    queue.push(nextNode);
-//                    nodeList.remove(nextNode);
-//                }
-//            }
-//        }
-//
-//        return nodeList.isEmpty();
-	}
-
-	public Tile[][] getBoard() {
-		return board;
 	}
 
 	public boolean addObserver(Observer<Gameboard> o) {
