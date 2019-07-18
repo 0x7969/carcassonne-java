@@ -52,7 +52,7 @@ public class MainWindow extends JFrame {
 
 		gameboard = new Gameboard();
 		gameboard.addObserver(gameboardPanel);
-		gameboard.initGameboard(tilestack.drawTile()); // The topmost tile of the tilestack is always the start tile.
+		gameboard.initGameboard(tilestack.pickUpTile()); // The topmost tile of the tilestack is always the start tile.
 
 		gameboardWrapper.add(gameboardPanel);
 		this.add(gameboardWrapper);
@@ -77,10 +77,6 @@ public class MainWindow extends JFrame {
 				// von mouseDragged(). TODO Hat immer offset von ~82. Wg. Menubar?
 				event.translatePoint(0, 82);
 				gameboardPanel.anchorPoint = event.getPoint();
-
-				// TODO bei jeder mausbewegung wird alles neu berechnet. vielleicht am anfang
-				// fragen, ob es die gleiche tile wie letztes mal ist (oder gar keine) und wenn
-				// ja sofort return. das erübrigt vllt. auch spätere abfragen davon.
 
 				TilePanel tile = gameboardPanel.getTileAt(p);
 				if (tile != null && tile == gameboardPanel.getTileInFocus())
@@ -133,12 +129,12 @@ public class MainWindow extends JFrame {
 		gameboardPanel.addMouseListener(new MouseAdapter() {
 			public void mouseClicked(MouseEvent event) {
 				// TODO ist die direkte referenz auf gameboardPanel innerhalb des controllers
-				// eigentlich erlaubt?
+				// eigentlich erlaubt? eigentlich nicht...
 				TilePanel tile = gameboardPanel.getOverlayedTile();
 
 				if (tile != null) {
 					if (SwingUtilities.isLeftMouseButton(event)) {
-						gameboard.newTile(tilestack.drawTile(), gameboardPanel.getGridX(tile),
+						gameboard.newTile(tilestack.pickUpTile(), gameboardPanel.getGridX(tile),
 								gameboardPanel.getGridY(tile));
 						repaint(); // !
 					} else if ((SwingUtilities.isRightMouseButton(event))) {

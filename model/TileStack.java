@@ -26,7 +26,7 @@ public class TileStack implements Observable<TileStack> {
 		cardstack.add(0, factory.getStartTile());
 	}
 
-	public Tile drawTile() {
+	public Tile pickUpTile() {
 		Tile topTile = cardstack.get(0);
 		cardstack.remove(0);
 		for (Observer<TileStack> o : observers)

@@ -3,9 +3,9 @@ package model;
 import static model.Position.BOTTOM;
 import static model.Position.BOTTOMLEFT;
 import static model.Position.BOTTOMRIGHT;
+import static model.Position.CENTER;
 import static model.Position.LEFT;
 import static model.Position.RIGHT;
-import static model.Position.CENTER;
 import static model.Position.TOP;
 import static model.Position.TOPLEFT;
 import static model.Position.TOPRIGHT;
@@ -15,26 +15,30 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.SortedMap;
+import java.util.TreeMap;
 
 import base.Edge;
 
 public class Tile {
 	private String type;
-	private Map<Position, FeatureNode> nodes;
+	private SortedMap<Position, FeatureNode> nodes; // by using a sorted map, the key and value pairs will be sorted
+													// from left to right, top to bottom (following the Position enums
+													// order).
 	private final List<Edge<FeatureType>> edges;
 	private final boolean coatOfArms;
 	private int rotation;
 
 	public Tile(String type) {
 		this.type = type;
-		nodes = new HashMap<Position, FeatureNode>();
+		nodes = new TreeMap<Position, FeatureNode>();
 		edges = new LinkedList<Edge<FeatureType>>();
 		coatOfArms = false;
 	}
 
 	public Tile(String type, boolean coatOfArms) {
 		this.type = type;
-		nodes = new HashMap<Position, FeatureNode>();
+		nodes = new TreeMap<Position, FeatureNode>();
 		edges = new LinkedList<Edge<FeatureType>>();
 		this.coatOfArms = coatOfArms;
 	}
@@ -70,13 +74,14 @@ public class Tile {
 	public Collection<FeatureNode> getNodes() {
 		return nodes.values();
 	}
-	
+
 	public List<Edge<FeatureType>> getEdges() {
 		return edges;
 	}
 
 	public void rotateRight() {
-		Map<Position, FeatureNode> rotatedNodes = new HashMap<Position, FeatureNode>();
+		SortedMap<Position, FeatureNode> rotatedNodes = new TreeMap<Position, FeatureNode>();
+
 		for (Position p : nodes.keySet()) {
 			switch (p) {
 			case TOPLEFT:
@@ -108,12 +113,13 @@ public class Tile {
 				break;
 			}
 		}
-		nodes = rotatedNodes;
-
-		for (FeatureNode n : nodes.values()) {
+		
+		for (FeatureNode n : rotatedNodes.values()) {
 			n.switchDirection();
 //			n.rotatePositionRight(); // Wird jetzt über die Map gemacht. TODO entfernen.
 		}
+		
+		nodes = rotatedNodes;
 
 		if (rotation == 270)
 			rotation = 0;
@@ -130,7 +136,7 @@ public class Tile {
 				+ featureAtPosition(LEFT) + ", right feature: " + featureAtPosition(RIGHT) + ", bottom feature: "
 				+ featureAtPosition(BOTTOM) + ", rotation: " + rotation;
 	}
-	
+
 	public boolean hasCoatOfArms() {
 		return coatOfArms;
 	}

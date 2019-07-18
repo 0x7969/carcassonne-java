@@ -8,16 +8,17 @@ import java.io.File;
 import java.io.IOException;
 
 import javax.imageio.ImageIO;
-import javax.swing.JLabel;
+import javax.swing.JPanel;
 
-public class TilePanel extends JLabel {
+public class TilePanel extends JPanel {
+	
+	private static final String folder = "resources/tiles_/";
 
 	private BufferedImage tileImage;
 	private String type;
-	private String overlayedTileID;
+	private String overlayedTileID; // TODO unused?
 	private int size; // both height and width in pixels
-	private static final String folder = "resources/tiles_/";
-	private int rotation;
+	private int rotation; // in degrees
 
 	public TilePanel(String id, int size) {
 		this.rotation = 0;
@@ -29,7 +30,7 @@ public class TilePanel extends JLabel {
 		return size;
 	}
 
-	public void setTileSize(int size) {
+	public void setTileSize(int size) { // TODO kann man stattdessen auch das setSize von JLabel nutzen? mal auschecken
 		this.size = size;
 //		setIcon(new ImageIcon(tileImage.getScaledInstance(size, size, Image.SCALE_SMOOTH)));
 	}
@@ -91,7 +92,7 @@ public class TilePanel extends JLabel {
 		Graphics2D g2d = (Graphics2D) g;
 		g2d.rotate(Math.toRadians(rotation), size / 2, size / 2);
 		g2d.drawImage(tileImage, 0, 0, size, size, null);
-		revalidate();
+		revalidate(); // nsin
 	}
 
 	public void setRotation(int rotation) {
