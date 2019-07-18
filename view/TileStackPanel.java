@@ -10,18 +10,21 @@ public class TileStackPanel extends JPanel implements Observer<TileStack> {
 	TilePanel topTile;
 	JLabel tileCounter;
 	
-	public TileStackPanel(TileStack tilestack) {
+	public TileStackPanel() {
 		setBorder(BorderFactory.createTitledBorder("Stack"));
-		topTile = new TilePanel(tilestack.peek().getType(), 100);
+		
+		topTile = new TilePanel("FLIPSIDE", 100);
 		add(topTile);
-		tileCounter = new JLabel(Integer.toString(tilestack.remainingTiles()));
+		
+		tileCounter = new JLabel();
 		add(tileCounter);
 	}
 
 	public void update(TileStack tilestack) {
-		topTile.setType(tilestack.peek().getType());
-		topTile.setRotation(tilestack.peek().getRotation());
+		topTile.setType(tilestack.peekTile().getType());
+		topTile.setRotation(tilestack.peekTile().getRotation());
 		tileCounter.setText(Integer.toString(tilestack.remainingTiles()));
+		repaint(); // !
 	}
 
 }

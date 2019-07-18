@@ -7,6 +7,7 @@ import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
+import javax.swing.SwingUtilities;
 
 public class ToolbarPanel extends JPanel {
 	
@@ -22,6 +23,14 @@ public class ToolbarPanel extends JPanel {
 		setLayout(new FlowLayout(FlowLayout.RIGHT));
 		quitButton = new JButton("Quit");
 		add(quitButton);
+		
+		quitButton.addActionListener((event) -> {
+			switch (event.getActionCommand()) {
+			case "Quit":
+				SwingUtilities.getWindowAncestor(this).dispose();
+				break;
+			}
+		});
 	}
 	
 	public void addToolbarActionListener(ActionListener l) {

@@ -34,7 +34,7 @@ public class TileStack implements Observable<TileStack> {
 		return topTile;
 	}
 
-	public Tile peek() {
+	public Tile peekTile() {
 		return cardstack.get(0);
 	}
 

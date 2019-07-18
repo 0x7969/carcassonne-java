@@ -44,18 +44,6 @@ public class TilePanel extends JPanel {
 		return type;
 	}
 
-	// TODO unused?
-	public void setOverlayedTileType(String id) {
-		overlayedTileID = id;
-		updateIcon();
-	}
-
-	// TODO unused?
-	public void unsetOverlayedTile() {
-		overlayedTileID = null;
-		updateIcon();
-	}
-
 	private void updateIcon() {
 		String filename = null;
 

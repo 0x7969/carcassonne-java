@@ -4,10 +4,14 @@ import java.awt.Component;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Point;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.util.Arrays;
 
 import javax.swing.JPanel;
+import javax.swing.SwingUtilities;
 
+import controller.GameController;
 import model.Gameboard;
 
 public class GameboardPanel extends JPanel implements GameboardObserver {
@@ -16,43 +20,108 @@ public class GameboardPanel extends JPanel implements GameboardObserver {
 
 	GridBagLayout gbl;
 	GridBagConstraints gbc;
-	int zoom = 100; // in pixels of each tile
+	int scale = 100; // in pixels of each tile
 
 	private TilePanel tileInFocus;
 	private TilePanel tileWithOverlay;
 	private TilePanel overlayedTile;
 
-	public GameboardPanel() {
+	public GameboardPanel(GameController gc) {
 		gbl = new GridBagLayout();
 		setLayout(gbl);
 		gbc = new GridBagConstraints();
+
+		this.addMouseListener(new MouseAdapter() {
+			public void mouseClicked(MouseEvent event) {
+				if (overlayedTile != null) {
+					if (SwingUtilities.isLeftMouseButton(event)) {
+						gc.newTile(gc.pickUpTile(), getGridX(overlayedTile), getGridY(overlayedTile));
+						repaint(); // !
+					} else if ((SwingUtilities.isRightMouseButton(event))) {
+						if (overlayedTile != null) {
+							gc.rotateNextTile();
+
+							for (int i = 0; i < 3; i++) {
+								if (gc.isTileAllowed(gc.peekTile(), getGridX(overlayedTile), getGridY(overlayedTile))) {
+									overlayedTile.setRotation(gc.peekTile().getRotation());
+									repaint();
+									return;
+								} else {
+									gc.rotateNextTile();
+									repaint();
+								}
+							}
+						}
+					}
+				}
+			}
+		});
+
+		this.addMouseMotionListener(new MouseAdapter() {
+
+			@Override
+			public void mouseMoved(MouseEvent event) {
+
+				Point p = event.getPoint();
+
+				// save current cursor position, used by mouseDragged()
+				anchorPoint = event.getPoint();
+
+				TilePanel tile = getTileAt(p);
+				if (tile != null && tile == getTileInFocus())
+					return;
+				setTileInFocus(tile);
+
+				if (tile != null) // debug
+					getTileInFocus().toString();
+
+				if (overlayedTile != null && !overlayedTile.contains(p)) {
+					remove(overlayedTile);
+					tileWithOverlay.setVisible(true);
+					tileWithOverlay = null;
+					overlayedTile = null;
+					repaint();
+				}
+
+				if (tile != null && overlayedTile == null && tile.getType() == "FLIPSIDE") {
+					for (int i = 0; i < 4; i++) {
+						if (gc.isTileAllowed(gc.peekTile(), getGridX(tile), getGridY(tile))) {
+							tileWithOverlay = tile;
+							tileWithOverlay.setVisible(false);
+							newOverlayedTile(gc.peekTile().getType(), getGridX(tile), getGridY(tile));
+							overlayedTile.setRotation(gc.peekTile().getRotation());
+							repaint();
+							return;
+						} else {
+							gc.rotateNextTile();
+							repaint();
+						}
+					}
+				}
+			}
+
+			@Override
+			public void mouseDragged(MouseEvent event) {
+				int anchorX = anchorPoint.x;
+				int anchorY = anchorPoint.y;
+
+				Point parentOnScreen = getParent().getLocationOnScreen();
+				Point mouseOnScreen = event.getLocationOnScreen();
+				Point position = new Point(mouseOnScreen.x - parentOnScreen.x - anchorX,
+						mouseOnScreen.y - parentOnScreen.y - anchorY);
+				setLocation(position);
+			}
+		});
+
+		this.addMouseWheelListener((event) -> {
+			int notches = event.getWheelRotation();
+			if (notches < 0) {
+				setScale(6);
+			} else {
+				setScale(-6);
+			}
+		});
 	}
-
-	/**
-	 * das hier war ein anfang, um statt gridbaglayout eine eigene zeichenmethode zu
-	 * schreiben, die die bilder selbst anhand der pixelkoordinaten setzt.
-	 **/
-
-//	public void paintComponent(Graphics g) {
-//		for (model.Tile[] row : board.getBoard()) {
-//			for (model.Tile tile : row) {
-//				try {
-//					BufferedImage tileImage = ImageIO.read(new File("resources/tiles/" + tile.getType() + "0.png"));
-//					g.drawImage(tileImage, 0, 0, null);
-//				} catch (IOException e) {
-//					e.printStackTrace();
-//				}
-//			}
-//		}
-//	}
-
-//	public void initGameboard(String type, int x, int y) {
-//		TilePanel tile = new TilePanel(type, zoom);
-//		gbc.gridx = x;
-//		gbc.gridy = y;
-//		add(tile, gbc);
-//		addSurroundingFlipsides(tile);
-//	}
 
 	/**
 	 * Adds a tile to the gameboard panel at given position (x, y). Actually it just
@@ -78,12 +147,16 @@ public class GameboardPanel extends JPanel implements GameboardObserver {
 		 * This part is only reached if there was no TilePanel at given position, which
 		 * should only be the case once at game initialization.
 		 */
-		TilePanel tile = new TilePanel(type, zoom);
+		TilePanel tile = new TilePanel(type, scale);
 		tile.setRotation(rotation);
 		gbc.gridx = x;
 		gbc.gridy = y;
-		add(tile, gbc);
+		add(new MeepleOverlayPanel(scale), gbc, 0);
+
+		add(tile, gbc, -1);
+
 		addSurroundingFlipsides(tile);
+		repaint(); // not necessary
 	}
 
 	private void addSurroundingFlipsides(TilePanel tile) {
@@ -92,22 +165,22 @@ public class GameboardPanel extends JPanel implements GameboardObserver {
 		gbc.gridy = y;
 		gbc.gridx = x - 1;
 		if (!hasTile(gbc.gridx, gbc.gridy))
-			add(new TilePanel("FLIPSIDE", zoom), gbc);
+			add(new TilePanel("FLIPSIDE", scale), gbc);
 		gbc.gridx = x + 1;
 		if (!hasTile(gbc.gridx, gbc.gridy))
-			add(new TilePanel("FLIPSIDE", zoom), gbc);
+			add(new TilePanel("FLIPSIDE", scale), gbc);
 		gbc.gridx = x;
 		gbc.gridy = y + 1;
 		if (!hasTile(gbc.gridx, gbc.gridy))
-			add(new TilePanel("FLIPSIDE", zoom), gbc);
+			add(new TilePanel("FLIPSIDE", scale), gbc);
 		gbc.gridy = y - 1;
 		if (!hasTile(gbc.gridx, gbc.gridy))
-			add(new TilePanel("FLIPSIDE", zoom), gbc);
+			add(new TilePanel("FLIPSIDE", scale), gbc);
 		repaint(); // not sure if necessary
 	}
 
 	public TilePanel newOverlayedTile(String type, int x, int y) {
-		overlayedTile = new TilePanel(type, zoom);
+		overlayedTile = new TilePanel(type, scale);
 		gbc.gridx = x;
 		gbc.gridy = y;
 		add(overlayedTile, gbc);
@@ -133,11 +206,11 @@ public class GameboardPanel extends JPanel implements GameboardObserver {
 		return false;
 	}
 
-	int getGridX(TilePanel t) {
+	private int getGridX(TilePanel t) {
 		return gbl.getConstraints(t).gridx;
 	}
 
-	int getGridY(TilePanel t) {
+	private int getGridY(TilePanel t) {
 		return gbl.getConstraints(t).gridy;
 	}
 
@@ -171,20 +244,19 @@ public class GameboardPanel extends JPanel implements GameboardObserver {
 
 	}
 
-	public void zoom(int pixels) {
-		int nextZoom = zoom + pixels;
-		if (nextZoom < 50 || nextZoom > 150)
+	public void setScale(int pixels) {
+		if (scale + pixels < 50 || scale + pixels > 150)
 			return;
 		else {
 			for (TilePanel t : getTiles())
 				t.setTileSize(t.getTileSize() + pixels);
-			zoom = nextZoom;
-			revalidate(); // nsin
+			scale += pixels;
+			revalidate(); // !
 		}
 	}
 
-	public int getZoom() {
-		return zoom;
+	public int getScale() {
+		return scale;
 	}
 
 	public void setTileInFocus(TilePanel lastTileInFocus) {
@@ -193,22 +265,6 @@ public class GameboardPanel extends JPanel implements GameboardObserver {
 
 	public TilePanel getTileInFocus() {
 		return tileInFocus;
-	}
-
-	public void setTileWithOverlay(TilePanel tileWithOverlay) {
-		this.tileWithOverlay = tileWithOverlay;
-	}
-
-	public TilePanel getTileWithOverlay() {
-		return tileWithOverlay;
-	}
-
-	public void setOverlayedTile(TilePanel overlayedTile) {
-		this.overlayedTile = overlayedTile;
-	}
-
-	public TilePanel getOverlayedTile() {
-		return overlayedTile;
 	}
 
 }

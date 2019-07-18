@@ -35,11 +35,6 @@ public class Gameboard implements Observable<Gameboard> {
 		board = new Tile[1000][1000]; // TODO variabel je nach anzahl an tiles?
 		observers = new LinkedList<GameboardObserver>();
 		graph = new FeatureGraph();
-
-		LOG.setLevel(Level.OFF);
-		ConsoleHandler consoleHandler = new ConsoleHandler();
-		consoleHandler.setLevel(LOG.getLevel());
-		LOG.addHandler(consoleHandler);
 	}
 
 	// kann nicht im konstrukor erfolgen, weil erst observer gesetzt werden muss
@@ -99,7 +94,7 @@ public class Gameboard implements Observable<Gameboard> {
 		}
 	}
 
-	public boolean isAllowed(Tile t, int x, int y) {
+	public boolean isTileAllowed(Tile t, int x, int y) {
 		LOG.finest("Checking if tile would be allowed at cursors position.");
 
 		// Check top tile
