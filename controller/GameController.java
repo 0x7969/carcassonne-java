@@ -27,17 +27,13 @@ public class GameController {
 		LOG.addHandler(consoleHandler);
 		
 	}
-
+	
 	public void initGameBoard() {
 		board.initGameboard(tileStack.pickUpTile()); // The topmost tile of the tilestack is always the start tile.
 	}
 
-	public void addGameBoardObserver(GameboardObserver o) {
-		board.addObserver(o);
-	}
-
-	public void addTileStackObserver(Observer<TileStack> o) {
-		tileStack.addObserver(o);
+	public void newTile(Tile t, int x, int y) {
+		board.newTile(t, x, y);
 	}
 
 	public Tile peekTile() {
@@ -55,8 +51,17 @@ public class GameController {
 	public boolean isTileAllowed(Tile t, int x, int y) {
 		return board.isTileAllowed(t, x, y);
 	}
-
-	public void newTile(Tile t, int x, int y) {
-		board.newTile(t, x, y);
+	
+	public boolean[] getMeepleSpots(int x, int y) {
+		return board.getMeepleSpots(x, y);
 	}
+
+	public void addGameBoardObserver(GameboardObserver o) {
+		board.addObserver(o);
+	}
+
+	public void addTileStackObserver(Observer<TileStack> o) {
+		tileStack.addObserver(o);
+	}
+
 }

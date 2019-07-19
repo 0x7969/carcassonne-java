@@ -19,7 +19,7 @@ public class MeepleOverlayPanel extends JLabel {
 	private int size; // both width and height in pixels
 	private int rotation; // in degrees
 
-	public MeepleOverlayPanel(int size) {
+	public MeepleOverlayPanel(boolean[] meepleSpots, int size) {
 		this.setLayout(new GridLayout(3, 3));
 		this.size = size;
 		this.setPreferredSize(new Dimension(size, size));

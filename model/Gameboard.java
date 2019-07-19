@@ -176,6 +176,10 @@ public class Gameboard implements Observable<Gameboard> {
 		return scores;
 
 	}
+	
+	public boolean[] getMeepleSpots(int x, int y) {
+		return board[x][y].getMeepleSpots();
+	}
 
 	public boolean addObserver(Observer<Gameboard> o) {
 		return observers.add((GameboardObserver) o);

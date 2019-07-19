@@ -35,7 +35,7 @@ public class MainWindow extends JFrame {
 
 		// game board (the wrapper is needed to be able to drag the board around. it can
 		// be understood as a window that you look through onto the gameboard, only
-		// seeing a part of it)
+		// seeing part of it)
 		gameboardPanelWrapper = new JPanel();
 		gameboardPanelWrapper.setLayout(null);
 		gameboardPanel = new GameboardPanel(gc);

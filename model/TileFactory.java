@@ -52,7 +52,7 @@ public class TileFactory {
 
 					// If the tile has a coat of arms, pass that to the constructor
 					if (tileAttributes.getNamedItem("coatofarms") != null
-							&& tileAttributes.getNamedItem("coatofarms").getNodeValue().equals("true"))
+							&& tileAttributes.getNamedItem("coatofarms").getNodeValue().equals(true))
 						newTile = new Tile(tileAttributes.getNamedItem("type").getNodeValue(), true);
 					else
 						newTile = new Tile(tileAttributes.getNamedItem("type").getNodeValue());
@@ -78,7 +78,12 @@ public class TileFactory {
 									FeatureType.valueOf(nodeAttributes.getNamedItem("feature").getNodeValue()),
 									Position.valueOf(nodeAttributes.getNamedItem("position").getNodeValue()));
 						}
-						newTile.addNode(fn.getPosition(), fn);
+
+						if (nodeAttributes.getNamedItem("meeplespot") != null
+								&& nodeAttributes.getNamedItem("meeplespot").getNodeValue() == "true")
+							fn.setMeepleSpot();
+
+						newTile.addNode(Position.valueOf(nodeAttributes.getNamedItem("position").getNodeValue()), fn);
 
 					}
 
@@ -96,7 +101,7 @@ public class TileFactory {
 
 					// If there is no start tile yet, save it seperately
 					if (startTile == null && newTile.getType().equals(START_TILE_TYPE))
-						startTile = newTile;						
+						startTile = newTile;
 					else
 						tiles.add(newTile);
 				}

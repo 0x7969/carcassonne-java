@@ -16,6 +16,8 @@ import controller.GameController;
 import model.Gameboard;
 
 public class GameboardPanel extends JPanel implements GameboardObserver {
+	
+	GameController gc;
 
 	Point anchorPoint;
 
@@ -29,6 +31,8 @@ public class GameboardPanel extends JPanel implements GameboardObserver {
 	private MeepleOverlayPanel meepleOverlayPanel;
 
 	public GameboardPanel(GameController gc) {
+		this.gc = gc;
+		
 		gbl = new GridBagLayout();
 		setLayout(gbl);
 		gbc = new GridBagConstraints();
@@ -40,7 +44,7 @@ public class GameboardPanel extends JPanel implements GameboardObserver {
 						gc.newTile(gc.pickUpTile(), getGridX(overlayedTile), getGridY(overlayedTile));
 						repaint(); // !
 					} else if ((SwingUtilities.isRightMouseButton(event))) {
-						rotateUntilAllowed(gc);
+						rotateUntilAllowed();
 					}
 				}
 			}
@@ -137,13 +141,10 @@ public class GameboardPanel extends JPanel implements GameboardObserver {
 		tile.setRotation(rotation);
 		gbc.gridx = x;
 		gbc.gridy = y;
-		meepleOverlayPanel = new MeepleOverlayPanel(scale);
-		add(meepleOverlayPanel, gbc, 0);
-
 		add(tile, gbc, -1);
 
 		addSurroundingFlipsides(x, y);
-		repaint(); // not necessary
+		repaint(); // TODO not necessary
 	}
 
 	private void addSurroundingFlipsides(int x, int y) {
@@ -164,7 +165,7 @@ public class GameboardPanel extends JPanel implements GameboardObserver {
 		repaint(); // not sure if necessary
 	}
 	
-	private void rotateUntilAllowed(GameController gc) {
+	private void rotateUntilAllowed() {
 		gc.rotateNextTile();
 
 		for (int i = 0; i < 3; i++) {
@@ -186,6 +187,15 @@ public class GameboardPanel extends JPanel implements GameboardObserver {
 		add(overlayedTile, gbc);
 		repaint(); // nsin
 		return overlayedTile;
+	}
+	
+	// TODO return void reicht?
+	public MeepleOverlayPanel showMeepleOverlay(boolean[] meepleSpots, int x, int y) {
+		gbc.gridx = x;
+		gbc.gridy = y;
+		meepleOverlayPanel = new MeepleOverlayPanel(meepleSpots, scale);
+		add(meepleOverlayPanel, gbc, 0);
+		return meepleOverlayPanel;
 	}
 
 	/**
@@ -238,19 +248,13 @@ public class GameboardPanel extends JPanel implements GameboardObserver {
 			return null;
 	}
 
-	@Override
-	public void update(Gameboard o) {
-		// TODO Auto-generated method stub
-
-	}
-
 	public void setScale(int pixels) {
 		if (scale + pixels < 50 || scale + pixels > 150)
 			return;
 		else {
 			for (TilePanel t : getTiles())
 				t.setTileSize(t.getTileSize() + pixels);
-			meepleOverlayPanel.setPreferredSize(new Dimension(scale + pixels, scale + pixels));
+//			meepleOverlayPanel.setPreferredSize(new Dimension(scale + pixels, scale + pixels));
 			scale += pixels;
 			revalidate(); // !
 		}
@@ -258,6 +262,12 @@ public class GameboardPanel extends JPanel implements GameboardObserver {
 
 	public int getScale() {
 		return scale;
+	}
+
+	@Override
+	public void update(Gameboard o) {
+		// TODO Auto-generated method stub
+		
 	}
 
 }

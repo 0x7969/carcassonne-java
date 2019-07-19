@@ -1,15 +1,16 @@
 package model;
 
-import base.Node;
-
 import static model.Direction.*;
 import static model.Position.*;
+
+import base.Node;
 
 public class FeatureNode extends Node<FeatureType> {
 
 	private Position position;
 	private Direction direction;
 	private boolean connectsTiles;
+	private boolean meepleSpot;
 
 	/**
 	 * Creates a new FeatureNode. It is only present when coming from the given
@@ -39,11 +40,20 @@ public class FeatureNode extends Node<FeatureType> {
 		this.direction = BOTH;
 		this.connectsTiles = false;
 	}
+	
+	public void setMeepleSpot() {
+		this.meepleSpot = true;
+	}
+	
+	public boolean hasMeepleSpot() {
+		return meepleSpot;
+	}
 
 	public FeatureType getType() {
 		return getValue();
 	}
 
+	// TODO deprecated?
 	public Position getPosition() {
 		return position;
 	}
@@ -59,6 +69,7 @@ public class FeatureNode extends Node<FeatureType> {
 			direction = direction.getOpposite();
 	}
 
+	// TODO deprecated?
 	public void rotatePositionRight() {
 		switch (position) {
 		case TOPLEFT:

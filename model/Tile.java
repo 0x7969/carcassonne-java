@@ -141,4 +141,13 @@ public class Tile {
 		return coatOfArms;
 	}
 
+	public boolean[] getMeepleSpots() {
+		boolean[] positions = new boolean[9];
+		for (FeatureNode n : nodes.values()) {
+			if(n.hasMeepleSpot())
+				positions[n.getPosition().ordinal()] = true;
+		}
+		return positions;
+	}
+
 }
