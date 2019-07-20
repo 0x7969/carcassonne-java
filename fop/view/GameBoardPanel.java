@@ -1,7 +1,6 @@
 package fop.view;
 
 import java.awt.Component;
-import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Point;
@@ -144,7 +143,6 @@ public class GameBoardPanel extends JPanel implements GameboardObserver {
 		add(tile, gbc, -1);
 
 		addSurroundingFlipsides(x, y);
-		repaint(); // TODO not necessary
 	}
 
 	private void addSurroundingFlipsides(int x, int y) {
@@ -162,7 +160,7 @@ public class GameBoardPanel extends JPanel implements GameboardObserver {
 		gbc.gridy = y - 1;
 		if (!hasTile(gbc.gridx, gbc.gridy))
 			add(new TilePanel("FLIPSIDE", scale), gbc);
-		repaint(); // not sure if necessary
+		repaint(); // TODO not sure if necessary
 	}
 	
 	private void rotateUntilAllowed() {

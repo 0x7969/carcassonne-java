@@ -1,5 +1,11 @@
 package fop.controller;
 
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseWheelEvent;
+import java.awt.event.MouseWheelListener;
 import java.util.logging.ConsoleHandler;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -13,7 +19,6 @@ import fop.model.Tile;
 import fop.model.TileStack;
 import fop.view.GameView;
 import fop.view.GameboardObserver;
-import fop.view.MainWindow;
 import fop.view.Observer;
 import fop.view.View;
 
@@ -21,17 +26,55 @@ public class GameController {
 
 	private final static Logger LOG = Logger.getLogger("Carcassonne");
 
+	private JFrame window;
 	private View view;
+	private GameState state;
 	private Gameboard board;
 	private TileStack stack;
 
 	public GameController() {
 		board = new Gameboard();
 		stack = new TileStack();
-
+		state = new MenuState(this);
 		initView();
 
+		view.addMouseListener(new MouseAdapter() {
+			public void mouseClicked(MouseEvent event) {
+				state.mouseClicked(event);
+			}
+		});
+
+		view.addMouseMotionListener(new MouseAdapter() {
+
+			@Override
+			public void mouseMoved(MouseEvent event) {
+				state.mouseMoved(event);
+			}
+
+			@Override
+			public void mouseDragged(MouseEvent event) {
+				state.mouseDragged(event);
+			}
+		});
+
+		view.addMouseWheelListener(new MouseWheelListener() {
+
+			@Override
+			public void mouseWheelMoved(MouseWheelEvent event) {
+				state.mouseWheelMoved(event);
+			}
+		});
+
+		view.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent event) {
+				state.actionPerformed(event);
+			}
+		});
+
 		LOG.setLevel(Level.OFF);
+
 		ConsoleHandler consoleHandler = new ConsoleHandler();
 		consoleHandler.setLevel(LOG.getLevel());
 		LOG.addHandler(consoleHandler);
@@ -45,29 +88,23 @@ public class GameController {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		
-		view = new GameView(this);
-		
-		JFrame frame = new JFrame("Carcassonne");
-		frame.setSize(800, 800);
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		frame.setContentPane(view);
-		frame.setVisible(true);
-		
-		// this is the recommended way to start swing applications but i didnt quite understand it
-//		SwingUtilities.invokeLater(new Runnable() {
-//			public void run() {
-//				try {
-//					view = new GameView(gc);
-//					JFrame mainWindow = new MainWindow("Carcassonne");
-//					mainWindow.setVisible(true);
-//					mainWindow.setContentPane(view);
-//				} catch (Exception e) {
-//					e.printStackTrace();
-//				}
-//			}
-//		});
+
+		view = state.initView();
+
+		window = new JFrame("Carcassonne");
+		window.setSize(400, 300);
+		window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		window.setContentPane(view);
+		window.setVisible(true);
 	}
+	
+	public void setState(GameState state) {
+		this.state = state;
+		window.setContentPane(state.initView());
+		window.setSize(1200, 900);
+		window.revalidate();
+		window.repaint();
+		}
 
 	public void initGameBoard() {
 		board.initGameboard(stack.pickUpTile()); // The topmost tile of the tilestack is always the start tile.
