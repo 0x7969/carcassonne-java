@@ -18,28 +18,28 @@ import java.util.Map;
 import java.util.SortedMap;
 import java.util.TreeMap;
 
-import fop.base.Edge;
+import fop.base.WeightedEdge;
 
 public class Tile {
 	private String type;
 	private SortedMap<Position, FeatureNode> nodes; // by using a sorted map, the key and value pairs will be sorted
 													// from left to right, top to bottom (following the Position enums
 													// order).
-	private final List<Edge<FeatureType>> edges;
+	private final List<WeightedEdge<FeatureType>> edges;
 	private final boolean coatOfArms;
 	private int rotation;
 
 	public Tile(String type) {
 		this.type = type;
 		nodes = new TreeMap<Position, FeatureNode>();
-		edges = new LinkedList<Edge<FeatureType>>();
+		edges = new LinkedList<WeightedEdge<FeatureType>>();
 		coatOfArms = false;
 	}
 
 	public Tile(String type, boolean coatOfArms) {
 		this.type = type;
 		nodes = new TreeMap<Position, FeatureNode>();
-		edges = new LinkedList<Edge<FeatureType>>();
+		edges = new LinkedList<WeightedEdge<FeatureType>>();
 		this.coatOfArms = coatOfArms;
 	}
 
@@ -55,7 +55,7 @@ public class Tile {
 		return nodes.get(position);
 	}
 
-	public boolean addEdge(Edge<FeatureType> edge) {
+	public boolean addEdge(WeightedEdge<FeatureType> edge) {
 		return edges.add(edge);
 	}
 
@@ -75,7 +75,7 @@ public class Tile {
 		return nodes.values();
 	}
 
-	public List<Edge<FeatureType>> getEdges() {
+	public List<WeightedEdge<FeatureType>> getEdges() {
 		return edges;
 	}
 

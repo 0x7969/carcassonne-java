@@ -1,10 +1,8 @@
 package fop.model;
 
 import java.io.File;
-import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -15,7 +13,7 @@ import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
-import fop.base.Edge;
+import fop.base.WeightedEdge;
 
 // TODO da wider erwarten keine unterklassen von tile gebraucht werden, ist das hier eigtl. auch keine factory...
 public class TileFactory {
@@ -94,7 +92,7 @@ public class TileFactory {
 
 						Node node = enl.item(k);
 						NamedNodeMap nodeAttributes = node.getAttributes();
-						newTile.addEdge(new Edge<FeatureType>(
+						newTile.addEdge(new WeightedEdge<FeatureType>(
 								newTile.getNode(Position.valueOf(nodeAttributes.getNamedItem("a").getNodeValue())),
 								newTile.getNode(Position.valueOf(nodeAttributes.getNamedItem("b").getNodeValue()))));
 					}

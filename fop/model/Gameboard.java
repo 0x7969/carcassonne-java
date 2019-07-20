@@ -14,7 +14,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.logging.Logger;
 
-import fop.base.Edge;
+import fop.base.WeightedEdge;
 import fop.base.Node;
 import fop.view.GameboardObserver;
 import fop.view.Observer;
@@ -149,8 +149,8 @@ public class Gameboard implements Observable<Gameboard> {
 
 			}
 
-			List<Edge<FeatureType>> edges = graph.getEdges(node);
-			for (Edge<FeatureType> edge : edges) {
+			List<WeightedEdge<FeatureType>> edges = graph.getEdges(node);
+			for (WeightedEdge<FeatureType> edge : edges) {
 				Node<FeatureType> nextNode = edge.getOtherNode(node);
 				if (nodeList.contains(nextNode)) {
 					LOG.info("Adding points of edge connecting a " + node.getValue() + " and a "
