@@ -1,5 +1,6 @@
 package fop.view;
 
+import java.awt.Point;
 import java.awt.event.ActionListener;
 
 import javax.swing.JPanel;
@@ -14,6 +15,12 @@ public abstract class View extends JPanel {
 		this.gc = gc;
 	}
 	
-	public abstract void addActionListener(ActionListener event);
+	public abstract void addActionListener(ActionListener l);
+
+	public abstract Point getOverlayedTileGridPosition();
+	
+	public abstract boolean hasOverlay();
+
+	protected abstract Object getOverlayedTile();
 
 }

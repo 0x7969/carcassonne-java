@@ -1,7 +1,8 @@
 package fop.view;
 
 import java.awt.BorderLayout;
-import java.awt.event.ActionEvent;
+import java.awt.Dimension;
+import java.awt.Point;
 import java.awt.event.ActionListener;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
@@ -21,6 +22,7 @@ public class GameView extends View {
 	public GameView(GameController gc) {
 		super(gc);
 		setLayout(new BorderLayout());
+		this.setPreferredSize(new Dimension(1200, 900));
 		// top toolbar
 		toolbarPanel = new ToolbarPanel();
 		this.add(toolbarPanel, BorderLayout.NORTH);
@@ -51,19 +53,25 @@ public class GameView extends View {
 			}
 		});
 	}
-
-	public Observer<TileStack> getTileStackObserver() {
-		return tileStackPanel;
-	}
-
-	public GameboardObserver getGameBoardObserver() {
-		return gameBoardPanel;
+	
+	public Point getOverlayedTileGridPosition() {
+		return gameBoardPanel.getOverlayedTileGridPosition();
 	}
 
 	@Override
-	public void addActionListener(ActionListener event) {
+	public void addActionListener(ActionListener l) {
 		// TODO Auto-generated method stub
-		
+
+	}
+
+	@Override
+	public boolean hasOverlay() {
+		return gameBoardPanel.hasOverlay();
+	}
+
+	@Override
+	protected Object getOverlayedTile() {
+		return gameBoardPanel.getOverlayedTile();
 	}
 
 }
