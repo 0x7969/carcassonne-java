@@ -13,6 +13,7 @@ import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 
 import fop.controller.GameController;
+import fop.controller.State;
 import fop.model.Gameboard;
 import fop.model.TileStack;
 
@@ -53,15 +54,15 @@ public class GameBoardPanel extends JPanel implements GameboardObserver {
 		gbc = new GridBagConstraints();
 
 		tileOverlay = new TileOverlayPanel("FLIPSIDE", scale);
-//		tileOverlay.setVisible(false);
 		gc.addTileStackObserver(tileOverlay);
 
 		this.addMouseListener(new MouseAdapter() {
 			public void mouseClicked(MouseEvent event) {
-				if (tileOverlay.isVisible()) {
+				if (contains(tileOverlay)) {
 					if (SwingUtilities.isLeftMouseButton(event)) {
 						gc.newTile(gc.pickUpTile(), getGridX(tileOverlay), getGridY(tileOverlay));
-						repaint(); // !
+						gc.setState(State.PLACING_MEEPLE);
+						hideTileOverlay();
 					} else if ((SwingUtilities.isRightMouseButton(event))) {
 						rotateUntilAllowed();
 					}
@@ -97,12 +98,7 @@ public class GameBoardPanel extends JPanel implements GameboardObserver {
 				tileInFocus = tile;
 
 				if (contains(tileOverlay) && !tileOverlay.contains(p)) {
-//					tileOverlay.setVisible(false);
-					remove(tileOverlay);
-					tileWithOverlay.setVisible(true);
-					tileWithOverlay = null;
-//					tileOverlay = null;
-					repaint();
+					hideTileOverlay();
 				}
 
 				if (tile != null && !contains(tileOverlay) && tile.getType() == "FLIPSIDE") {
@@ -291,13 +287,18 @@ public class GameBoardPanel extends JPanel implements GameboardObserver {
 		return meepleOverlay;
 	}
 
-	private TileOverlayPanel showTileOverlay(String type, int x, int y) {
-		tileOverlay.setVisible(true);
+	private void showTileOverlay(String type, int x, int y) {
 		gbc.gridx = x;
 		gbc.gridy = y;
 		add(tileOverlay, gbc);
 		repaint(); // nsin
-		return tileOverlay;
+	}
+
+	private void hideTileOverlay() {
+		remove(tileOverlay);
+		tileWithOverlay.setVisible(true);
+		tileWithOverlay = null;
+		repaint();
 	}
 
 	private boolean contains(Component c) {
