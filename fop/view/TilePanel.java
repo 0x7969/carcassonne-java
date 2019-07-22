@@ -19,6 +19,7 @@ public class TilePanel extends JPanel {
 	private int rotation; // in degrees
 
 	TilePanel(String id, int size) {
+		super(true); // enables double buffering
 		this.rotation = 0;
 		this.setPreferredSize(new Dimension(size, size));
 		setType(id);
