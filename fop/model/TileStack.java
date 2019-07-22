@@ -6,16 +6,14 @@ import java.util.List;
 
 import fop.view.Observer;
 
-public class TileStack implements Observable<TileStack> {
+public class TileStack extends Observable<TileStack> {
 	private List<Tile> cardstack; // stack wäre natürlich naheliegender aber eignet sich weniger gut zum mischen
 	// TODO in stack umwandeln. einfach vorher factory.gettiles.. und das shufflen. danach erst auf stack legen.
 	private TileFactory factory;
-	private List<Observer<TileStack>> observers;
 
 	public TileStack() {
 		cardstack = new LinkedList<Tile>();
 		factory = new TileFactory();
-		observers = new LinkedList<Observer<TileStack>>();
 
 		for (Tile tile : factory.getTiles()) {
 			cardstack.add(0, tile);
@@ -29,8 +27,7 @@ public class TileStack implements Observable<TileStack> {
 	public Tile pickUpTile() {
 		Tile topTile = cardstack.get(0);
 		cardstack.remove(0);
-		for (Observer<TileStack> o : observers)
-			o.update(this);
+		push(this);
 		return topTile;
 	}
 
@@ -47,15 +44,4 @@ public class TileStack implements Observable<TileStack> {
 		for (Observer<TileStack> o : observers)
 			o.update(this);
 	}
-
-	@Override
-	public boolean addObserver(Observer<TileStack> o) {
-		return observers.add(o);
-	}
-
-	@Override
-	public boolean removeObserver(Observer<TileStack> o) {
-		return observers.remove(o);
-	}
-
 }

@@ -28,6 +28,8 @@ public class Tile {
 	private final List<WeightedEdge<FeatureType>> edges;
 	private final boolean coatOfArms;
 	private int rotation;
+	public int x;
+	public int y;
 
 	public Tile(String type) {
 		this.type = type;

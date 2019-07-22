@@ -15,9 +15,10 @@ import javax.swing.SwingUtilities;
 import fop.controller.GameController;
 import fop.controller.State;
 import fop.model.Gameboard;
+import fop.model.Tile;
 import fop.model.TileStack;
 
-public class GameBoardPanel extends JPanel implements GameboardObserver {
+public class GameBoardPanel extends JPanel implements Observer<Gameboard> {
 
 	private class TileOverlayPanel extends TilePanel implements Observer<TileStack> {
 
@@ -54,7 +55,7 @@ public class GameBoardPanel extends JPanel implements GameboardObserver {
 		gbc = new GridBagConstraints();
 
 		tileOverlay = new TileOverlayPanel("FLIPSIDE", scale);
-		gc.addTileStackObserver(tileOverlay);
+//		gc.addTileStackObserver(tileOverlay);
 
 		this.addMouseListener(new MouseAdapter() {
 			public void mouseClicked(MouseEvent event) {
@@ -118,7 +119,7 @@ public class GameBoardPanel extends JPanel implements GameboardObserver {
 			}
 		});
 
-		this.addMouseWheelListener((event) -> {
+		this.addMouseWheelListener(event -> {
 			int notches = event.getWheelRotation();
 			if (notches < 0) {
 				setScale(6);
@@ -194,6 +195,10 @@ public class GameBoardPanel extends JPanel implements GameboardObserver {
 	private TilePanel[] getTiles() {
 		return Arrays.stream(getComponents()).filter(c -> c instanceof TilePanel).map(c -> (TilePanel) c)
 				.toArray(TilePanel[]::new);
+	}
+	
+	public TileOverlayPanel getTileOverlay() {
+		return tileOverlay;
 	}
 
 	public boolean hasOverlay() {
@@ -309,8 +314,9 @@ public class GameBoardPanel extends JPanel implements GameboardObserver {
 	}
 
 	@Override
-	public void update(Gameboard o) {
-		// pass
+	public void update(Gameboard board) {
+		Tile t = board.getNewestTile();
+		newTile(t.getType(), t.getRotation(), t.x, t.y);
 	}
 
 }

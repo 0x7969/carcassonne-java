@@ -1,7 +1,6 @@
 package fop.controller;
 
 import java.awt.Dimension;
-import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
@@ -11,16 +10,18 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javax.swing.JFrame;
-import javax.swing.SwingUtilities;
+import javax.swing.JPanel;
 import javax.swing.UIManager;
 
 import fop.model.Gameboard;
 import fop.model.Tile;
 import fop.model.TileStack;
+import fop.view.GameBoardPanel;
 import fop.view.GameView;
 import fop.view.GameboardObserver;
 import fop.view.MenuView;
 import fop.view.Observer;
+import fop.view.TileStackPanel;
 import fop.view.View;
 
 public class GameController {
@@ -28,10 +29,12 @@ public class GameController {
 	private final static Logger LOG = Logger.getLogger("Carcassonne");
 
 	private JFrame window;
-	private View view;
+	private GameView view;
 	private State state;
 	private Gameboard board;
 	private TileStack stack;
+	private GameBoardPanel boardPanel;
+	private TileStackPanel stackPanel;
 
 	public GameController() {
 		setupWindow();
@@ -64,8 +67,7 @@ public class GameController {
 	/**
 	 * Replaces the windows content with the given view.
 	 */
-	private void setView(View view) {
-		this.view = view;
+	private void setView(JPanel view) {
 		window.setContentPane(view);
 		window.pack();
 		window.revalidate();
@@ -78,13 +80,17 @@ public class GameController {
 		switch (state) {
 		case GAME_MENU:
 			setView(new MenuView(this));
-			setupListeners();
 			break;
 		case GAME_START:
 			board = new Gameboard();
 			stack = new TileStack();
-			setView(new GameView(this));
+			view = new GameView(this);
+			setView(view);
+			boardPanel = view.getGameBoardPanel();
+			stackPanel = view.getTileStackPanel();
 			setupListeners();
+			setupObservers();
+			initGameBoard();
 			setState(State.PLACING_TILE);
 			break;
 		case GAME_SCORE:
@@ -96,11 +102,6 @@ public class GameController {
 	}
 
 	private void setupListeners() {
-		switch (state) {
-		case GAME_MENU:
-			view.addActionListener(new GameMenuActionListener());
-			break;
-		case GAME_START:
 //			view.addMouseListener(new MouseAdapter() {
 //				public void mouseClicked(MouseEvent event) {
 //					if (state == State.PLACING_TILE && view.hasOverlay()) {
@@ -134,19 +135,14 @@ public class GameController {
 //					}
 //				}
 //			});
-
-			view.addMouseMotionListener(new MouseAdapter() {
-				@Override
-				public void mouseMoved(MouseEvent event) {
-					// mooooooove
-				}
-			});
-		default:
-			break;
-		}
-
 	}
 
+	private void setupObservers() {
+		stack.addObserver(stackPanel);
+		stack.addObserver(boardPanel.getTileOverlay());
+		board.addObserver(boardPanel);
+	}
+	
 	public void initGameBoard() {
 		board.initGameboard(stack.pickUpTile()); // The topmost tile of the tilestack is always the start tile.
 	}

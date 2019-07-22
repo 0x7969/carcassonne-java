@@ -14,22 +14,19 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.logging.Logger;
 
-import fop.base.WeightedEdge;
 import fop.base.Node;
-import fop.view.GameboardObserver;
-import fop.view.Observer;
+import fop.base.WeightedEdge;
 
-public class Gameboard implements Observable<Gameboard> {
+public class Gameboard extends Observable<Gameboard> {
 
 	private final static Logger LOG = Logger.getLogger("Carcassonne");
 
 	private Tile[][] board;
-	private List<GameboardObserver> observers;
 	private final FeatureGraph graph;
+	private Tile newestTile;
 
 	public Gameboard() {
 		board = new Tile[1000][1000]; // TODO variabel je nach anzahl an tiles?
-		observers = new LinkedList<GameboardObserver>();
 		graph = new FeatureGraph();
 	}
 
@@ -39,14 +36,15 @@ public class Gameboard implements Observable<Gameboard> {
 	}
 
 	public void newTile(Tile t, int x, int y) {
-		board[x][y] = t;
+		t.x = x; // TODO unschön
+		t.y = y;
+		board[x][y] = newestTile = t;
 
 		connectNodes(x, y);
-		for (GameboardObserver o : observers)
-			o.newTile(t.getType(), t.getRotation(), x, y);
-
-		calculatePoints(ROAD);
-		calculatePoints(CASTLE); // TODO soll eigentlich durch state change ausgelöst werden
+		push(this);
+		
+		calculatePoints(ROAD); // TODO soll eigentlich durch state change ausgelöst werden
+		calculatePoints(CASTLE);
 		// TODO eigentlich müsste man das gar nicht trennen. wir wollen nur wiesen noch
 		// nicht behandeln.
 		// sobald die verbindung/berechnung der wiesen funktioniert, können alle punkte
@@ -180,13 +178,9 @@ public class Gameboard implements Observable<Gameboard> {
 	public boolean[] getMeepleSpots(int x, int y) {
 		return board[x][y].getMeepleSpots();
 	}
-
-	public boolean addObserver(Observer<Gameboard> o) {
-		return observers.add((GameboardObserver) o);
-	}
-
-	public boolean removeObserver(Observer<Gameboard> o) {
-		return observers.remove((GameboardObserver) o);
+	
+	public Tile getNewestTile() {
+		return newestTile;
 	}
 
 }
