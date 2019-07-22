@@ -26,7 +26,6 @@ public class GameBoardPanel extends JPanel implements GameboardObserver {
 
 		@Override
 		public void update(TileStack ts) {
-			System.out.println("updated");
 			setType(ts.peekTile().getType());
 			setRotation(ts.peekTile().getRotation());
 			repaint();
@@ -108,7 +107,7 @@ public class GameBoardPanel extends JPanel implements GameboardObserver {
 
 				if (tile != null && !contains(tileOverlay) && tile.getType() == "FLIPSIDE") {
 					for (int i = 0; i < 4; i++) {
-						if (gc.isTileAllowed(gc.peekTile(), getGridX(tile), getGridY(tile))) {
+						if (gc.isTopTileAllowed(getGridX(tile), getGridY(tile))) {
 							tileWithOverlay = tile;
 							tileWithOverlay.setVisible(false);
 							showTileOverlay(gc.peekTile().getType(), getGridX(tile), getGridY(tile));
@@ -261,7 +260,7 @@ public class GameBoardPanel extends JPanel implements GameboardObserver {
 		gc.rotateTopTile();
 
 		for (int i = 0; i < 3; i++) {
-			if (!gc.isTileAllowed(gc.peekTile(), getGridX(tileOverlay), getGridY(tileOverlay))) {
+			if (!gc.isTopTileAllowed(getGridX(tileOverlay), getGridY(tileOverlay))) {
 				gc.rotateTopTile();
 			} else {
 				allowed = true;
@@ -275,7 +274,8 @@ public class GameBoardPanel extends JPanel implements GameboardObserver {
 			return;
 		else {
 			for (TilePanel t : getTiles())
-				t.setTileSize(scale + pixels);
+				t.setPreferredSize(new Dimension(scale + pixels, scale + pixels));
+			tileOverlay.setPreferredSize(new Dimension(scale + pixels, scale + pixels));
 //			meepleOverlayPanel.setPreferredSize(new Dimension(scale + pixels, scale + pixels));
 			scale += pixels;
 			revalidate(); // !

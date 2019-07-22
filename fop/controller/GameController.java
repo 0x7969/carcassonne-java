@@ -167,8 +167,8 @@ public class GameController {
 		stack.rotateTopTile();
 	}
 
-	public boolean isTileAllowed(Tile t, int x, int y) {
-		return board.isTileAllowed(t, x, y);
+	public boolean isTopTileAllowed(int x, int y) {
+		return board.isTileAllowed(peekTile(), x, y);
 	}
 
 	public boolean[] getMeepleSpots(int x, int y) {

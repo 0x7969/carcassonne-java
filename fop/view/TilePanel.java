@@ -16,21 +16,12 @@ public class TilePanel extends JPanel {
 
 	private BufferedImage tileImage;
 	private String type;
-	private int size; // both height and width in pixels
 	private int rotation; // in degrees
 
 	TilePanel(String id, int size) {
 		this.rotation = 0;
-		this.size = size;
+		this.setPreferredSize(new Dimension(size, size));
 		setType(id);
-	}
-
-	public int getTileSize() {
-		return size;
-	}
-
-	public void setTileSize(int size) { // TODO kann man stattdessen auch das setSize von JLabel nutzen? mal auschecken
-		this.size = size;
 	}
 
 	public void setType(String id) {
@@ -51,11 +42,6 @@ public class TilePanel extends JPanel {
 	}
 
 	@Override
-	public Dimension getPreferredSize() {
-		return new Dimension(size, size);
-	}
-
-	@Override
 	protected void paintComponent(Graphics g) {
 //    	super.paintComponent(g); // nsin
 //    	AffineTransform at = AffineTransform.getScaleInstance(size / 100, size / 100);
@@ -67,8 +53,8 @@ public class TilePanel extends JPanel {
 
 		super.paintComponent(g);
 		Graphics2D g2d = (Graphics2D) g;
-		g2d.rotate(Math.toRadians(rotation), size / 2, size / 2);
-		g2d.drawImage(tileImage, 0, 0, size, size, null);
+		g2d.rotate(Math.toRadians(rotation), getWidth() / 2, getHeight() / 2);
+		g2d.drawImage(tileImage, 0, 0, getWidth(), getHeight(), null);
 	}
 
 	public void setRotation(int rotation) {
