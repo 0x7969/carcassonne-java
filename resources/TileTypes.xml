@@ -1,0 +1,303 @@
+<?xml version="1.0"?>
+<tiletypes>
+	<!-- Beispielformat
+
+	<tile type="" ammount="" coatofarms="">
+		<node feature="" position="" direction=""/>
+		<edge a="" b=""/>
+	</tile>
+
+	"type" name of tile, as named in the official rules (also its the filename of the tiles image)
+	"coatofarms" can be true or left out
+	"monastery" can be true or left out
+	"feature" can be FIELDS, ROAD, CASTLE
+	"position" can be TOPLEFT, TOP, TOPRIGHT, LEFT, CENTER, RIGHT, BOTTOMLEFT, BOTTOM, BOTTOMRIGHT
+	"direction" can be X, Y or BOTH
+	edge connections positions "a" and "b".
+
+	-->
+
+	<tile type="A" ammount="2" monastery="true">
+		<node feature="FIELDS" position="TOP"/>
+		<node feature="FIELDS" position="LEFT" meeplespot="true"/>
+		<node feature="FIELDS" position="CENTER"/> <!-- merely a shortcut -->
+		<node feature="FIELDS" position="RIGHT"/>
+		<node feature="FIELDS" position="BOTTOMLEFT" direction="Y"/>
+		<node feature="ROAD" position="BOTTOM" meeplespot="true"/>
+		<node feature="FIELDS" position="BOTTOMRIGHT" direction="Y"/>
+		<edge a="LEFT" b="CENTER"/>
+		<edge a="TOP" b="CENTER"/>
+		<edge a="RIGHT" b="CENTER"/>
+		<edge a="BOTTOMLEFT" b="CENTER"/>
+		<edge a="BOTTOMRIGHT" b="CENTER"/>"
+	</tile>
+
+	<tile type="B" ammount="4" monastery="true">
+		<node feature="FIELDS" position="TOP"/>
+		<node feature="FIELDS" position="LEFT" meeplespot="true"/>
+		<node feature="FIELDS" position="CENTER"/><!-- merely a shortcut -->
+		<node feature="FIELDS" position="RIGHT"/>
+		<node feature="FIELDS" position="BOTTOM"/>
+		<edge a="LEFT" b="CENTER"/>
+		<edge a="TOP" b="CENTER"/>
+		<edge a="RIGHT" b="CENTER"/>
+		<edge a="BOTTOM" b="CENTER"/>
+	</tile>
+
+	<tile type="C" ammount="1" coatofarms="true">
+		<node feature="CASTLE" position="TOP"/>
+		<node feature="CASTLE" position="LEFT"/>
+		<node feature="CASTLE" position="CENTER" meeplespot="true"/>
+		<node feature="CASTLE" position="RIGHT"/>
+		<node feature="CASTLE" position="BOTTOM"/>
+		<edge a="LEFT" b="CENTER"/>
+		<edge a="TOP" b="CENTER"/>
+		<edge a="RIGHT" b="CENTER"/>
+		<edge a="BOTTOM" b="CENTER"/>
+	</tile>
+
+	<tile type="D" ammount="4">
+		<node feature="CASTLE" position="TOP" meeplespot="true"/>
+		<node feature="ROAD" position="LEFT" meeplespot="true"/>
+		<node feature="ROAD" position="RIGHT"/>
+		<node feature="FIELDS" position="BOTTOMLEFT" direction="X"/>
+		<node feature="FIELDS" position="BOTTOM" meeplespot="true"/>
+		<node feature="FIELDS" position="BOTTOMRIGHT" direction="X"/>
+		<edge a="LEFT" b="RIGHT"/>
+		<edge a="BOTTOMLEFT" b="BOTTOM"/>
+		<edge a="BOTTOMRIGHT" b="BOTTOM"/>
+	</tile>
+
+	<tile type="E" ammount="5">
+		<node feature="CASTLE" position="TOP" meeplespot="true"/>
+		<node feature="FIELDS" position="LEFT"/>
+		<node feature="FIELDS" position="CENTER" meeplespot="true"/>
+		<node feature="FIELDS" position="RIGHT"/>
+		<node feature="FIELDS" position="BOTTOM"/>
+		<edge a="LEFT" b="CENTER"/>
+		<edge a="RIGHT" b="CENTER"/>
+		<edge a="BOTTOM" b="CENTER"/>
+	</tile>
+
+	<tile type="F" ammount="2" coatofarms="true">
+		<node feature="FIELDS" position="TOP" meeplespot="true"/>
+		<node feature="CASTLE" position="LEFT" meeplespot="true"/>
+		<node feature="CASTLE" position="RIGHT"/>
+		<node feature="FIELDS" position="BOTTOM" meeplespot="true"/>
+		<edge a="LEFT" b="RIGHT"/>
+	</tile>
+
+	<tile type="G" ammount="1">
+		<node feature="FIELDS" position="TOP" meeplespot="true"/>
+		<node feature="CASTLE" position="LEFT" meeplespot="true"/>
+		<node feature="CASTLE" position="RIGHT"/>
+		<node feature="FIELDS" position="BOTTOM" meeplespot="true"/>
+		<edge a="LEFT" b="RIGHT"/>
+	</tile>
+
+	<tile type="H" ammount="3">
+		<node feature="CASTLE" position="TOP" meeplespot="true"/>
+		<node feature="FIELDS" position="LEFT" meeplespot="true"/>
+		<node feature="FIELDS" position="RIGHT"/>
+		<node feature="CASTLE" position="BOTTOM" meeplespot="true"/>
+		<edge a="LEFT" b="RIGHT"/>
+	</tile>
+
+	<tile type="I" ammount="2">
+		<node feature="CASTLE" position="TOP" meeplespot="true"/>
+		<node feature="CASTLE" position="LEFT" meeplespot="true"/>
+		<node feature="FIELDS" position="RIGHT" meeplespot="true"/>
+		<node feature="FIELDS" position="BOTTOM"/>
+		<edge a="RIGHT" b="BOTTOM"/>
+	</tile>
+
+	<tile type="J" ammount="3">
+		<node feature="CASTLE" position="TOP" meeplespot="true"/>
+		<node feature="FIELDS" position="TOPRIGHT" direction="X"/>
+		<node feature="FIELDS" position="LEFT" meeplespot="true"/>
+		<node feature="FIELDS" position="CENTER"/>
+		<node feature="ROAD" position="RIGHT"/>
+		<node feature="FIELDS" position="BOTTOMLEFT" direction="BOTH"/>
+		<node feature="ROAD" position="BOTTOM" meeplespot="true"/>
+		<node feature="FIELDS" position="BOTTOMRIGHT" direction="BOTH"/>
+		<edge a="LEFT" b="CENTER"/>
+		<edge a="BOTTOMLEFT" b="CENTER"/>
+		<edge a="TOPRIGHT" b="CENTER"/>
+		<edge a="BOTTOM" b="RIGHT"/>
+	</tile>
+
+	<tile type="K" ammount="3">
+		<node feature="FIELDS" position="TOPLEFT" direction="X"/>
+		<node feature="CASTLE" position="TOP" meeplespot="true"/>
+		<node feature="ROAD" position="LEFT" meeplespot="true"/>
+		<node feature="FIELDS" position="CENTER"/>
+		<node feature="FIELDS" position="RIGHT" meeplespot="true"/>
+		<node feature="FIELDS" position="BOTTOMLEFT" direction="BOTH"/>
+		<node feature="ROAD" position="BOTTOM"/>
+		<node feature="FIELDS" position="BOTTOMRIGHT" direction="X"/> <!-- wg. RIGHT -->
+		<edge a="LEFT" b="BOTTOM"/>
+		<edge a="TOPLEFT" b="CENTER"/>
+		<edge a="RIGHT" b="CENTER"/>
+		<edge a="BOTTOMRIGHT" b="CENTER"/>
+	</tile>
+
+	<tile type="L" ammount="3">
+		<node feature="FIELDS" position="TOPLEFT" direction="X" meeplespot="true"/>
+		<node feature="CASTLE" position="TOP" meeplespot="true"/>
+		<node feature="FIELDS" position="TOPRIGHT" direction="X"/>
+		<node feature="ROAD" position="LEFT" meeplespot="true"/>
+		<node feature="ROAD" position="RIGHT" meeplespot="true"/>
+		<node feature="FIELDS" position="BOTTOMLEFT" direction="BOTH" meeplespot="true"/>
+		<node feature="ROAD" position="BOTTOM" meeplespot="true"/>
+		<node feature="FIELDS" position="BOTTOMRIGHT" direction="BOTH" meeplespot="true"/>
+		<edge a="TOPLEFT" b="TOPRIGHT"/>
+	</tile>
+
+	<tile type="M" ammount="2" coatofarms="true">
+		<node feature="CASTLE" position="TOP"/>
+		<node feature="CASTLE" position="LEFT" meeplespot="true"/>
+		<node feature="FIELDS" position="RIGHT" meeplespot="true"/>
+		<node feature="FIELDS" position="BOTTOM"/>
+		<edge a="LEFT" b="TOP"/>
+		<edge a="RIGHT" b="BOTTOM"/>
+	</tile>
+
+	<tile type="N" ammount="3" coatofarms="">
+		<node feature="CASTLE" position="TOP"/>
+		<node feature="CASTLE" position="LEFT" meeplespot="true"/>
+		<node feature="FIELDS" position="RIGHT" meeplespot="true"/>
+		<node feature="FIELDS" position="BOTTOM"/>
+		<edge a="LEFT" b="TOP"/>
+		<edge a="RIGHT" b="BOTTOM"/>
+	</tile>
+
+	<tile type="O" ammount="2" coatofarms="true">
+		<node feature="CASTLE" position="TOP"/>
+		<node feature="FIELDS" position="TOPRIGHT" direction="X" meeplespot="true"/>
+		<node feature="CASTLE" position="LEFT" meeplespot="true"/>
+		<node feature="ROAD" position="RIGHT"/>
+		<node feature="FIELDS" position="BOTTOMLEFT" direction="Y"/>
+		<node feature="ROAD" position="BOTTOM" meeplespot="true"/>
+		<node feature="FIELDS" position="BOTTOMRIGHT" direction="BOTH" meeplespot="true"/>
+		<edge a="TOP" b="LEFT"/>
+		<edge a="BOTTOMLEFT" b="TOPRIGHT"/>
+		<edge a="BOTTOM" b="RIGHT"/>
+	</tile>
+
+	<tile type="P" ammount="3">
+		<node feature="CASTLE" position="TOP"/>
+		<node feature="FIELDS" position="TOPRIGHT" direction="X" meeplespot="true"/>
+		<node feature="CASTLE" position="LEFT" meeplespot="true"/>
+		<node feature="ROAD" position="RIGHT"/>
+		<node feature="FIELDS" position="BOTTOMLEFT" direction="Y"/>
+		<node feature="ROAD" position="BOTTOM" meeplespot="true"/>
+		<node feature="FIELDS" position="BOTTOMRIGHT" direction="BOTH" meeplespot="true"/>
+		<edge a="TOP" b="LEFT"/>
+		<edge a="BOTTOMLEFT" b="TOPRIGHT"/>
+		<edge a="BOTTOM" b="RIGHT"/>
+	</tile>
+
+	<tile type="Q" ammount="1" coatofarms="true">
+		<node feature="CASTLE" position="TOP"/>
+		<node feature="CASTLE" position="LEFT"/>
+		<node feature="CASTLE" position="CENTER" meeplespot="true"/>
+		<node feature="CASTLE" position="RIGHT"/>
+		<node feature="FIELDS" position="BOTTOM" meeplespot="true"/>
+		<edge a="LEFT" b="CENTER"/>
+		<edge a="TOP" b="CENTER"/>
+		<edge a="RIGHT" b="CENTER"/>
+	</tile>
+
+	<tile type="R" ammount="3">
+		<node feature="CASTLE" position="TOP"/>
+		<node feature="CASTLE" position="LEFT"/>
+		<node feature="CASTLE" position="CENTER" meeplespot="true"/>
+		<node feature="CASTLE" position="RIGHT"/>
+		<node feature="FIELDS" position="BOTTOM" meeplespot="true"/>
+		<edge a="LEFT" b="CENTER"/>
+		<edge a="TOP" b="CENTER"/>
+		<edge a="RIGHT" b="CENTER"/>
+	</tile>
+
+	<tile type="S" ammount="2" coatofarms="true">
+		<node feature="CASTLE" position="TOP"/>
+		<node feature="CASTLE" position="LEFT"/>
+		<node feature="CASTLE" position="CENTER" meeplespot="true"/>
+		<node feature="CASTLE" position="RIGHT"/>
+		<node feature="FIELDS" position="BOTTOMLEFT" direction="Y" meeplespot="true"/>
+		<node feature="ROAD" position="BOTTOM" meeplespot="true"/>
+		<node feature="FIELDS" position="BOTTOMRIGHT" direction="Y" meeplespot="true"/>
+		<edge a="LEFT" b="CENTER"/>
+		<edge a="TOP" b="CENTER"/>
+		<edge a="RIGHT" b="CENTER"/>
+	</tile>
+
+	<tile type="T" ammount="1">
+		<node feature="CASTLE" position="TOP"/>
+		<node feature="CASTLE" position="LEFT"/>
+		<node feature="CASTLE" position="CENTER" meeplespot="true"/>
+		<node feature="CASTLE" position="RIGHT"/>
+		<node feature="FIELDS" position="BOTTOMLEFT" direction="Y" meeplespot="true"/>
+		<node feature="ROAD" position="BOTTOM" meeplespot="true"/>
+		<node feature="FIELDS" position="BOTTOMRIGHT" direction="Y" meeplespot="true"/>
+		<edge a="LEFT" b="CENTER"/>
+		<edge a="TOP" b="CENTER"/>
+		<edge a="RIGHT" b="CENTER"/>
+	</tile>
+
+	<tile type="U" ammount="8">
+		<node feature="FIELDS" position="TOPLEFT" direction="X"/>
+		<node feature="FIELDS" position="TOP" meeplespot="true"/>
+		<node feature="FIELDS" position="TOPRIGHT" direction="X"/>
+		<node feature="ROAD" position="LEFT" meeplespot="true"/>
+		<node feature="ROAD" position="RIGHT"/>
+		<node feature="FIELDS" position="BOTTOMLEFT" direction="X"/>
+		<node feature="FIELDS" position="BOTTOM" meeplespot="true"/>
+		<node feature="FIELDS" position="BOTTOMRIGHT" direction="X"/>
+		<edge a="TOPLEFT" b="TOPRIGHT"/>
+		<edge a="LEFT" b="RIGHT"/>
+		<edge a="BOTTOMLEFT" b="BOTTOMRIGHT"/>
+	</tile>
+
+	<tile type="V" ammount="9">
+		<node feature="FIELDS" position="TOPLEFT" direction="X"/>
+		<node feature="FIELDS" position="TOP"/>
+		<node feature="ROAD" position="LEFT" meeplespot="true"/>
+		<node feature="FIELDS" position="CENTER"/>
+		<node feature="FIELDS" position="RIGHT" meeplespot="true"/>
+		<node feature="FIELDS" position="BOTTOMLEFT" direction="BOTH"/>
+		<node feature="ROAD" position="BOTTOM"/>
+		<node feature="FIELDS" position="BOTTOMRIGHT" direction="Y"/>
+		<edge a="LEFT" b="BOTTOM"/>
+		<edge a="TOPLEFT" b="CENTER"/>
+		<edge a="TOP" b="CENTER"/>
+		<edge a="RIGHT" b="CENTER"/>
+		<edge a="BOTTOMRIGHT" b="CENTER"/>
+	</tile>
+
+	<tile type="W" ammount="4">
+		<node feature="FIELDS" position="TOPLEFT" direction="X"/>
+		<node feature="FIELDS" position="TOP" meeplespot="true"/>
+		<node feature="FIELDS" position="TOPRIGHT" direction="X"/>
+		<node feature="ROAD" position="LEFT" meeplespot="true"/>
+		<node feature="FIELDS" position="CENTER"/>
+		<node feature="ROAD" position="RIGHT" meeplespot="true"/>
+		<node feature="FIELDS" position="BOTTOMLEFT" direction="BOTH" meeplespot="true"/>
+		<node feature="ROAD" position="BOTTOM" meeplespot="true"/>
+		<node feature="FIELDS" position="BOTTOMRIGHT" direction="BOTH" meeplespot="true"/>
+		<edge a="TOPLEFT" b="CENTER"/>
+		<edge a="TOP" b="CENTER"/>
+		<edge a="TOPRIGHT" b="CENTER"/>
+	</tile>
+
+	<tile type="X" ammount="1">
+		<node feature="FIELDS" position="TOPLEFT" direction="BOTH" meeplespot="true"/>
+		<node feature="ROAD" position="TOP" meeplespot="true"/>
+		<node feature="FIELDS" position="TOPRIGHT" direction="BOTH" meeplespot="true"/>
+		<node feature="ROAD" position="LEFT" meeplespot="true"/>
+		<node feature="ROAD" position="RIGHT" meeplespot="true"/>
+		<node feature="FIELDS" position="BOTTOMLEFT" direction="BOTH" meeplespot="true"/>
+		<node feature="ROAD" position="BOTTOM" meeplespot="true"/>
+		<node feature="FIELDS" position="BOTTOMRIGHT" direction="BOTH" meeplespot="true"/>
+	</tile>
+</tiletypes>

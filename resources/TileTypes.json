@@ -1,0 +1,242 @@
+{
+	"A": {
+		"Ammount": 2,
+		"CoatOfArms": false,
+		"T": "FIELDS→L→R→BLB→BRB",
+		"L": "FIELDS→T→R→BLB→BRB",
+		"R": "FIELDS→T→L→BLB→BRB",
+		"BLB": "FIELDS→T→L→R→BRB",
+		"B": "ROAD",
+		"BRB": "FIELDS→T→L→R→BLB",
+		"C": "MONASTERY"
+	},
+	"B": {
+		"Ammount": 4,
+		"CoatOfArms": false,
+		"T": "FIELDS→L→R→B",
+		"L": "FIELDS→T→R→B",
+		"R": "FIELDS→T→L→B",
+		"B": "FIELDS→T→L→R",
+		"C": "MONASTERY"
+	}, // TODO ab hier
+	"C": {
+		"Ammount": 1,
+		"CoatOfArms": true,
+		"T": "FIELDS",
+		"L": "FIELDS",
+		"R": "FIELDS",
+		"BLB": "FIELDS→L→T→R→BRB",
+		"B": "ROAD",
+		"C": "MONASTERY"
+	},
+	"D": {
+		"Ammount": 4,
+		"CoatOfArms": false,
+		"T": "FIELDS",
+		"L": "FIELDS",
+		"R": "FIELDS",
+		"BLB": "FIELDS→L→T→R→BRB",
+		"B": "ROAD",
+		"C": "MONASTERY"
+	},
+	"E": {
+		"Ammount": 5,
+		"CoatOfArms": false,
+		"T": "FIELDS",
+		"L": "FIELDS",
+		"R": "FIELDS",
+		"BLB": "FIELDS→L→T→R→BRB",
+		"B": "ROAD",
+		"C": "MONASTERY"
+	},
+	"F": {
+		"Ammount": 2,
+		"CoatOfArms": false,
+		"T": "FIELDS",
+		"L": "FIELDS",
+		"R": "FIELDS",
+		"BLB": "FIELDS→L→T→R→BRB",
+		"B": "ROAD",
+		"C": "MONASTERY"
+	},
+	"G": {
+		"Ammount": 2,
+		"CoatOfArms": false,
+		"T": "FIELDS",
+		"L": "FIELDS",
+		"R": "FIELDS",
+		"BLB": "FIELDS→L→T→R→BRB",
+		"B": "ROAD",
+		"C": "MONASTERY"
+	},
+	"H": {
+		"Ammount": 2,
+		"CoatOfArms": false,
+		"T": "FIELDS",
+		"L": "FIELDS",
+		"R": "FIELDS",
+		"BLB": "FIELDS→L→T→R→BRB",
+		"B": "ROAD",
+		"C": "MONASTERY"
+	},
+	"I": {
+		"Ammount": 2,
+		"CoatOfArms": false,
+		"T": "FIELDS",
+		"L": "FIELDS",
+		"R": "FIELDS",
+		"BLB": "FIELDS→L→T→R→BRB",
+		"B": "ROAD",
+		"C": "MONASTERY"
+	},
+	"J": {
+		"Ammount": 2,
+		"CoatOfArms": false,
+		"T": "FIELDS",
+		"L": "FIELDS",
+		"R": "FIELDS",
+		"BLB": "FIELDS→L→T→R→BRB",
+		"B": "ROAD",
+		"C": "MONASTERY"
+	},
+	"K": {
+		"Ammount": 2,
+		"CoatOfArms": false,
+		"T": "FIELDS",
+		"L": "FIELDS",
+		"R": "FIELDS",
+		"BLB": "FIELDS→L→T→R→BRB",
+		"B": "ROAD",
+		"C": "MONASTERY"
+	},
+	"L": {
+		"Ammount": 2,
+		"CoatOfArms": false,
+		"T": "FIELDS",
+		"L": "FIELDS",
+		"R": "FIELDS",
+		"BLB": "FIELDS→L→T→R→BRB",
+		"B": "ROAD",
+		"C": "MONASTERY"
+	},
+	"M": {
+		"Ammount": 2,
+		"CoatOfArms": false,
+		"T": "FIELDS",
+		"L": "FIELDS",
+		"R": "FIELDS",
+		"BLB": "FIELDS→L→T→R→BRB",
+		"B": "ROAD",
+		"C": "MONASTERY"
+	},
+	"N": {
+		"Ammount": 2,
+		"CoatOfArms": false,
+		"T": "FIELDS",
+		"L": "FIELDS",
+		"R": "FIELDS",
+		"BLB": "FIELDS→L→T→R→BRB",
+		"B": "ROAD",
+		"C": "MONASTERY"
+	},
+	"O": {
+		"Ammount": 2,
+		"CoatOfArms": false,
+		"T": "FIELDS",
+		"L": "FIELDS",
+		"R": "FIELDS",
+		"BLB": "FIELDS→L→T→R→BRB",
+		"B": "ROAD",
+		"C": "MONASTERY"
+	},
+	"P": {
+		"Ammount": 2,
+		"CoatOfArms": false,
+		"T": "FIELDS",
+		"L": "FIELDS",
+		"R": "FIELDS",
+		"BLB": "FIELDS→L→T→R→BRB",
+		"B": "ROAD",
+		"C": "MONASTERY"
+	},
+	"Q": {
+		"Ammount": 2,
+		"CoatOfArms": false,
+		"T": "FIELDS",
+		"L": "FIELDS",
+		"R": "FIELDS",
+		"BLB": "FIELDS→L→T→R→BRB",
+		"B": "ROAD",
+		"C": "MONASTERY"
+	},
+	"R": {
+		"Ammount": 2,
+		"CoatOfArms": false,
+		"T": "FIELDS",
+		"L": "FIELDS",
+		"R": "FIELDS",
+		"BLB": "FIELDS→L→T→R→BRB",
+		"B": "ROAD",
+		"C": "MONASTERY"
+	},
+	"S": {
+		"Ammount": 2,
+		"CoatOfArms": false,
+		"T": "FIELDS",
+		"L": "FIELDS",
+		"R": "FIELDS",
+		"BLB": "FIELDS→L→T→R→BRB",
+		"B": "ROAD",
+		"C": "MONASTERY"
+	},
+	"T": {
+		"Ammount": 2,
+		"CoatOfArms": false,
+		"T": "FIELDS",
+		"L": "FIELDS",
+		"R": "FIELDS",
+		"BLB": "FIELDS→L→T→R→BRB",
+		"B": "ROAD",
+		"C": "MONASTERY"
+	},
+	"U": {
+		"Ammount": 2,
+		"CoatOfArms": false,
+		"T": "FIELDS",
+		"L": "FIELDS",
+		"R": "FIELDS",
+		"BLB": "FIELDS→L→T→R→BRB",
+		"B": "ROAD",
+		"C": "MONASTERY"
+	},
+	"V": {
+		"Ammount": 2,
+		"CoatOfArms": false,
+		"T": "FIELDS",
+		"L": "FIELDS",
+		"R": "FIELDS",
+		"BLB": "FIELDS→L→T→R→BRB",
+		"B": "ROAD",
+		"C": "MONASTERY"
+	},
+	"W": {
+		"Ammount": 2,
+		"CoatOfArms": false,
+		"T": "FIELDS",
+		"L": "FIELDS",
+		"R": "FIELDS",
+		"BLB": "FIELDS→L→T→R→BRB",
+		"B": "ROAD",
+		"C": "MONASTERY"
+	},
+	"X": {
+		"Ammount": 2,
+		"CoatOfArms": false,
+		"T": "FIELDS",
+		"L": "FIELDS",
+		"R": "FIELDS",
+		"BLB": "FIELDS→L→T→R→BRB",
+		"B": "ROAD",
+		"C": "MONASTERY"
+	},
+}
