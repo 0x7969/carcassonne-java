@@ -27,7 +27,6 @@ public class TileStack extends Observable<TileStack> {
 	public Tile pickUpTile() {
 		Tile topTile = cardstack.get(0);
 		cardstack.remove(0);
-		push(this);
 		return topTile;
 	}
 

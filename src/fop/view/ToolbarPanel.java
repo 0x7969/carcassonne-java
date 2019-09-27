@@ -11,12 +11,8 @@ import javax.swing.SwingUtilities;
 
 public class ToolbarPanel extends JPanel {
 	
-	JButton zoomInButton;
-	JButton zoomOutButton;
-	JButton playButton;
 	JButton quitButton;
-	JTextField xValue;
-	JTextField yValue;
+	JButton skipButton;
 	
 	public ToolbarPanel() {
 		setBorder(BorderFactory.createTitledBorder("Menu"));
@@ -24,25 +20,21 @@ public class ToolbarPanel extends JPanel {
 		quitButton = new JButton("Quit");
 		add(quitButton);
 		
-		quitButton.addActionListener((event) -> {
-			switch (event.getActionCommand()) {
-			case "Quit":
-				SwingUtilities.getWindowAncestor(this).dispose();
-				break;
-			}
-		});
+		skipButton = new JButton("Skip");
+		add(skipButton);
 	}
 	
-	public void addToolbarActionListener(ActionListener l) {
+	public void addToolbarActionListeners(ActionListener l) {
 		quitButton.addActionListener(l);
+		skipButton.addActionListener(l);
 	}
 	
-	public int getXValue() {
-		return Integer.parseInt(xValue.getText());
+	public void toggleSkipButton() {
+		if(skipButton.isVisible())
+			skipButton.setVisible(false);
+		else
+			skipButton.setVisible(true);
 	}
-	
-	public int getYValue() {
-		return Integer.parseInt(yValue.getText());
-	}
+
 
 }

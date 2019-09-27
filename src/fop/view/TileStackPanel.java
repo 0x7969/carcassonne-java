@@ -26,5 +26,11 @@ public class TileStackPanel extends JPanel implements Observer<TileStack> {
 		topTile.repaint(); // !
 		tileCounter.setText(Integer.toString(tilestack.remainingTiles()));
 	}
+	
+	public void hideTileStack() {
+		topTile.setType("FLIPSIDE");
+		topTile.setRotation(0);
+		topTile.repaint();
+	}
 
 }

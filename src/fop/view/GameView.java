@@ -61,5 +61,9 @@ public class GameView extends JPanel {
 	public TileStackPanel getTileStackPanel() {
 		return tileStackPanel;
 	}
+	
+	public ToolbarPanel getToolbarPanel() {
+		return toolbarPanel;
+	}
 
 }

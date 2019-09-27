@@ -59,14 +59,27 @@ public class GameBoardPanel extends JPanel implements Observer<Gameboard> {
 
 		this.addMouseListener(new MouseAdapter() {
 			public void mouseClicked(MouseEvent event) {
-				if (contains(tileOverlay)) {
-					if (SwingUtilities.isLeftMouseButton(event)) {
-						gc.newTile(gc.pickUpTile(), getGridX(tileOverlay), getGridY(tileOverlay));
-						gc.setState(State.PLACING_MEEPLE);
-						hideTileOverlay();
-					} else if ((SwingUtilities.isRightMouseButton(event))) {
-						rotateUntilAllowed();
+				State currentState = gc.getState();
+				switch (currentState) {
+				case PLACING_TILE:
+					if (contains(tileOverlay)) {
+						if (SwingUtilities.isLeftMouseButton(event)) {
+							gc.newTile(gc.pickUpTile(), getGridX(tileOverlay), getGridY(tileOverlay));
+							gc.setState(State.PLACING_MEEPLE);
+							hideTileOverlay();
+						} else if ((SwingUtilities.isRightMouseButton(event))) {
+							rotateUntilAllowed();
+						}
 					}
+					break;
+				case PLACING_MEEPLE:
+					if (SwingUtilities.isLeftMouseButton(event)) {
+						System.out.println("Ok, not placing a meeple.");
+						gc.setState(State.PLACING_TILE);
+					}
+					break;
+				default:
+					break;
 				}
 			}
 		});
@@ -87,6 +100,8 @@ public class GameBoardPanel extends JPanel implements Observer<Gameboard> {
 
 			@Override
 			public void mouseMoved(MouseEvent event) {
+				if(gc.getState() != State.PLACING_TILE)
+					return;
 
 				Point p = event.getPoint();
 
@@ -196,7 +211,7 @@ public class GameBoardPanel extends JPanel implements Observer<Gameboard> {
 		return Arrays.stream(getComponents()).filter(c -> c instanceof TilePanel).map(c -> (TilePanel) c)
 				.toArray(TilePanel[]::new);
 	}
-	
+
 	public TileOverlayPanel getTileOverlay() {
 		return tileOverlay;
 	}
@@ -290,6 +305,10 @@ public class GameBoardPanel extends JPanel implements Observer<Gameboard> {
 		meepleOverlay = new MeepleOverlayPanel(meepleSpots, scale);
 		add(meepleOverlay, gbc); // auf z-axis ist kein verlass, lieber mit setVisible
 		return meepleOverlay;
+	}
+	
+	public void hideMeepleOverlay() {
+		remove(meepleOverlay);
 	}
 
 	private void showTileOverlay(String type, int x, int y) {

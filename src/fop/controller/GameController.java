@@ -93,6 +93,16 @@ public class GameController {
 			initGameBoard();
 			setState(State.PLACING_TILE);
 			break;
+		case PLACING_TILE:
+			stack.push(stack); // pushes stack to observers (= tileStackPanel)
+			view.getToolbarPanel().toggleSkipButton();
+			System.out.println("Please place a tile.");
+			break;
+		case PLACING_MEEPLE:
+			stackPanel.hideTileStack();
+			view.getToolbarPanel().toggleSkipButton();
+			System.out.println("Please place a meeple or not.");
+			break;
 		case GAME_SCORE:
 			// score anzeigen
 			break;
@@ -101,7 +111,21 @@ public class GameController {
 		}
 	}
 
+	public State getState() {
+		return state;
+	}
+
 	private void setupListeners() {
+		view.getToolbarPanel().addToolbarActionListeners((event) -> {
+			switch (event.getActionCommand()) {
+			case "Quit":
+				window.dispose();
+				break;
+			case "Skip":
+				setState(State.PLACING_TILE);
+			}
+		});
+
 //			view.addMouseListener(new MouseAdapter() {
 //				public void mouseClicked(MouseEvent event) {
 //					if (state == State.PLACING_TILE && view.hasOverlay()) {
@@ -142,7 +166,7 @@ public class GameController {
 		stack.addObserver(boardPanel.getTileOverlay());
 		board.addObserver(boardPanel);
 	}
-	
+
 	public void initGameBoard() {
 		board.initGameboard(stack.pickUpTile()); // The topmost tile of the tilestack is always the start tile.
 	}
