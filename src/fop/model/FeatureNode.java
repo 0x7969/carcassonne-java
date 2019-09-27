@@ -53,7 +53,7 @@ public class FeatureNode extends Node<FeatureType> {
 		return getValue();
 	}
 
-	// TODO deprecated?
+	@Deprecated
 	public Position getPosition() {
 		return position;
 	}

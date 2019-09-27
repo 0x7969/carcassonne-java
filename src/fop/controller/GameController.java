@@ -5,6 +5,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.util.Arrays;
 import java.util.logging.ConsoleHandler;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -94,11 +95,14 @@ public class GameController {
 			setState(State.PLACING_TILE);
 			break;
 		case PLACING_TILE:
+			boardPanel.hideMeepleOverlay();
 			stack.push(stack); // pushes stack to observers (= tileStackPanel)
 			view.getToolbarPanel().toggleSkipButton();
 			System.out.println("Please place a tile.");
 			break;
 		case PLACING_MEEPLE:
+			Tile newestTile = board.getNewestTile();
+			boardPanel.showMeepleOverlay(newestTile.getMeepleSpots(), newestTile.x, newestTile.y);
 			stackPanel.hideTileStack();
 			view.getToolbarPanel().toggleSkipButton();
 			System.out.println("Please place a meeple or not.");

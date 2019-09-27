@@ -100,7 +100,7 @@ public class GameBoardPanel extends JPanel implements Observer<Gameboard> {
 
 			@Override
 			public void mouseMoved(MouseEvent event) {
-				if(gc.getState() != State.PLACING_TILE)
+				if (gc.getState() != State.PLACING_TILE)
 					return;
 
 				Point p = event.getPoint();
@@ -303,12 +303,14 @@ public class GameBoardPanel extends JPanel implements Observer<Gameboard> {
 		gbc.gridx = x;
 		gbc.gridy = y;
 		meepleOverlay = new MeepleOverlayPanel(meepleSpots, scale);
-		add(meepleOverlay, gbc); // auf z-axis ist kein verlass, lieber mit setVisible
+		add(meepleOverlay, gbc, 0); // auf z-axis ist kein verlass, lieber mit setVisible
 		return meepleOverlay;
 	}
-	
+
 	public void hideMeepleOverlay() {
-		remove(meepleOverlay);
+		if (meepleOverlay != null)
+			remove(meepleOverlay);
+		repaint();
 	}
 
 	private void showTileOverlay(String type, int x, int y) {

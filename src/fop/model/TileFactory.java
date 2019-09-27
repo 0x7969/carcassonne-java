@@ -1,6 +1,7 @@
 package fop.model;
 
 import java.io.File;
+import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -50,7 +51,7 @@ public class TileFactory {
 
 					// If the tile has a coat of arms, pass that to the constructor
 					if (tileAttributes.getNamedItem("coatofarms") != null
-							&& tileAttributes.getNamedItem("coatofarms").getNodeValue().equals(true))
+							&& tileAttributes.getNamedItem("coatofarms").getNodeValue().equals("true"))
 						newTile = new Tile(tileAttributes.getNamedItem("type").getNodeValue(), true);
 					else
 						newTile = new Tile(tileAttributes.getNamedItem("type").getNodeValue());
@@ -78,7 +79,7 @@ public class TileFactory {
 						}
 
 						if (nodeAttributes.getNamedItem("meeplespot") != null
-								&& nodeAttributes.getNamedItem("meeplespot").getNodeValue() == "true")
+								&& nodeAttributes.getNamedItem("meeplespot").getNodeValue().equals("true"))
 							fn.setMeepleSpot();
 
 						newTile.addNode(Position.valueOf(nodeAttributes.getNamedItem("position").getNodeValue()), fn);
@@ -108,122 +109,6 @@ public class TileFactory {
 		} catch (Exception exception) {
 			exception.printStackTrace();
 		}
-
-//		tiles = new LinkedList<Tile>();
-//
-//		Tile tile = new Tile("B"); // Tile B
-//		FeatureNode top = new FeatureNode(FIELDS, TOP);
-//		FeatureNode left = new FeatureNode(FIELDS, LEFT);
-//		FeatureNode center = new FeatureNode(MONASTERY, CENTER);
-//		FeatureNode right = new FeatureNode(FIELDS, RIGHT);
-//		FeatureNode bottom = new FeatureNode(FIELDS, BOTTOM);
-//		tile.addEdge(new Edge<FeatureType>(left, center));
-//		tile.addEdge(new Edge<FeatureType>(top, center));
-//		tile.addEdge(new Edge<FeatureType>(right, center));
-//		tile.addEdge(new Edge<FeatureType>(bottom, center));
-//		tile.addNode(TOP, top);
-//		tile.addNode(LEFT, left);
-//		tile.addNode(CENTER, center);
-//		tile.addNode(RIGHT, right);
-//		tile.addNode(BOTTOM, bottom);
-//		tiles.add(tile);
-//		tiles.add(tile);
-//		tiles.add(tile);
-//		tiles.add(tile);
-//
-//		tile = new Tile("C", true); // Tile C
-//		top = new FeatureNode(CASTLE, TOP);
-//		left = new FeatureNode(CASTLE, LEFT);
-//		center = new FeatureNode(CASTLE, CENTER);
-//		right = new FeatureNode(CASTLE, RIGHT);
-//		bottom = new FeatureNode(CASTLE, BOTTOM);
-//		tile.addEdge(new Edge<FeatureType>(left, center));
-//		tile.addEdge(new Edge<FeatureType>(top, center));
-//		tile.addEdge(new Edge<FeatureType>(right, center));
-//		tile.addEdge(new Edge<FeatureType>(bottom, center));
-//		tile.addNode(TOP, top);
-//		tile.addNode(LEFT, left);
-//		tile.addNode(CENTER, center);
-//		tile.addNode(RIGHT, right);
-//		tile.addNode(BOTTOM, bottom);
-//		tiles.add(tile);
-//
-//		tile = new Tile("D", false); // Tile D
-//		top = new FeatureNode(CASTLE, TOP);
-//		left = new FeatureNode(ROAD, LEFT);
-//		center = new FeatureNode(ROAD, CENTER);
-//		right = new FeatureNode(ROAD, RIGHT);
-//		bottom = new FeatureNode(FIELDS, BOTTOM);
-//		tile.addEdge(new Edge<FeatureType>(left, right));
-//		tile.addNode(TOP, top);
-//		tile.addNode(LEFT, left);
-//		tile.addNode(CENTER, center);
-//		tile.addNode(RIGHT, right);
-//		tile.addNode(BOTTOM, bottom);
-//		tiles.add(tile);
-//
-//		tile = new Tile("D", false); // Tile D
-//		top = new FeatureNode(CASTLE, TOP);
-//		left = new FeatureNode(ROAD, LEFT);
-//		center = new FeatureNode(ROAD, CENTER);
-//		right = new FeatureNode(ROAD, RIGHT);
-//		bottom = new FeatureNode(FIELDS, BOTTOM);
-//		tile.addEdge(new Edge<FeatureType>(left, right));
-//		tile.addNode(TOP, top);
-//		tile.addNode(LEFT, left);
-//		tile.addNode(CENTER, center);
-//		tile.addNode(RIGHT, right);
-//		tile.addNode(BOTTOM, bottom);
-//
-//		tile = new Tile("D", false); // Tile D
-//		top = new FeatureNode(CASTLE, TOP);
-//		left = new FeatureNode(ROAD, LEFT);
-//		center = new FeatureNode(ROAD, CENTER);
-//		right = new FeatureNode(ROAD, RIGHT);
-//		bottom = new FeatureNode(FIELDS, BOTTOM);
-//		tile.addEdge(new Edge<FeatureType>(left, right));
-//		tile.addNode(TOP, top);
-//		tile.addNode(LEFT, left);
-//		tile.addNode(CENTER, center);
-//		tile.addNode(RIGHT, right);
-//		tile.addNode(BOTTOM, bottom);
-//		
-//		tile = new Tile("D", false); // Tile D
-//		top = new FeatureNode(CASTLE, TOP);
-//		left = new FeatureNode(ROAD, LEFT);
-//		center = new FeatureNode(ROAD, CENTER);
-//		right = new FeatureNode(ROAD, RIGHT);
-//		bottom = new FeatureNode(FIELDS, BOTTOM);
-//		tile.addEdge(new Edge<FeatureType>(left, right));
-//		tile.addNode(TOP, top);
-//		tile.addNode(LEFT, left);
-//		tile.addNode(CENTER, center);
-//		tile.addNode(RIGHT, right);
-//		tile.addNode(BOTTOM, bottom);
-//		startTile = tile;
-////		 There are four tiles of type D but one is the starting tile, which is
-////		 generated upon initialising the gameboard.
-//
-//		tile = new Tile("E"); // Tile E
-//		top = new FeatureNode(CASTLE, TOP);
-//		left = new FeatureNode(FIELDS, LEFT);
-//		center = new FeatureNode(FIELDS, CENTER);
-//		right = new FeatureNode(FIELDS, RIGHT);
-//		bottom = new FeatureNode(FIELDS, BOTTOM);
-//		tile.addEdge(new Edge<FeatureType>(top, center));
-//		tile.addEdge(new Edge<FeatureType>(right, center));
-//		tile.addEdge(new Edge<FeatureType>(bottom, center));
-//		tile.addNode(TOP, top);
-//		tile.addNode(LEFT, left);
-//		tile.addNode(CENTER, center);
-//		tile.addNode(RIGHT, right);
-//		tile.addNode(BOTTOM, bottom);
-//		tiles.add(tile);
-//		tiles.add(tile);
-//		tiles.add(tile);
-//		tiles.add(tile);
-//		tiles.add(tile);
-
 	}
 
 	public List<Tile> getTiles() {
@@ -233,9 +118,4 @@ public class TileFactory {
 	public Tile getStartTile() {
 		return startTile;
 	}
-
-//	public static void main(String args[]) {
-//		TileFactory tf = new TileFactory();
-//	}
-
 }

@@ -57,6 +57,7 @@
 	</tile>
 
 	<tile type="D" ammount="4">
+		<!-- FIELDS ON TOP STILL MISSING -->
 		<node feature="CASTLE" position="TOP" meeplespot="true"/>
 		<node feature="ROAD" position="LEFT" meeplespot="true"/>
 		<node feature="ROAD" position="RIGHT"/>

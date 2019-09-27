@@ -115,12 +115,12 @@ public class Tile {
 				break;
 			}
 		}
-		
+
 		for (FeatureNode n : rotatedNodes.values()) {
 			n.switchDirection();
 //			n.rotatePositionRight(); // Wird jetzt über die Map gemacht. TODO entfernen.
 		}
-		
+
 		nodes = rotatedNodes;
 
 		if (rotation == 270)
@@ -145,11 +145,14 @@ public class Tile {
 
 	public boolean[] getMeepleSpots() {
 		boolean[] positions = new boolean[9];
-		for (FeatureNode n : nodes.values()) {
-			if(n.hasMeepleSpot())
-				positions[n.getPosition().ordinal()] = true;
+
+		for (Position p : Position.values()) {
+			FeatureNode n = nodes.get(p);
+			if (n != null)
+				if (n.hasMeepleSpot())
+					positions[p.ordinal()] = true;
 		}
+
 		return positions;
 	}
-
 }

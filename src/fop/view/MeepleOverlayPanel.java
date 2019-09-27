@@ -13,7 +13,7 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 
 public class MeepleOverlayPanel extends JLabel {
-	
+
 	private static final String FOLDER = "resources/meeple/";
 
 	private int size; // both width and height in pixels
@@ -24,16 +24,13 @@ public class MeepleOverlayPanel extends JLabel {
 		this.size = size;
 		this.setPreferredSize(new Dimension(size, size));
 		rotation = 0;
-		
-		add(new MeeplePanel());
-		add(new MeeplePanel());
-		add(new MeeplePanel());
-		add(new MeeplePanel());
-		add(new MeeplePanel());
-		add(new MeeplePanel());
-		add(new MeeplePanel());
-		add(new MeeplePanel());
-		add(new MeeplePanel());
+
+		for (boolean spot : meepleSpots) {
+			if (spot)
+				add(new MeeplePanel(true));
+			else
+				add(new MeeplePanel(false));
+		}
 	}
 
 //	@Override
@@ -48,7 +45,7 @@ public class MeepleOverlayPanel extends JLabel {
 //	public Dimension getPreferredSize() {
 //		return new Dimension(size, size);
 //	}
-	
+
 	public void setSize(int size) {
 		this.setPreferredSize(new Dimension(size, size));
 	}
@@ -57,18 +54,19 @@ public class MeepleOverlayPanel extends JLabel {
 		this.rotation = rotation;
 	}
 
-//	public static void main(String args[]) {
-//		JFrame f = new JFrame();
-//		GridBagConstraints gbc = new GridBagConstraints();
-//		f.setLayout(new GridBagLayout());
-//		f.setSize(800, 800);
-//		f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-//		gbc.gridx = 0;
-//		gbc.gridy = 0;
-////		f.add(new MeepleOverlayPanel(400), gbc);
-//		f.add(new TilePanel("A", 400), gbc);
-//
-//		f.setVisible(true);
-//	}
+	public static void main(String args[]) {
+		JFrame f = new JFrame();
+		GridBagConstraints gbc = new GridBagConstraints();
+		f.setLayout(new GridBagLayout());
+		f.setSize(500, 500);
+		f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		gbc.gridx = 0;
+		gbc.gridy = 0;
+		f.add(new MeepleOverlayPanel(new boolean[] { true, false, false, false, true, false, false, true, false }, 400),
+				gbc);
+		f.add(new TilePanel("A", 400), gbc);
+
+		f.setVisible(true);
+	}
 
 }

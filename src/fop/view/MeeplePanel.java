@@ -21,28 +21,39 @@ public class MeeplePanel extends JPanel {
 	private BufferedImage meepleImage;
 	Color color;
 
-	MeeplePanel() {
+	MeeplePanel(boolean isSpot) {
 		this.setOpaque(false);
-		try {
-			meepleImage = ImageIO.read(new File(FOLDER + "meeple_road.png"));
-		} catch (IOException e) {
-			e.printStackTrace();
+
+		if (isSpot) {
+			try {
+				meepleImage = ImageIO.read(new File(FOLDER + "meeple_road.png"));
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+
+			this.addMouseListener(new MouseAdapter() {
+				@Override
+				public void mouseEntered(MouseEvent event) {
+					try {
+						meepleImage = ImageIO.read(new File(FOLDER + "meeple_road_template.png"));
+					} catch (IOException e) {
+						e.printStackTrace();
+					}
+					repaint();
+				}
+
+				@Override
+				public void mouseExited(MouseEvent event) {
+					try {
+						meepleImage = ImageIO.read(new File(FOLDER + "meeple_road.png"));
+					} catch (IOException e) {
+						e.printStackTrace();
+					}
+					repaint();
+				}
+			});
 		}
-		
-		this.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mouseEntered(MouseEvent event) {
-				setOpaque(true);
-				repaint();
-			}
-			
-			@Override
-			public void mouseExited(MouseEvent event) {
-				setOpaque(false);
-				repaint();
-			}
-		});
-		
+
 //		this.addMouseMotionListener(new MouseAdapter() {
 //
 //			@Override
