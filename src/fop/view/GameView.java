@@ -23,7 +23,7 @@ public class GameView extends JPanel {
 		setLayout(new BorderLayout());
 		this.setPreferredSize(new Dimension(1200, 900));
 		// top toolbar
-		toolbarPanel = new ToolbarPanel();
+		toolbarPanel = new ToolbarPanel(gc.getPlayers());
 		this.add(toolbarPanel, BorderLayout.NORTH);
 
 		// tile stack

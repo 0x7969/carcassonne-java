@@ -1,11 +1,11 @@
 package fop.controller;
 
+import static fop.model.FeatureType.CASTLE;
+import static fop.model.FeatureType.ROAD;
+
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-import java.util.Arrays;
 import java.util.logging.ConsoleHandler;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -15,6 +15,9 @@ import javax.swing.JPanel;
 import javax.swing.UIManager;
 
 import fop.model.Gameboard;
+import fop.model.Observable;
+import fop.model.Player;
+import fop.model.Position;
 import fop.model.Tile;
 import fop.model.TileStack;
 import fop.view.GameBoardPanel;
@@ -23,23 +26,29 @@ import fop.view.GameboardObserver;
 import fop.view.MenuView;
 import fop.view.Observer;
 import fop.view.TileStackPanel;
-import fop.view.View;
 
-public class GameController {
+public class GameController extends Observable<Player[]> {
 
 	private final static Logger LOG = Logger.getLogger("Carcassonne");
 
-	private JFrame window;
-	private GameView view;
+	// model
 	private State state;
 	private Gameboard board;
 	private TileStack stack;
+	private Player[] players;
+	private int currentRound;
+
+	// view
+	private JFrame window;
+	private GameView view;
 	private GameBoardPanel boardPanel;
 	private TileStackPanel stackPanel;
 
 	public GameController() {
 		setupWindow();
 		setState(State.GAME_MENU);
+
+		currentRound = 0;
 
 		// set up logging
 		LOG.setLevel(Level.OFF);
@@ -83,6 +92,8 @@ public class GameController {
 			setView(new MenuView(this));
 			break;
 		case GAME_START:
+			// TODO soll dann vom menu aus gesetzt werden
+			players = new Player[]{new Player("P1"), new Player("P2")};
 			board = new Gameboard();
 			stack = new TileStack();
 			view = new GameView(this);
@@ -92,11 +103,13 @@ public class GameController {
 			setupListeners();
 			setupObservers();
 			initGameBoard();
+			
 			setState(State.PLACING_TILE);
 			break;
 		case PLACING_TILE:
+			push(players); // push players to observers (= ToolbarPanel)
 			boardPanel.hideMeepleOverlay();
-			stack.push(stack); // pushes stack to observers (= tileStackPanel)
+			stack.push(stack); // pushes tile stack to observers (= TileStackPanel)
 			view.getToolbarPanel().toggleSkipButton();
 			System.out.println("Please place a tile.");
 			break;
@@ -105,7 +118,7 @@ public class GameController {
 			boardPanel.showMeepleOverlay(newestTile.getMeepleSpots(), newestTile.x, newestTile.y);
 			stackPanel.hideTileStack();
 			view.getToolbarPanel().toggleSkipButton();
-			System.out.println("Please place a meeple or not.");
+			System.out.println("Please place a meeple or skip.");
 			break;
 		case GAME_SCORE:
 			// score anzeigen
@@ -126,7 +139,7 @@ public class GameController {
 				window.dispose();
 				break;
 			case "Skip":
-				setState(State.PLACING_TILE);
+				nextRound();
 			}
 		});
 
@@ -164,8 +177,22 @@ public class GameController {
 //				}
 //			});
 	}
+	
+	public void nextRound() {
+		board.calculatePoints(ROAD); // TODO soll eigentlich durch state change ausgelöst werden
+		board.calculatePoints(CASTLE);
+		// TODO eigentlich müsste man das gar nicht trennen. wir wollen nur wiesen noch
+		// nicht behandeln.
+		// sobald die verbindung/berechnung der wiesen funktioniert, können alle punkte
+		// in einem rutsch berechnet werden
+		// (für die wiese muss dann trotzdem noch zusätzlich die anzahl der berührten
+		// fertigen castles gesammelt werden).
+		currentRound++;
+		setState(State.PLACING_TILE);
+	}
 
 	private void setupObservers() {
+		this.addObserver(view.getToolbarPanel());
 		stack.addObserver(stackPanel);
 		stack.addObserver(boardPanel.getTileOverlay());
 		board.addObserver(boardPanel);
@@ -199,12 +226,22 @@ public class GameController {
 		return board.getMeepleSpots(x, y);
 	}
 
+	public void placeMeeple(Position position) {
+		board.placeMeeple(position, players[currentRound % players.length]); // the current player is determinded by the
+																				// current round modulo amount of
+																				// players
+	}
+
 	public void addGameBoardObserver(GameboardObserver o) {
 		board.addObserver(o);
 	}
 
 	public void addTileStackObserver(Observer<TileStack> o) {
 		stack.addObserver(o);
+	}
+	
+	public Player[] getPlayers() {
+		return players;
 	}
 
 	public static void main(String[] args) {

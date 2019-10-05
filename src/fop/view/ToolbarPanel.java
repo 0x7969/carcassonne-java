@@ -5,36 +5,52 @@ import java.awt.event.ActionListener;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.JTextField;
-import javax.swing.SwingUtilities;
 
-public class ToolbarPanel extends JPanel {
-	
+import fop.model.Player;
+
+public class ToolbarPanel extends JPanel implements Observer<Player[]> {
+
 	JButton quitButton;
 	JButton skipButton;
-	
-	public ToolbarPanel() {
+	JLabel[] playerLabels;
+
+	public ToolbarPanel(Player[] players) {
 		setBorder(BorderFactory.createTitledBorder("Menu"));
 		setLayout(new FlowLayout(FlowLayout.RIGHT));
+
+		playerLabels = new JLabel[players.length];
+		for (int i = 0; i < players.length; i++) {
+			playerLabels[i] = new JLabel(players[i].getName() + ":  " + players[i].getScore());
+			add(playerLabels[i]);
+		}
+
 		quitButton = new JButton("Quit");
 		add(quitButton);
-		
+
 		skipButton = new JButton("Skip");
 		add(skipButton);
 	}
-	
+
 	public void addToolbarActionListeners(ActionListener l) {
 		quitButton.addActionListener(l);
 		skipButton.addActionListener(l);
 	}
-	
+
 	public void toggleSkipButton() {
-		if(skipButton.isVisible())
+		if (skipButton.isVisible())
 			skipButton.setVisible(false);
 		else
 			skipButton.setVisible(true);
 	}
 
+	@Override
+	public void update(Player[] players) {
+		for (int i = 0; i < players.length; i++) {
+			playerLabels[i].setText(players[i].getName() + ":  " + players[i].getScore());
+			add(playerLabels[i]);
+		}
+	}
 
 }

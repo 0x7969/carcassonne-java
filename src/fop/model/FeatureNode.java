@@ -11,6 +11,7 @@ public class FeatureNode extends Node<FeatureType> {
 	private Direction direction;
 	private boolean connectsTiles;
 	private boolean meepleSpot;
+	private Player meeple;
 
 	/**
 	 * Creates a new FeatureNode. It is only present when coming from the given
@@ -40,13 +41,28 @@ public class FeatureNode extends Node<FeatureType> {
 		this.direction = BOTH;
 		this.connectsTiles = false;
 	}
-	
+
 	public void setMeepleSpot() {
 		this.meepleSpot = true;
 	}
-	
+
 	public boolean hasMeepleSpot() {
 		return meepleSpot;
+	}
+
+	public void setMeeple(Player p) {
+		meeple = p;
+	}
+
+	public boolean hasMeeple() {
+		if (meeple != null)
+			return true;
+		else
+			return false;
+	}
+
+	public Player getMeeple() {
+		return meeple;
 	}
 
 	public FeatureType getType() {
@@ -69,42 +85,10 @@ public class FeatureNode extends Node<FeatureType> {
 			direction = direction.getOpposite();
 	}
 
-	// TODO deprecated?
-	public void rotatePositionRight() {
-		switch (position) {
-		case TOPLEFT:
-			position = TOPRIGHT;
-			break;
-		case TOP:
-			position = RIGHT;
-			break;
-		case TOPRIGHT:
-			position = BOTTOMRIGHT;
-			break;
-		case LEFT:
-			position = TOP;
-			break;
-		case CENTER:
-			break;
-		case RIGHT:
-			position = BOTTOM;
-			break;
-		case BOTTOMLEFT:
-			position = TOPLEFT;
-			break;
-		case BOTTOM:
-			position = LEFT;
-			break;
-		case BOTTOMRIGHT:
-			position = BOTTOMLEFT;
-			break;
-		}
-	}
-	
 	public void setConnectsTiles() {
 		connectsTiles = true;
 	}
-	
+
 	public boolean isConnectingTiles() {
 		return connectsTiles;
 	}

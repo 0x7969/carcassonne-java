@@ -143,6 +143,12 @@ public class Tile {
 		return coatOfArms;
 	}
 
+	/**
+	 * 
+	 * @return The spots on which it is allowed to place a meeple as a boolean array
+	 *         representing the tile split in nine cells from top left to bottom
+	 *         right.
+	 */
 	public boolean[] getMeepleSpots() {
 		boolean[] positions = new boolean[9];
 
@@ -155,4 +161,32 @@ public class Tile {
 
 		return positions;
 	}
+
+	/**
+	 * 
+	 * @return The position on which a meeple was placed or null if no meeple was
+	 *         placed.
+	 */
+	public Position getMeeplePosition() {
+		for (Position p : Position.values()) {
+			FeatureNode n = nodes.get(p);
+			if (n != null && n.hasMeeple())
+				return p;
+		}
+
+		return null;
+	}
+
+	/**
+	 * Returns true if this tile has a meeple placed on it.
+	 * 
+	 * @return true if it does, false if it doesn't
+	 */
+	public boolean hasMeeple() {
+		for (FeatureNode n : nodes.values())
+			if (n.hasMeeple())
+				return true;
+		return false;
+	}
+
 }

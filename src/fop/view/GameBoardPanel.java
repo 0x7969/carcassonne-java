@@ -8,13 +8,17 @@ import java.awt.Point;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.Arrays;
+import java.util.LinkedList;
+import java.util.List;
 
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 
 import fop.controller.GameController;
 import fop.controller.State;
+import fop.model.FeatureNode;
 import fop.model.Gameboard;
+import fop.model.Position;
 import fop.model.Tile;
 import fop.model.TileStack;
 
@@ -57,7 +61,10 @@ public class GameBoardPanel extends JPanel implements Observer<Gameboard> {
 		tileOverlay = new TileOverlayPanel("FLIPSIDE", scale);
 //		gc.addTileStackObserver(tileOverlay);
 
+		meepleOverlay = new MeepleOverlayPanel(scale);
+
 		this.addMouseListener(new MouseAdapter() {
+			@Override
 			public void mouseClicked(MouseEvent event) {
 				State currentState = gc.getState();
 				switch (currentState) {
@@ -74,8 +81,14 @@ public class GameBoardPanel extends JPanel implements Observer<Gameboard> {
 					break;
 				case PLACING_MEEPLE:
 					if (SwingUtilities.isLeftMouseButton(event)) {
-						System.out.println("Ok, not placing a meeple.");
-						gc.setState(State.PLACING_TILE);
+						Component c = event.getComponent();
+						if (c instanceof MeeplePanel) {
+							Position p = ((MeeplePanel) c).getPosition();
+							if (p != null) {
+								gc.placeMeeple(p);
+								gc.nextRound();
+							}
+						}
 					}
 					break;
 				default:
@@ -292,13 +305,12 @@ public class GameBoardPanel extends JPanel implements Observer<Gameboard> {
 			for (TilePanel t : getTiles())
 				t.setPreferredSize(new Dimension(scale + pixels, scale + pixels));
 			tileOverlay.setPreferredSize(new Dimension(scale + pixels, scale + pixels));
-//			meepleOverlayPanel.setPreferredSize(new Dimension(scale + pixels, scale + pixels));
+			meepleOverlay.setPreferredSize(new Dimension(scale + pixels, scale + pixels));
 			scale += pixels;
 			revalidate(); // !
 		}
 	}
 
-	// TODO return void reicht?
 	public MeepleOverlayPanel showMeepleOverlay(boolean[] meepleSpots, int x, int y) {
 		gbc.gridx = x;
 		gbc.gridy = y;
@@ -308,9 +320,28 @@ public class GameBoardPanel extends JPanel implements Observer<Gameboard> {
 	}
 
 	public void hideMeepleOverlay() {
-		if (meepleOverlay != null)
-			remove(meepleOverlay);
+		remove(meepleOverlay);
 		repaint();
+	}
+	
+	private void showMeeples(List<Tile> tiles) {
+		for (Component c : getComponents()) {
+			if (c instanceof MeepleOverlayPanel)
+				remove(c);
+		}
+		
+		for (Tile t : tiles) {
+			if (t.hasMeeple()) {
+				boolean[] positions = new boolean[9];
+
+				for (Position p : Position.values()) {
+						if (p.equals(t.getMeeplePosition()))
+							positions[p.ordinal()] = true;
+				}
+				showMeepleOverlay(positions, t.x, t.y);
+			}
+		}
+		repaint(); // nsin
 	}
 
 	private void showTileOverlay(String type, int x, int y) {
@@ -336,8 +367,9 @@ public class GameBoardPanel extends JPanel implements Observer<Gameboard> {
 
 	@Override
 	public void update(Gameboard board) {
-		Tile t = board.getNewestTile();
-		newTile(t.getType(), t.getRotation(), t.x, t.y);
+		Tile newTile = board.getNewestTile();
+		newTile(newTile.getType(), newTile.getRotation(), newTile.x, newTile.y);
+		showMeeples(board.getTiles());
 	}
 
 }

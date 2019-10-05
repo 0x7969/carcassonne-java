@@ -7,10 +7,13 @@ import java.awt.Graphics;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.GridLayout;
+import java.awt.event.MouseListener;
 
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+
+import fop.model.Position;
 
 public class MeepleOverlayPanel extends JLabel {
 
@@ -19,17 +22,24 @@ public class MeepleOverlayPanel extends JLabel {
 	private int size; // both width and height in pixels
 	private int rotation; // in degrees
 
+	public MeepleOverlayPanel(int size) {
+		this.setLayout(new GridLayout(3, 3));
+		this.size = size;
+		this.setPreferredSize(new Dimension(size, size));
+		rotation = 0;
+	}
+
 	public MeepleOverlayPanel(boolean[] meepleSpots, int size) {
 		this.setLayout(new GridLayout(3, 3));
 		this.size = size;
 		this.setPreferredSize(new Dimension(size, size));
 		rotation = 0;
 
-		for (boolean spot : meepleSpots) {
-			if (spot)
-				add(new MeeplePanel(true));
+		for (int i = 0; i < meepleSpots.length; i++) {
+			if (meepleSpots[i])
+				add(new MeeplePanel(Position.values()[i]));
 			else
-				add(new MeeplePanel(false));
+				add(new MeeplePanel());
 		}
 	}
 
@@ -52,6 +62,10 @@ public class MeepleOverlayPanel extends JLabel {
 
 	public void setRotation(int rotation) {
 		this.rotation = rotation;
+	}
+
+	public void addMeepleMouseListener(MouseListener l) {
+		this.addMouseListener(l);
 	}
 
 	public static void main(String args[]) {

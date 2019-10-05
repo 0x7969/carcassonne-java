@@ -3,7 +3,6 @@ package fop.view;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
-import java.awt.Point;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
@@ -12,47 +11,69 @@ import java.io.IOException;
 
 import javax.imageio.ImageIO;
 import javax.swing.JPanel;
-import javax.swing.SwingUtilities;
 
+import fop.model.Position;
+
+/**
+ * A MeeplePanel is one of nine Panels inside a MeepleOverlayPanel. It is either
+ * a possible spot to place a Meeple on or not, in which case it is still part
+ * of the MeepleOverlayPanel to get the spacing right.
+ * 
+ * @author yi
+ *
+ */
 public class MeeplePanel extends JPanel {
 
 	private static final String FOLDER = "resources/meeple/";
 
 	private BufferedImage meepleImage;
-	Color color;
+	private Position position; // the meeple spots position inside the tile its on
+	private Color color;
 
-	MeeplePanel(boolean isSpot) {
+	/**
+	 * A meeple panel without a position is considered not to be a spot to place a
+	 * meeple on. It's just an invisible panel using up space.
+	 */
+	MeeplePanel() {
 		this.setOpaque(false);
+	}
 
-		if (isSpot) {
-			try {
-				meepleImage = ImageIO.read(new File(FOLDER + "meeple_road.png"));
-			} catch (IOException e) {
-				e.printStackTrace();
+	MeeplePanel(Position p) {
+		this.setOpaque(false);
+		this.position = p;
+
+		try {
+			meepleImage = ImageIO.read(new File(FOLDER + "meeple_road.png"));
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
+		this.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent event) {
+				getParent().getParent().dispatchEvent(event); // dispatches event to GameBoardPanel
+			}
+			
+			@Override
+			public void mouseEntered(MouseEvent event) {
+				try {
+					meepleImage = ImageIO.read(new File(FOLDER + "meeple_road_template.png"));
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+				repaint();
 			}
 
-			this.addMouseListener(new MouseAdapter() {
-				@Override
-				public void mouseEntered(MouseEvent event) {
-					try {
-						meepleImage = ImageIO.read(new File(FOLDER + "meeple_road_template.png"));
-					} catch (IOException e) {
-						e.printStackTrace();
-					}
-					repaint();
+			@Override
+			public void mouseExited(MouseEvent event) {
+				try {
+					meepleImage = ImageIO.read(new File(FOLDER + "meeple_road.png"));
+				} catch (IOException e) {
+					e.printStackTrace();
 				}
-
-				@Override
-				public void mouseExited(MouseEvent event) {
-					try {
-						meepleImage = ImageIO.read(new File(FOLDER + "meeple_road.png"));
-					} catch (IOException e) {
-						e.printStackTrace();
-					}
-					repaint();
-				}
-			});
-		}
+				repaint();
+			}
+		});
 
 //		this.addMouseMotionListener(new MouseAdapter() {
 //
@@ -74,6 +95,10 @@ public class MeeplePanel extends JPanel {
 //				SwingUtilities.getAncestorNamed("GameboardPanel", this.).setLocation(position);
 //			}
 //		});
+	}
+	
+	Position getPosition() {
+		return position;
 	}
 
 	@Override

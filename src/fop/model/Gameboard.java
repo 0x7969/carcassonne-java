@@ -1,7 +1,6 @@
 package fop.model;
 
 import static fop.model.FeatureType.CASTLE;
-import static fop.model.FeatureType.ROAD;
 import static fop.model.Position.BOTTOM;
 import static fop.model.Position.LEFT;
 import static fop.model.Position.RIGHT;
@@ -10,9 +9,12 @@ import static fop.model.Position.TOP;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.logging.Logger;
+import java.util.stream.Collectors;
 
 import fop.base.Node;
 import fop.base.WeightedEdge;
@@ -22,11 +24,13 @@ public class Gameboard extends Observable<Gameboard> {
 	private final static Logger LOG = Logger.getLogger("Carcassonne");
 
 	private Tile[][] board;
+	private List<Tile> tiles; // secondary structure as a helper, should be replaced
 	private final FeatureGraph graph;
 	private Tile newestTile;
 
 	public Gameboard() {
 		board = new Tile[1000][1000]; // TODO variabel je nach anzahl an tiles?
+		tiles = new LinkedList<Tile>();
 		graph = new FeatureGraph();
 	}
 
@@ -39,18 +43,10 @@ public class Gameboard extends Observable<Gameboard> {
 		t.x = x; // TODO unschön
 		t.y = y;
 		board[x][y] = newestTile = t;
+		tiles.add(t);
 
 		connectNodes(x, y);
-		push(this);
-		
-		calculatePoints(ROAD); // TODO soll eigentlich durch state change ausgelöst werden
-		calculatePoints(CASTLE);
-		// TODO eigentlich müsste man das gar nicht trennen. wir wollen nur wiesen noch
-		// nicht behandeln.
-		// sobald die verbindung/berechnung der wiesen funktioniert, können alle punkte
-		// in einem rutsch berechnet werden
-		// (für die wiese muss dann trotzdem noch zusätzlich die anzahl der berührten
-		// fertigen castles gesammelt werden).
+		push(this); // pushes the new gameboard state to its observers (= GameBoardPanel)
 	}
 
 	/**
@@ -129,22 +125,27 @@ public class Gameboard extends Observable<Gameboard> {
 		return true;
 	}
 
-	private List<Integer> calculatePoints(FeatureType type) {
+	public List<Integer> calculatePoints(FeatureType type) {
 		List<Integer> scores = new LinkedList<Integer>();
 		List<Node<FeatureType>> nodeList = new ArrayList<>(graph.getNodes(type));
 		ArrayDeque<Node<FeatureType>> queue = new ArrayDeque<>(); // TODO hat deque hier einen vorteil? habs übernommen
 
+		HashMap<Player, Integer> meeplesPerPlayer = new HashMap<Player, Integer>(); // Counts the meeples met while
+																					// traversing
+		List<FeatureNode> nodesWithMeeple = new LinkedList<FeatureNode>();
+
 		int score = 1; // As we only get points for transitioning between tiles, we start with 1.
 		boolean connects = true; // Is set to false if a node is visited that does not connect to any other tile
+
 		queue.push(nodeList.remove(0));
 		while (!queue.isEmpty()) {
 			FeatureNode node = (FeatureNode) queue.pop();
-			if (Arrays.stream(Position.getStraightPositions()).anyMatch(node.getPosition()::equals)) { // TODO etwas
-																										// unschön...
+
+			// TODO review.. etwas unschön.. und deprecated
+			if (Arrays.stream(Position.getStraightPositions()).anyMatch(node.getPosition()::equals)) {
 				if (!node.isConnectingTiles()) {
 					connects = false;
 				}
-
 			}
 
 			List<WeightedEdge<FeatureType>> edges = graph.getEdges(node);
@@ -154,33 +155,76 @@ public class Gameboard extends Observable<Gameboard> {
 					LOG.info("Adding points of edge connecting a " + node.getValue() + " and a "
 							+ edge.getOtherNode(node).getValue() + ", weight " + edge.getWeight());
 					score += edge.getWeight();
+
+					// Collect the meeples encountered on traversal
+					Player meeple = node.getMeeple();
+					if (meeple != null) {
+						nodesWithMeeple.add(node);
+						int previousMeeplesFromPlayer = meeplesPerPlayer.getOrDefault(meeple, 0);
+						meeplesPerPlayer.put(meeple, previousMeeplesFromPlayer++);
+					}
+
 					queue.push(nextNode);
 					nodeList.remove(nextNode);
 				}
 			}
+
 			// If the queue is empty, all nodes of a subgraph were visited
 			if (queue.isEmpty()) {
 				if (type == CASTLE)
 					score *= 2;
 				scores.add(score);
-				System.out.println(type.toString() + " of " + score + " points. Connects? " + connects);
-				score = 1;
-				connects = true;
+
+				if (connects && meeplesPerPlayer.size() > 0) {
+					int maxMeepleCount = Collections.max(meeplesPerPlayer.values());
+					List<Player> playersWithMostMeeples = meeplesPerPlayer.entrySet().stream()
+							.filter(e -> e.getValue().equals(maxMeepleCount)).map(e -> e.getKey())
+							.collect(Collectors.toList());
+
+					// The player with the most meeples on this feature gets the points
+					// in case of a tie: every player gets the points
+					for (Player p : playersWithMostMeeples) {
+						p.addScore(score);
+						System.out.println("Player " + p.getName() + " gets " + score);
+					}
+
+					// Now that the score is added, the meeple are returned to the players
+					// inventories
+					// and removed from the meeple spots
+					for (FeatureNode n : nodesWithMeeple) {
+						// TODO ask which player they are from and return them
+						n.setMeeple(null);
+					}
+				}
+
+				System.out.println(type.toString() + " of " + score + " points. Connects? " + connects + ".");
+
+				nodesWithMeeple = new LinkedList<FeatureNode>();
+				meeplesPerPlayer = new HashMap<Player, Integer>(); // reset collected meeples
+				score = 1; // reset score
+				connects = true; // reset connects
 				// If there are nonetheless nodes left, there must be another subgraph
 				if (!nodeList.isEmpty())
 					queue.push(nodeList.remove(0));
 			}
 		}
 		return scores;
-
 	}
 	
+	public List<Tile> getTiles() {
+		return tiles;
+	}
+
 	public boolean[] getMeepleSpots(int x, int y) {
 		return board[x][y].getMeepleSpots();
 	}
-	
+
 	public Tile getNewestTile() {
 		return newestTile;
+	}
+
+	public void placeMeeple(Position position, Player player) {
+		board[newestTile.x][newestTile.y].getNode(position).setMeeple(player);
 	}
 
 }

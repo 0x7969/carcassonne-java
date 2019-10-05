@@ -4,6 +4,7 @@ import static fop.model.FeatureType.*;
 
 import fop.base.Node;
 
+@Deprecated
 public enum TileType {
 	
 	// To represent a tile, we divide it into a grid of nine cells, that is
