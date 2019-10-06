@@ -92,6 +92,8 @@ public class GameController extends Observable<Player[]> {
 			setView(new MenuView(this));
 			break;
 		case GAME_START:
+			System.out.println("Entered GAME_START");
+			
 			// TODO soll dann vom menu aus gesetzt werden
 			players = new Player[]{new Player("P1"), new Player("P2")};
 			board = new Gameboard();
@@ -107,18 +109,21 @@ public class GameController extends Observable<Player[]> {
 			setState(State.PLACING_TILE);
 			break;
 		case PLACING_TILE:
+			System.out.println("Entered PLACING_TILE");
 			push(players); // push players to observers (= ToolbarPanel)
-			boardPanel.hideMeepleOverlay();
 			stack.push(stack); // pushes tile stack to observers (= TileStackPanel)
 			view.getToolbarPanel().toggleSkipButton();
 			System.out.println("Please place a tile.");
+			// Now waiting for user input
 			break;
 		case PLACING_MEEPLE:
+			System.out.println("Entered PLACING_MEEPLE");
 			Tile newestTile = board.getNewestTile();
 			boardPanel.showMeepleOverlay(newestTile.getMeepleSpots(), newestTile.x, newestTile.y);
 			stackPanel.hideTileStack();
 			view.getToolbarPanel().toggleSkipButton();
 			System.out.println("Please place a meeple or skip.");
+			// Now waiting for user input
 			break;
 		case GAME_SCORE:
 			// score anzeigen
@@ -139,7 +144,11 @@ public class GameController extends Observable<Player[]> {
 				window.dispose();
 				break;
 			case "Skip":
+				boardPanel.removeTempMeepleOverlay();
+				board.calculatePoints();
+				board.push(board);
 				nextRound();
+				break;
 			}
 		});
 
@@ -179,14 +188,6 @@ public class GameController extends Observable<Player[]> {
 	}
 	
 	public void nextRound() {
-		board.calculatePoints(ROAD); // TODO soll eigentlich durch state change ausgelöst werden
-		board.calculatePoints(CASTLE);
-		// TODO eigentlich müsste man das gar nicht trennen. wir wollen nur wiesen noch
-		// nicht behandeln.
-		// sobald die verbindung/berechnung der wiesen funktioniert, können alle punkte
-		// in einem rutsch berechnet werden
-		// (für die wiese muss dann trotzdem noch zusätzlich die anzahl der berührten
-		// fertigen castles gesammelt werden).
 		currentRound++;
 		setState(State.PLACING_TILE);
 	}

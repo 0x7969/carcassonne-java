@@ -49,7 +49,7 @@ public class GameBoardPanel extends JPanel implements Observer<Gameboard> {
 	private TilePanel tileWithOverlay;
 	private TileOverlayPanel tileOverlay;
 
-	private MeepleOverlayPanel meepleOverlay;
+	private MeepleOverlayPanel tempMeepleOverlay;
 
 	public GameBoardPanel(GameController gc) {
 		this.gc = gc;
@@ -61,13 +61,12 @@ public class GameBoardPanel extends JPanel implements Observer<Gameboard> {
 		tileOverlay = new TileOverlayPanel("FLIPSIDE", scale);
 //		gc.addTileStackObserver(tileOverlay);
 
-		meepleOverlay = new MeepleOverlayPanel(scale);
+		tempMeepleOverlay = new MeepleOverlayPanel(scale);
 
 		this.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent event) {
-				State currentState = gc.getState();
-				switch (currentState) {
+				switch (gc.getState()) {
 				case PLACING_TILE:
 					if (contains(tileOverlay)) {
 						if (SwingUtilities.isLeftMouseButton(event)) {
@@ -78,7 +77,6 @@ public class GameBoardPanel extends JPanel implements Observer<Gameboard> {
 							rotateUntilAllowed();
 						}
 					}
-					break;
 				case PLACING_MEEPLE:
 					if (SwingUtilities.isLeftMouseButton(event)) {
 						Component c = event.getComponent();
@@ -113,37 +111,14 @@ public class GameBoardPanel extends JPanel implements Observer<Gameboard> {
 
 			@Override
 			public void mouseMoved(MouseEvent event) {
-				if (gc.getState() != State.PLACING_TILE)
-					return;
-
 				Point p = event.getPoint();
 
 				// save current cursor position, used by mouseDragged()
 				anchorPoint = p;
 
-				TilePanel tile = getTileAt(p);
-				if (tile != null && tile == tileInFocus)
-					return;
-				tileInFocus = tile;
+				if (gc.getState() == State.PLACING_TILE)
+					showTileOverlay(p);
 
-				if (contains(tileOverlay) && !tileOverlay.contains(p)) {
-					hideTileOverlay();
-				}
-
-				if (tile != null && !contains(tileOverlay) && tile.getType() == "FLIPSIDE") {
-					for (int i = 0; i < 4; i++) {
-						if (gc.isTopTileAllowed(getGridX(tile), getGridY(tile))) {
-							tileWithOverlay = tile;
-							tileWithOverlay.setVisible(false);
-							showTileOverlay(gc.peekTile().getType(), getGridX(tile), getGridY(tile));
-							repaint();
-							return;
-						} else {
-							gc.rotateTopTile();
-							repaint();
-						}
-					}
-				}
 			}
 		});
 
@@ -305,7 +280,7 @@ public class GameBoardPanel extends JPanel implements Observer<Gameboard> {
 			for (TilePanel t : getTiles())
 				t.setPreferredSize(new Dimension(scale + pixels, scale + pixels));
 			tileOverlay.setPreferredSize(new Dimension(scale + pixels, scale + pixels));
-			meepleOverlay.setPreferredSize(new Dimension(scale + pixels, scale + pixels));
+			tempMeepleOverlay.setPreferredSize(new Dimension(scale + pixels, scale + pixels));
 			scale += pixels;
 			revalidate(); // !
 		}
@@ -314,29 +289,32 @@ public class GameBoardPanel extends JPanel implements Observer<Gameboard> {
 	public MeepleOverlayPanel showMeepleOverlay(boolean[] meepleSpots, int x, int y) {
 		gbc.gridx = x;
 		gbc.gridy = y;
-		meepleOverlay = new MeepleOverlayPanel(meepleSpots, scale);
-		add(meepleOverlay, gbc, 0); // auf z-axis ist kein verlass, lieber mit setVisible
-		return meepleOverlay;
+		tempMeepleOverlay = new MeepleOverlayPanel(meepleSpots, scale);
+		add(tempMeepleOverlay, gbc, 0); // auf z-axis ist kein verlass, lieber mit setVisible
+		return tempMeepleOverlay;
 	}
 
-	public void hideMeepleOverlay() {
-		remove(meepleOverlay);
-		repaint();
+	public void removeTempMeepleOverlay() {
+		remove(tempMeepleOverlay);
+		repaint(); // !
 	}
-	
-	private void showMeeples(List<Tile> tiles) {
+
+	private void removeMeeples() {
 		for (Component c : getComponents()) {
 			if (c instanceof MeepleOverlayPanel)
 				remove(c);
 		}
-		
+	}
+
+	private void showMeeples(List<Tile> tiles) {
+		removeMeeples();
 		for (Tile t : tiles) {
 			if (t.hasMeeple()) {
 				boolean[] positions = new boolean[9];
 
 				for (Position p : Position.values()) {
-						if (p.equals(t.getMeeplePosition()))
-							positions[p.ordinal()] = true;
+					if (p.equals(t.getMeeplePosition()))
+						positions[p.ordinal()] = true;
 				}
 				showMeepleOverlay(positions, t.x, t.y);
 			}
@@ -344,11 +322,38 @@ public class GameBoardPanel extends JPanel implements Observer<Gameboard> {
 		repaint(); // nsin
 	}
 
-	private void showTileOverlay(String type, int x, int y) {
-		gbc.gridx = x;
-		gbc.gridy = y;
-		add(tileOverlay, gbc);
-		repaint(); // nsin
+	/**
+	 * Shows a temporary tile (the top tile of the tile stack) if it is allowed to
+	 * place it on the mouses location, which is given as a Point.
+	 * 
+	 * @param p The mouses location as a Point.
+	 */
+	private void showTileOverlay(Point p) {
+		TilePanel tile = getTileAt(p);
+		if (tile != null && tile == tileInFocus)
+			return;
+		tileInFocus = tile;
+
+		if (contains(tileOverlay) && !tileOverlay.contains(p)) {
+			hideTileOverlay();
+		}
+
+		if (tile != null && !contains(tileOverlay) && tile.getType() == "FLIPSIDE") {
+			for (int i = 0; i < 4; i++) {
+				if (gc.isTopTileAllowed(getGridX(tile), getGridY(tile))) {
+					tileWithOverlay = tile;
+					tileWithOverlay.setVisible(false);
+					gbc.gridx = getGridX(tile);
+					gbc.gridy = getGridY(tile);
+					add(tileOverlay, gbc);
+					repaint(); // nsin
+					return;
+				} else {
+					gc.rotateTopTile();
+					repaint();
+				}
+			}
+		}
 	}
 
 	private void hideTileOverlay() {
@@ -367,9 +372,20 @@ public class GameBoardPanel extends JPanel implements Observer<Gameboard> {
 
 	@Override
 	public void update(Gameboard board) {
-		Tile newTile = board.getNewestTile();
-		newTile(newTile.getType(), newTile.getRotation(), newTile.x, newTile.y);
-		showMeeples(board.getTiles());
+		switch (gc.getState()) {
+		case GAME_START:
+			// same behaviour as with PLACING_TILE, so we just omit the break statement
+		case PLACING_TILE:
+			Tile newTile = board.getNewestTile();
+			newTile(newTile.getType(), newTile.getRotation(), newTile.x, newTile.y);
+			break;
+		case PLACING_MEEPLE:
+			showMeeples(board.getTiles());
+			repaint();
+			break;
+		default:
+			break;
+		}
 	}
 
 }

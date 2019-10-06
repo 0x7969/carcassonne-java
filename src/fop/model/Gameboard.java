@@ -1,6 +1,7 @@
 package fop.model;
 
 import static fop.model.FeatureType.CASTLE;
+import static fop.model.FeatureType.ROAD;
 import static fop.model.Position.BOTTOM;
 import static fop.model.Position.LEFT;
 import static fop.model.Position.RIGHT;
@@ -124,6 +125,17 @@ public class Gameboard extends Observable<Gameboard> {
 		}
 		return true;
 	}
+	
+	public void calculatePoints() {
+		calculatePoints(ROAD); // TODO soll eigentlich durch state change ausgelöst werden
+		calculatePoints(CASTLE);
+		// TODO eigentlich müsste man das gar nicht trennen. wir wollen nur wiesen noch
+		// nicht behandeln.
+		// sobald die verbindung/berechnung der wiesen funktioniert, können alle punkte
+		// in einem rutsch berechnet werden
+		// (für die wiese muss dann trotzdem noch zusätzlich die anzahl der berührten
+		// fertigen castles gesammelt werden).
+	}
 
 	public List<Integer> calculatePoints(FeatureType type) {
 		List<Integer> scores = new LinkedList<Integer>();
@@ -210,7 +222,7 @@ public class Gameboard extends Observable<Gameboard> {
 		}
 		return scores;
 	}
-	
+
 	public List<Tile> getTiles() {
 		return tiles;
 	}
@@ -225,6 +237,8 @@ public class Gameboard extends Observable<Gameboard> {
 
 	public void placeMeeple(Position position, Player player) {
 		board[newestTile.x][newestTile.y].getNode(position).setMeeple(player);
+		calculatePoints();
+		push(this);
 	}
 
 }

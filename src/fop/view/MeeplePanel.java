@@ -53,7 +53,7 @@ public class MeeplePanel extends JPanel {
 			public void mouseClicked(MouseEvent event) {
 				getParent().getParent().dispatchEvent(event); // dispatches event to GameBoardPanel
 			}
-			
+
 			@Override
 			public void mouseEntered(MouseEvent event) {
 				try {
@@ -73,6 +73,7 @@ public class MeeplePanel extends JPanel {
 				}
 				repaint();
 			}
+
 		});
 
 //		this.addMouseMotionListener(new MouseAdapter() {
@@ -96,7 +97,7 @@ public class MeeplePanel extends JPanel {
 //			}
 //		});
 	}
-	
+
 	Position getPosition() {
 		return position;
 	}
