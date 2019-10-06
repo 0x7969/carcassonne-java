@@ -125,7 +125,7 @@ public class Gameboard extends Observable<Gameboard> {
 		}
 		return true;
 	}
-	
+
 	public void calculatePoints() {
 		calculatePoints(ROAD); // TODO soll eigentlich durch state change ausgelöst werden
 		calculatePoints(CASTLE);
@@ -137,8 +137,7 @@ public class Gameboard extends Observable<Gameboard> {
 		// fertigen castles gesammelt werden).
 	}
 
-	public List<Integer> calculatePoints(FeatureType type) {
-		List<Integer> scores = new LinkedList<Integer>();
+	public void calculatePoints(FeatureType type) {
 		List<Node<FeatureType>> nodeList = new ArrayList<>(graph.getNodes(type));
 		ArrayDeque<Node<FeatureType>> queue = new ArrayDeque<>(); // TODO hat deque hier einen vorteil? habs übernommen
 
@@ -159,6 +158,15 @@ public class Gameboard extends Observable<Gameboard> {
 					connects = false;
 				}
 			}
+			
+			// Collect the meeples encountered on traversal, so we know who has the most
+			// meeples on a connected feature subgraph.
+			Player meeple = node.getMeeple();
+			if (meeple != null) {
+				nodesWithMeeple.add(node);
+				int previousMeeplesFromPlayer = meeplesPerPlayer.getOrDefault(meeple, 0);
+				meeplesPerPlayer.put(meeple, previousMeeplesFromPlayer + 1);
+			}
 
 			List<WeightedEdge<FeatureType>> edges = graph.getEdges(node);
 			for (WeightedEdge<FeatureType> edge : edges) {
@@ -167,14 +175,6 @@ public class Gameboard extends Observable<Gameboard> {
 					LOG.info("Adding points of edge connecting a " + node.getValue() + " and a "
 							+ edge.getOtherNode(node).getValue() + ", weight " + edge.getWeight());
 					score += edge.getWeight();
-
-					// Collect the meeples encountered on traversal
-					Player meeple = node.getMeeple();
-					if (meeple != null) {
-						nodesWithMeeple.add(node);
-						int previousMeeplesFromPlayer = meeplesPerPlayer.getOrDefault(meeple, 0);
-						meeplesPerPlayer.put(meeple, previousMeeplesFromPlayer++);
-					}
 
 					queue.push(nextNode);
 					nodeList.remove(nextNode);
@@ -185,10 +185,10 @@ public class Gameboard extends Observable<Gameboard> {
 			if (queue.isEmpty()) {
 				if (type == CASTLE)
 					score *= 2;
-				scores.add(score);
 
 				if (connects && meeplesPerPlayer.size() > 0) {
 					int maxMeepleCount = Collections.max(meeplesPerPlayer.values());
+					System.out.println(nodesWithMeeple.size());
 					List<Player> playersWithMostMeeples = meeplesPerPlayer.entrySet().stream()
 							.filter(e -> e.getValue().equals(maxMeepleCount)).map(e -> e.getKey())
 							.collect(Collectors.toList());
@@ -205,6 +205,7 @@ public class Gameboard extends Observable<Gameboard> {
 					// and removed from the meeple spots
 					for (FeatureNode n : nodesWithMeeple) {
 						// TODO ask which player they are from and return them
+						System.out.println("Removing a meeple.");
 						n.setMeeple(null);
 					}
 				}
@@ -220,7 +221,6 @@ public class Gameboard extends Observable<Gameboard> {
 					queue.push(nodeList.remove(0));
 			}
 		}
-		return scores;
 	}
 
 	public List<Tile> getTiles() {
