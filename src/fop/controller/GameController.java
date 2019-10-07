@@ -115,7 +115,7 @@ public class GameController extends Observable<Player[]> {
 		case PLACING_MEEPLE:
 			System.out.println("Entered PLACING_MEEPLE");
 			
-			// When the current player does not have any meeple left, go to next round.
+			// When the current player does not have any meeple left, go to next round immediately.
 			if (players[currentRound % players.length].getMeeples() == 0) {
 				board.calculatePoints();
 				nextRound();

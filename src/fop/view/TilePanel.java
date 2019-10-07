@@ -44,14 +44,6 @@ public class TilePanel extends JPanel {
 
 	@Override
 	protected void paintComponent(Graphics g) {
-//    	super.paintComponent(g); // nsin
-//    	AffineTransform at = AffineTransform.getScaleInstance(size / 100, size / 100);
-//    	at.rotate(Math.PI / 2, size / 2, size / 2);
-//    	
-//    	Graphics2D g2d = (Graphics2D) g;
-//    	g2d.drawImage(tileImage, at, null);
-//    	repaint();
-
 		super.paintComponent(g);
 		Graphics2D g2d = (Graphics2D) g;
 		g2d.rotate(Math.toRadians(rotation), getWidth() / 2, getHeight() / 2);

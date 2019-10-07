@@ -181,7 +181,7 @@ public class Tile {
 	public Player getMeeple() {
 		for (FeatureNode n : nodes.values())
 			if (n.hasMeeple())
-				return n.getMeeple();
+				return n.getPlayer();
 		return null;
 	}
 

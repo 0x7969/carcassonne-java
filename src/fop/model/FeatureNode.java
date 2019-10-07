@@ -47,7 +47,7 @@ public class FeatureNode extends Node<FeatureType> {
 		return meepleSpot;
 	}
 
-	public void setMeeple(Player p) {
+	public void setPlayer(Player p) {
 		meeple = p;
 	}
 
@@ -58,7 +58,7 @@ public class FeatureNode extends Node<FeatureType> {
 			return false;
 	}
 
-	public Player getMeeple() {
+	public Player getPlayer() {
 		return meeple;
 	}
 

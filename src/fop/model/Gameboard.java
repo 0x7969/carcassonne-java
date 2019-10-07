@@ -2,6 +2,7 @@ package fop.model;
 
 import static fop.model.FeatureType.CASTLE;
 import static fop.model.FeatureType.ROAD;
+import static fop.model.FeatureType.MONASTERY;
 import static fop.model.Position.BOTTOM;
 import static fop.model.Position.LEFT;
 import static fop.model.Position.RIGHT;
@@ -129,6 +130,7 @@ public class Gameboard extends Observable<Gameboard> {
 	public void calculatePoints() {
 		calculatePoints(ROAD); // TODO soll eigentlich durch state change ausgelöst werden
 		calculatePoints(CASTLE);
+		calculateMonasteries();
 		// TODO eigentlich müsste man das gar nicht trennen. wir wollen nur wiesen noch
 		// nicht behandeln.
 		// sobald die verbindung/berechnung der wiesen funktioniert, können alle punkte
@@ -137,7 +139,60 @@ public class Gameboard extends Observable<Gameboard> {
 		// fertigen castles gesammelt werden).
 	}
 
-	public void calculatePoints(FeatureType type) {
+	/**
+	 * Calculates points for monasteries (one point for each adjacent tile).
+	 */
+	private void calculateMonasteries() {
+		int score = 0;
+		for (Tile t : tiles) {
+			FeatureNode node = t.getNode(Position.CENTER);
+			if (node != null && node.getType() == MONASTERY && node.hasMeeple()) {
+				int x = t.x;
+				int y = t.y;
+
+				// Check top left tile
+				if (board[x - 1][y - 1] != null)
+					score++;
+
+				// Check top tile
+				if (board[x][y - 1] != null)
+					score++;
+
+				// Check top right tile
+				if (board[x + 1][y - 1] != null)
+					score++;
+
+				// Check left tile
+				if (board[x - 1][y] != null)
+					score++;
+
+				// Check right tile
+				if (board[x + 1][y] != null)
+					score++;
+
+				// Check bottom left tile
+				if (board[x - 1][y + 1] != null)
+					score++;
+
+				// Check bottom tile
+				if (board[x][y + 1] != null)
+					score++;
+
+				// Check bottom right tile
+				if (board[x + 1][y + 1] != null)
+					score++;
+
+				if (score == 8) {
+					node.getPlayer().addScore(score);
+					node.getPlayer().returnMeeple();
+					System.out.println("Removing a meeple.");
+					node.setPlayer(null);
+				}
+			}
+		}
+	}
+
+	private void calculatePoints(FeatureType type) {
 		List<Node<FeatureType>> nodeList = new ArrayList<>(graph.getNodes(type));
 		ArrayDeque<Node<FeatureType>> queue = new ArrayDeque<>(); // TODO hat deque hier einen vorteil? habs übernommen
 
@@ -161,7 +216,7 @@ public class Gameboard extends Observable<Gameboard> {
 
 			// Collect the meeples encountered on traversal, so we know who has the most
 			// meeples on a connected feature subgraph.
-			Player meeple = node.getMeeple();
+			Player meeple = node.getPlayer();
 			if (meeple != null) {
 				nodesWithMeeple.add(node);
 				int previousMeeplesFromPlayer = meeplesPerPlayer.getOrDefault(meeple, 0);
@@ -202,9 +257,9 @@ public class Gameboard extends Observable<Gameboard> {
 					// Now that the score is added, the meeple are returned to the players
 					// inventories and removed from the tile.
 					for (FeatureNode n : nodesWithMeeple) {
-						n.getMeeple().returnMeeple();
+						n.getPlayer().returnMeeple();
 						System.out.println("Removing a meeple.");
-						n.setMeeple(null);
+						n.setPlayer(null);
 					}
 				}
 
@@ -253,11 +308,11 @@ public class Gameboard extends Observable<Gameboard> {
 		queue.push(n);
 		while (!queue.isEmpty()) {
 			FeatureNode node = (FeatureNode) queue.pop();
-			System.out.println("RUSH" + n.getType());
 			if (node.hasMeeple())
 				return true;
 
 			List<WeightedEdge<FeatureType>> edges = graph.getEdges(node);
+			System.out.println("Edge length: " + edges.size());
 			for (WeightedEdge<FeatureType> edge : edges) {
 				Node<FeatureType> nextNode = edge.getOtherNode(node);
 				if (!visitedNodes.contains(nextNode)) {
@@ -266,7 +321,6 @@ public class Gameboard extends Observable<Gameboard> {
 				}
 			}
 		}
-		System.out.println("false");
 		return false;
 	}
 
@@ -275,9 +329,9 @@ public class Gameboard extends Observable<Gameboard> {
 	}
 
 	public void placeMeeple(Position position, Player player) {
-		board[newestTile.x][newestTile.y].getNode(position).setMeeple(player);
+		board[newestTile.x][newestTile.y].getNode(position).setPlayer(player);
 		player.removeMeeple();
-		calculatePoints();
+		calculatePoints(); // calculating needs to be done before pushing
 		push(this);
 	}
 

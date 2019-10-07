@@ -7,41 +7,47 @@
 		<edge a="" b=""/>
 	</tile>
 
-	"type" name of tile, as named in the official rules (also its the filename of the tiles image)
+	"type" name of tile, as named in the official rules (also it is the filename of the tiles image)
 	"coatofarms" can be true or left out
-	"monastery" can be true or left out
-	"feature" can be FIELDS, ROAD, CASTLE
+	"feature" can be FIELDS, ROAD, CASTLE, MONASTERY
 	"position" can be TOPLEFT, TOP, TOPRIGHT, LEFT, CENTER, RIGHT, BOTTOMLEFT, BOTTOM, BOTTOMRIGHT
 	"direction" can be X, Y or BOTH
 	edge connections positions "a" and "b".
 
 	-->
 
-	<tile type="A" ammount="2" monastery="true">
+	<tile type="A" ammount="2">
 		<node feature="FIELDS" position="TOP"/>
 		<node feature="FIELDS" position="LEFT" meeplespot="true"/>
-		<node feature="FIELDS" position="CENTER"/> <!-- merely a shortcut -->
+		<node feature="MONASTERY" position="CENTER" meeplespot="true"/>
 		<node feature="FIELDS" position="RIGHT"/>
 		<node feature="FIELDS" position="BOTTOMLEFT" direction="Y"/>
 		<node feature="ROAD" position="BOTTOM" meeplespot="true"/>
 		<node feature="FIELDS" position="BOTTOMRIGHT" direction="Y"/>
-		<edge a="LEFT" b="CENTER"/>
-		<edge a="TOP" b="CENTER"/>
-		<edge a="RIGHT" b="CENTER"/>
-		<edge a="BOTTOMLEFT" b="CENTER"/>
-		<edge a="BOTTOMRIGHT" b="CENTER"/>"
+		<edge a="TOP" b="LEFT" />
+		<edge a="TOP" b="RIGHT" />
+		<edge a="TOP" b="BOTTOMLEFT" />
+		<edge a="TOP" b="BOTTOMRIGHT" />
+		<edge a="LEFT" b="RIGHT" />
+		<edge a="LEFT" b="BOTTOMLEFT" />
+		<edge a="LEFT" b="BOTTOMRIGHT" />
+		<edge a="RIGHT" b="BOTTOMLEFT"/>
+		<edge a="RIGHT" b="BOTTOMRIGHT"/>
+		<edge a="BOTTOMLEFT" b="BOTTOMRIGHT"/>
 	</tile>
 
-	<tile type="B" ammount="4" monastery="true">
+	<tile type="B" ammount="4">
 		<node feature="FIELDS" position="TOP"/>
 		<node feature="FIELDS" position="LEFT" meeplespot="true"/>
-		<node feature="FIELDS" position="CENTER"/><!-- merely a shortcut -->
+		<node feature="MONASTERY" position="CENTER" meeplespot="true"/>
 		<node feature="FIELDS" position="RIGHT"/>
 		<node feature="FIELDS" position="BOTTOM"/>
-		<edge a="LEFT" b="CENTER"/>
-		<edge a="TOP" b="CENTER"/>
-		<edge a="RIGHT" b="CENTER"/>
-		<edge a="BOTTOM" b="CENTER"/>
+		<edge a="TOP" b="LEFT"/>
+		<edge a="TOP" b="RIGHT"/>
+		<edge a="TOP" b="BOTTOM"/>
+		<edge a="LEFT" b="RIGHT"/>
+		<edge a="LEFT" b="BOTTOM"/>
+		<edge a="RIGHT" b="BOTTOM"/>
 	</tile>
 
 	<tile type="C" ammount="1" coatofarms="true">
