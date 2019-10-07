@@ -48,7 +48,7 @@ public class GameBoardPanel extends JPanel implements Observer<Gameboard> {
 	private TilePanel tileWithOverlay;
 	private TileOverlayPanel tileOverlay;
 
-	private MeepleOverlayPanel tempMeepleOverlay;
+	private TemporaryMeepleOverlayPanel tempMeepleOverlay;
 
 	public GameBoardPanel(GameController gc) {
 		this.gc = gc;
@@ -77,8 +77,8 @@ public class GameBoardPanel extends JPanel implements Observer<Gameboard> {
 				case PLACING_MEEPLE:
 					if (SwingUtilities.isLeftMouseButton(event)) {
 						Component c = event.getComponent();
-						if (c instanceof MeeplePanel) {
-							Position p = ((MeeplePanel) c).getPosition();
+						if (c instanceof TemporaryMeeplePanel) {
+							Position p = ((TemporaryMeeplePanel) c).getPosition();
 							if (p != null) {
 								gc.placeMeeple(p);
 								gc.nextRound();
@@ -287,13 +287,21 @@ public class GameBoardPanel extends JPanel implements Observer<Gameboard> {
 		}
 	}
 
-	public MeepleOverlayPanel showMeepleOverlay(boolean[] meepleSpots, int x, int y, Player player) {
+	public MeepleOverlayPanel showTemporaryMeepleOverlay(boolean[] meepleSpots, int x, int y, Player player) {
 		gbc.gridx = x;
 		gbc.gridy = y;
-		tempMeepleOverlay = new MeepleOverlayPanel(meepleSpots, scale, player);
+		tempMeepleOverlay = new TemporaryMeepleOverlayPanel(meepleSpots, scale, player);
 		add(tempMeepleOverlay, gbc, 0); // auf z-axis ist kein verlass, lieber mit setVisible
 		return tempMeepleOverlay;
 	}
+	
+	public MeepleOverlayPanel showMeepleOverlay(boolean[] meepleSpots, int x, int y, Player player) {
+		gbc.gridx = x;
+		gbc.gridy = y;
+		add(new MeepleOverlayPanel(meepleSpots, scale, player), gbc, 0); // auf z-axis ist kein verlass, lieber mit setVisible
+		return tempMeepleOverlay;
+	}
+	
 
 	/**
 	 * Removes the temporary meeple overlay (which shows possible meeple spots) that

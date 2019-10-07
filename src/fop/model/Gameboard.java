@@ -158,7 +158,7 @@ public class Gameboard extends Observable<Gameboard> {
 					connects = false;
 				}
 			}
-			
+
 			// Collect the meeples encountered on traversal, so we know who has the most
 			// meeples on a connected feature subgraph.
 			Player meeple = node.getMeeple();
@@ -200,10 +200,9 @@ public class Gameboard extends Observable<Gameboard> {
 					}
 
 					// Now that the score is added, the meeple are returned to the players
-					// inventories
-					// and removed from the meeple spots
+					// inventories and removed from the tile.
 					for (FeatureNode n : nodesWithMeeple) {
-						// TODO ask which player they are from and return them
+						n.getMeeple().returnMeeple();
 						System.out.println("Removing a meeple.");
 						n.setMeeple(null);
 					}
@@ -236,6 +235,7 @@ public class Gameboard extends Observable<Gameboard> {
 
 	public void placeMeeple(Position position, Player player) {
 		board[newestTile.x][newestTile.y].getNode(position).setMeeple(player);
+		player.removeMeeple();
 		calculatePoints();
 		push(this);
 	}

@@ -4,14 +4,11 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 
 import javax.imageio.ImageIO;
-import javax.swing.JPanel;
 
-import fop.model.MeepleColour;
 import fop.model.Player;
 import fop.model.Position;
 
@@ -23,32 +20,54 @@ import fop.model.Position;
  * @author yi
  *
  */
-public class MeeplePanel extends JPanel {
-
-	protected static final String FOLDER = "resources/meeple/";
-
-	protected BufferedImage meepleImage;
-	protected Position position; // the meeple spots position inside the tile its on
-	protected MeepleColour colour;
+public class TemporaryMeeplePanel extends MeeplePanel {
 
 	/**
 	 * A meeple panel without a position is considered not to be a spot to place a
 	 * meeple on. It's just an invisible panel using up space.
 	 */
-	MeeplePanel() {
-		this.setOpaque(false);
+	TemporaryMeeplePanel() {
+		super();
 	}
 
-	MeeplePanel(Position pos, Player player) {
-		this();
-		this.position = pos;
+	TemporaryMeeplePanel(Position pos, Player player) {
+		super();
+		super.position = pos;
 		this.colour = player.getColour();
 
 		try {
-			meepleImage = ImageIO.read(new File(FOLDER + colour.toString().toLowerCase() + ".png"));
+			meepleImage = ImageIO.read(new File(FOLDER + colour.toString().toLowerCase() + "_outline.png"));
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+
+		this.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent event) {
+				getParent().getParent().dispatchEvent(event); // dispatches event to GameBoardPanel
+			}
+
+			@Override
+			public void mouseEntered(MouseEvent event) {
+				try {
+					meepleImage = ImageIO.read(new File(FOLDER + colour.toString().toLowerCase() + ".png"));
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+				repaint();
+			}
+
+			@Override
+			public void mouseExited(MouseEvent event) {
+				try {
+					meepleImage = ImageIO.read(new File(FOLDER + colour.toString().toLowerCase() + "_outline.png"));
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+				repaint();
+			}
+
+		});
 	}
 
 	Position getPosition() {

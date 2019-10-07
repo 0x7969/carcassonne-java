@@ -11,12 +11,12 @@ import fop.model.Position;
 public class MeepleOverlayPanel extends JLabel {
 
 	public MeepleOverlayPanel(int size) {
-		this(null, size, null);
+		this.setLayout(new GridLayout(3, 3));
+		this.setPreferredSize(new Dimension(size, size));
 	}
 
 	public MeepleOverlayPanel(boolean[] meepleSpots, int size, Player player) {
-		this.setLayout(new GridLayout(3, 3));
-		this.setPreferredSize(new Dimension(size, size));
+		this(size);
 
 		for (int i = 0; i < meepleSpots.length; i++) {
 			if (meepleSpots[i])

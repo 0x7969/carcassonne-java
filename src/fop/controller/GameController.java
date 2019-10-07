@@ -116,8 +116,16 @@ public class GameController extends Observable<Player[]> {
 			break;
 		case PLACING_MEEPLE:
 			System.out.println("Entered PLACING_MEEPLE");
+			
+			// When the current player does not have any meeple left, go to next round.
+			if (players[currentRound % players.length].getMeeples() == 0) {
+				board.calculatePoints();
+				nextRound();
+				break;
+			}
+
 			Tile newestTile = board.getNewestTile();
-			boardPanel.showMeepleOverlay(newestTile.getMeepleSpots(), newestTile.x, newestTile.y, players[currentRound % players.length]);
+			boardPanel.showTemporaryMeepleOverlay(newestTile.getMeepleSpots(), newestTile.x, newestTile.y, players[currentRound % players.length]);
 			stackPanel.hideTileStack();
 			view.getToolbarPanel().toggleSkipButton();
 			System.out.println("Please place a meeple or skip.");

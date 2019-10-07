@@ -17,12 +17,12 @@ public class ToolbarPanel extends JPanel implements Observer<Player[]> {
 	JLabel[] playerLabels;
 
 	public ToolbarPanel(Player[] players) {
-		setBorder(BorderFactory.createTitledBorder("Menu"));
-		setLayout(new FlowLayout(FlowLayout.RIGHT));
+//		setBorder(BorderFactory.createTitledBorder("Menu"));
+		setLayout(new FlowLayout(FlowLayout.LEFT));
 
 		playerLabels = new JLabel[players.length];
 		for (int i = 0; i < players.length; i++) {
-			playerLabels[i] = new JLabel(players[i].getName() + ":  " + players[i].getScore());
+			playerLabels[i] = new JLabel(players[i].getName() + " Score:  " + players[i].getScore() + " Meeples: " + players[i].getMeeples());
 			add(playerLabels[i]);
 		}
 
@@ -48,8 +48,7 @@ public class ToolbarPanel extends JPanel implements Observer<Player[]> {
 	@Override
 	public void update(Player[] players) {
 		for (int i = 0; i < players.length; i++) {
-			playerLabels[i].setText(players[i].getName() + ":  " + players[i].getScore());
-			add(playerLabels[i]);
+			playerLabels[i].setText(players[i].getName() + " Score:  " + players[i].getScore() + " Meeples: " +  players[i].getMeeples());
 		}
 	}
 

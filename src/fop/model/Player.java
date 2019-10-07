@@ -1,17 +1,16 @@
 package fop.model;
 
-import java.awt.Color;
-
 public class Player {
 	private MeepleColour colour;
 	private String name;
 	private int score;
-	private int meeples;
+	private int meeples; // the amount of meeples
 
 	public Player(String name, MeepleColour colour) {
 		this.colour = colour;
 		this.name = name;
 		this.score = 0;
+		this.meeples = 7;
 	}
 	
 	public MeepleColour getColour() {
@@ -28,6 +27,18 @@ public class Player {
 	
 	public int getScore() {
 		return score;
+	}
+	
+	public int getMeeples() {
+		return meeples;
+	}
+	
+	public void removeMeeple() {
+		meeples--;
+	}
+	
+	public void returnMeeple() {
+		meeples++;
 	}
 
 }
