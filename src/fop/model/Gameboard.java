@@ -188,7 +188,6 @@ public class Gameboard extends Observable<Gameboard> {
 
 				if (connects && meeplesPerPlayer.size() > 0) {
 					int maxMeepleCount = Collections.max(meeplesPerPlayer.values());
-					System.out.println(nodesWithMeeple.size());
 					List<Player> playersWithMostMeeples = meeplesPerPlayer.entrySet().stream()
 							.filter(e -> e.getValue().equals(maxMeepleCount)).map(e -> e.getKey())
 							.collect(Collectors.toList());
@@ -197,7 +196,7 @@ public class Gameboard extends Observable<Gameboard> {
 					// in case of a tie: every player gets the points
 					for (Player p : playersWithMostMeeples) {
 						p.addScore(score);
-						System.out.println("Player " + p.getName() + " gets " + score);
+						System.out.println("Player " + p.getName() + " gets " + score + " points.");
 					}
 
 					// Now that the score is added, the meeple are returned to the players

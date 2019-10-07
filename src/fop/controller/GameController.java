@@ -1,8 +1,5 @@
 package fop.controller;
 
-import static fop.model.FeatureType.CASTLE;
-import static fop.model.FeatureType.ROAD;
-
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -15,6 +12,7 @@ import javax.swing.JPanel;
 import javax.swing.UIManager;
 
 import fop.model.Gameboard;
+import fop.model.MeepleColour;
 import fop.model.Observable;
 import fop.model.Player;
 import fop.model.Position;
@@ -95,7 +93,7 @@ public class GameController extends Observable<Player[]> {
 			System.out.println("Entered GAME_START");
 			
 			// TODO soll dann vom menu aus gesetzt werden
-			players = new Player[]{new Player("P1"), new Player("P2")};
+			players = new Player[]{new Player("P1", MeepleColour.RED), new Player("P2", MeepleColour.BLUE)};
 			board = new Gameboard();
 			stack = new TileStack();
 			view = new GameView(this);
@@ -119,7 +117,7 @@ public class GameController extends Observable<Player[]> {
 		case PLACING_MEEPLE:
 			System.out.println("Entered PLACING_MEEPLE");
 			Tile newestTile = board.getNewestTile();
-			boardPanel.showMeepleOverlay(newestTile.getMeepleSpots(), newestTile.x, newestTile.y);
+			boardPanel.showMeepleOverlay(newestTile.getMeepleSpots(), newestTile.x, newestTile.y, players[currentRound % players.length]);
 			stackPanel.hideTileStack();
 			view.getToolbarPanel().toggleSkipButton();
 			System.out.println("Please place a meeple or skip.");

@@ -189,4 +189,17 @@ public class Tile {
 		return false;
 	}
 
+	/**
+	 * Returns the Player that has placed a meeple on this tile.
+	 * 
+	 * @return The Player that has placed a meeple or null if there is no meeple
+	 *         placed here.
+	 */
+	public Player getMeeple() {
+		for (FeatureNode n : nodes.values())
+			if (n.hasMeeple())
+				return n.getMeeple();
+		return null;
+	}
+
 }

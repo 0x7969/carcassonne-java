@@ -8,7 +8,6 @@ import java.awt.Point;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.Arrays;
-import java.util.LinkedList;
 import java.util.List;
 
 import javax.swing.JPanel;
@@ -16,8 +15,8 @@ import javax.swing.SwingUtilities;
 
 import fop.controller.GameController;
 import fop.controller.State;
-import fop.model.FeatureNode;
 import fop.model.Gameboard;
+import fop.model.Player;
 import fop.model.Position;
 import fop.model.Tile;
 import fop.model.TileStack;
@@ -60,8 +59,6 @@ public class GameBoardPanel extends JPanel implements Observer<Gameboard> {
 
 		tileOverlay = new TileOverlayPanel("FLIPSIDE", scale);
 //		gc.addTileStackObserver(tileOverlay);
-
-		tempMeepleOverlay = new MeepleOverlayPanel(scale);
 
 		this.addMouseListener(new MouseAdapter() {
 			@Override
@@ -277,23 +274,31 @@ public class GameBoardPanel extends JPanel implements Observer<Gameboard> {
 		if (scale + pixels < 50 || scale + pixels > 150)
 			return;
 		else {
-			for (TilePanel t : getTiles())
-				t.setPreferredSize(new Dimension(scale + pixels, scale + pixels));
+			for (Component c : getComponents()) {
+				if (c instanceof MeepleOverlayPanel)
+					c.setPreferredSize(new Dimension(scale + pixels, scale + pixels));
+				else if (c instanceof TilePanel)
+					c.setPreferredSize(new Dimension(scale + pixels, scale + pixels));
+			}
+
 			tileOverlay.setPreferredSize(new Dimension(scale + pixels, scale + pixels));
-			tempMeepleOverlay.setPreferredSize(new Dimension(scale + pixels, scale + pixels));
 			scale += pixels;
 			revalidate(); // !
 		}
 	}
 
-	public MeepleOverlayPanel showMeepleOverlay(boolean[] meepleSpots, int x, int y) {
+	public MeepleOverlayPanel showMeepleOverlay(boolean[] meepleSpots, int x, int y, Player player) {
 		gbc.gridx = x;
 		gbc.gridy = y;
-		tempMeepleOverlay = new MeepleOverlayPanel(meepleSpots, scale);
+		tempMeepleOverlay = new MeepleOverlayPanel(meepleSpots, scale, player);
 		add(tempMeepleOverlay, gbc, 0); // auf z-axis ist kein verlass, lieber mit setVisible
 		return tempMeepleOverlay;
 	}
 
+	/**
+	 * Removes the temporary meeple overlay (which shows possible meeple spots) that
+	 * is displayed when entering PLACING_MEEPLE state.
+	 */
 	public void removeTempMeepleOverlay() {
 		remove(tempMeepleOverlay);
 		repaint(); // !
@@ -316,7 +321,7 @@ public class GameBoardPanel extends JPanel implements Observer<Gameboard> {
 					if (p.equals(t.getMeeplePosition()))
 						positions[p.ordinal()] = true;
 				}
-				showMeepleOverlay(positions, t.x, t.y);
+				showMeepleOverlay(positions, t.x, t.y, t.getMeeple());
 			}
 		}
 		repaint(); // nsin
@@ -374,7 +379,7 @@ public class GameBoardPanel extends JPanel implements Observer<Gameboard> {
 	public void update(Gameboard board) {
 		switch (gc.getState()) {
 		case GAME_START:
-			// same behaviour as with PLACING_TILE, so we just omit the break statement
+			// same behaviour as when PLACING_TILE, so we just omit the break statement
 		case PLACING_TILE:
 			Tile newTile = board.getNewestTile();
 			newTile(newTile.getType(), newTile.getRotation(), newTile.x, newTile.y);

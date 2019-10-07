@@ -6,6 +6,5 @@ public enum FeatureType {
     ROAD,
     MONASTERY,
     FIELDS,
-    NULL; // etwas unschöne lösung, unbedingt nötig?
 	
 }

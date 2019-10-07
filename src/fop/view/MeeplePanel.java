@@ -1,6 +1,5 @@
 package fop.view;
 
-import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.event.MouseAdapter;
@@ -12,6 +11,8 @@ import java.io.IOException;
 import javax.imageio.ImageIO;
 import javax.swing.JPanel;
 
+import fop.model.MeepleColour;
+import fop.model.Player;
 import fop.model.Position;
 
 /**
@@ -28,7 +29,7 @@ public class MeeplePanel extends JPanel {
 
 	private BufferedImage meepleImage;
 	private Position position; // the meeple spots position inside the tile its on
-	private Color color;
+	private MeepleColour colour;
 
 	/**
 	 * A meeple panel without a position is considered not to be a spot to place a
@@ -38,12 +39,13 @@ public class MeeplePanel extends JPanel {
 		this.setOpaque(false);
 	}
 
-	MeeplePanel(Position p) {
+	MeeplePanel(Position pos, Player player) {
 		this.setOpaque(false);
-		this.position = p;
+		this.position = pos;
+		this.colour = player.getColour();
 
 		try {
-			meepleImage = ImageIO.read(new File(FOLDER + "meeple_road.png"));
+			meepleImage = ImageIO.read(new File(FOLDER + colour.toString().toLowerCase() + "_outline.png"));
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -57,7 +59,7 @@ public class MeeplePanel extends JPanel {
 			@Override
 			public void mouseEntered(MouseEvent event) {
 				try {
-					meepleImage = ImageIO.read(new File(FOLDER + "meeple_road_template.png"));
+					meepleImage = ImageIO.read(new File(FOLDER + colour.toString().toLowerCase() + ".png"));
 				} catch (IOException e) {
 					e.printStackTrace();
 				}
@@ -67,7 +69,7 @@ public class MeeplePanel extends JPanel {
 			@Override
 			public void mouseExited(MouseEvent event) {
 				try {
-					meepleImage = ImageIO.read(new File(FOLDER + "meeple_road.png"));
+					meepleImage = ImageIO.read(new File(FOLDER + colour.toString().toLowerCase() + "_outline.png"));
 				} catch (IOException e) {
 					e.printStackTrace();
 				}
