@@ -1,8 +1,6 @@
 package fop.controller;
 
 import java.awt.Dimension;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.util.logging.ConsoleHandler;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -125,7 +123,7 @@ public class GameController extends Observable<Player[]> {
 			}
 
 			Tile newestTile = board.getNewestTile();
-			boardPanel.showTemporaryMeepleOverlay(newestTile.getMeepleSpots(), newestTile.x, newestTile.y, players[currentRound % players.length]);
+			boardPanel.showTemporaryMeepleOverlay(board.getMeepleSpots(), newestTile.x, newestTile.y, players[currentRound % players.length]);
 			stackPanel.hideTileStack();
 			view.getToolbarPanel().toggleSkipButton();
 			System.out.println("Please place a meeple or skip.");
@@ -229,10 +227,6 @@ public class GameController extends Observable<Player[]> {
 		return board.isTileAllowed(peekTile(), x, y);
 	}
 
-	public boolean[] getMeepleSpots(int x, int y) {
-		return board.getMeepleSpots(x, y);
-	}
-
 	public void placeMeeple(Position position) {
 		board.placeMeeple(position, players[currentRound % players.length]); // the current player is determinded by the
 																				// current round modulo amount of
@@ -253,15 +247,6 @@ public class GameController extends Observable<Player[]> {
 
 	public static void main(String[] args) {
 		new GameController();
-	}
-
-	private class GameMenuActionListener implements ActionListener {
-
-		@Override
-		public void actionPerformed(ActionEvent event) {
-			// hier kann dann noch genauer der button abgefragt werden usw.
-			setState(State.GAME_START);
-		}
 	}
 
 }

@@ -225,8 +225,49 @@ public class Gameboard extends Observable<Gameboard> {
 		return tiles;
 	}
 
-	public boolean[] getMeepleSpots(int x, int y) {
-		return board[x][y].getMeepleSpots();
+	/**
+	 * Returns the spots on which it is allowed to place a meeple on the most
+	 * recently placed tile.
+	 * 
+	 * @return The spots on which it is allowed to place a meeple as a boolean array
+	 *         representing the tile split in nine cells from top left, to right, to
+	 *         bottom right.
+	 */
+	public boolean[] getMeepleSpots() {
+		boolean[] positions = new boolean[9];
+
+		for (Position p : Position.values()) {
+			FeatureNode n = newestTile.getNodeAtPosition(p);
+			if (n != null)
+				if (n.hasMeepleSpot() && !hasMeepleOnSubGraph(n))
+					positions[p.ordinal()] = true;
+		}
+
+		return positions;
+	}
+
+	private boolean hasMeepleOnSubGraph(FeatureNode n) {
+		List<Node<FeatureType>> visitedNodes = new ArrayList<>();
+		ArrayDeque<Node<FeatureType>> queue = new ArrayDeque<>();
+
+		queue.push(n);
+		while (!queue.isEmpty()) {
+			FeatureNode node = (FeatureNode) queue.pop();
+			System.out.println("RUSH" + n.getType());
+			if (node.hasMeeple())
+				return true;
+
+			List<WeightedEdge<FeatureType>> edges = graph.getEdges(node);
+			for (WeightedEdge<FeatureType> edge : edges) {
+				Node<FeatureType> nextNode = edge.getOtherNode(node);
+				if (!visitedNodes.contains(nextNode)) {
+					queue.push(nextNode);
+					visitedNodes.add(nextNode);
+				}
+			}
+		}
+		System.out.println("false");
+		return false;
 	}
 
 	public Tile getNewestTile() {

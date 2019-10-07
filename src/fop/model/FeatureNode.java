@@ -1,8 +1,5 @@
 package fop.model;
 
-import static fop.model.Direction.*;
-import static fop.model.Position.*;
-
 import fop.base.Node;
 
 public class FeatureNode extends Node<FeatureType> {
@@ -38,7 +35,7 @@ public class FeatureNode extends Node<FeatureType> {
 	public FeatureNode(FeatureType type, Position position) {
 		super(type);
 		this.position = position;
-		this.direction = BOTH;
+		this.direction = Direction.BOTH;
 		this.connectsTiles = false;
 	}
 
@@ -79,7 +76,7 @@ public class FeatureNode extends Node<FeatureType> {
 	}
 
 	public void switchDirection() {
-		if (direction == BOTH)
+		if (direction == Direction.BOTH)
 			return;
 		else
 			direction = direction.getOpposite();

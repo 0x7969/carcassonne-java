@@ -11,10 +11,8 @@ import static fop.model.Position.TOPLEFT;
 import static fop.model.Position.TOPRIGHT;
 
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
 import java.util.SortedMap;
 import java.util.TreeMap;
 
@@ -80,6 +78,10 @@ public class Tile {
 	public List<WeightedEdge<FeatureType>> getEdges() {
 		return edges;
 	}
+	
+	public FeatureNode getNodeAtPosition(Position p) {
+		return nodes.get(p);
+	}
 
 	public void rotateRight() {
 		SortedMap<Position, FeatureNode> rotatedNodes = new TreeMap<Position, FeatureNode>();
@@ -141,25 +143,6 @@ public class Tile {
 
 	public boolean hasCoatOfArms() {
 		return coatOfArms;
-	}
-
-	/**
-	 * 
-	 * @return The spots on which it is allowed to place a meeple as a boolean array
-	 *         representing the tile split in nine cells from top left to bottom
-	 *         right.
-	 */
-	public boolean[] getMeepleSpots() {
-		boolean[] positions = new boolean[9];
-
-		for (Position p : Position.values()) {
-			FeatureNode n = nodes.get(p);
-			if (n != null)
-				if (n.hasMeepleSpot())
-					positions[p.ordinal()] = true;
-		}
-
-		return positions;
 	}
 
 	/**
