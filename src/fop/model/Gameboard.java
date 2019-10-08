@@ -142,7 +142,7 @@ public class Gameboard extends Observable<Gameboard> {
 	 * Calculates points for monasteries (one point for each adjacent tile).
 	 */
 	private void calculateMonasteries() {
-		int score = 0;
+		int score = 1;
 		for (Tile t : tiles) {
 			FeatureNode node = t.getNode(Position.CENTER);
 			if (node != null && node.getType() == MONASTERY && node.hasMeeple()) {
@@ -181,10 +181,10 @@ public class Gameboard extends Observable<Gameboard> {
 				if (board[x + 1][y + 1] != null)
 					score++;
 
-				if (score == 8) {
+				if (score == 9) {
 					node.getPlayer().addScore(score);
 					node.getPlayer().returnMeeple();
-					System.out.println("Removing a meeple.");
+					LOG.info("Player " + node.getPlayer().getName() + " scored " + score + " points completing a monastery.");
 					node.setPlayer(null);
 				}
 			}
@@ -208,18 +208,19 @@ public class Gameboard extends Observable<Gameboard> {
 
 		queue.push(nodeList.remove(0));
 		while (!queue.isEmpty()) {
-			FeatureNode node = (FeatureNode) queue.pop();
+			FeatureNode node = (FeatureNode) queue.pop(); 
 			Tile tile = getTileContainingNode(node);
-			
+
 			if (!visitedTiles.contains(tile)) {
 				score++;
+				if (tile.hasPennant())
+					score += 1;
 				visitedTiles.add(tile);
 			}
-			
-			// If there is one node that does not connect to another tile, the feature
-			// cannot be completed.
-			if (!node.isConnectingTiles()) {
-				System.out.println("There is a node that is not connected: " + node.getType() + "at x " + getTileContainingNode(node).x + " and y " + getTileContainingNode(node).x);
+
+			// If there is one straight positioned node that does not connect to another
+			// tile, the feature cannot be completed.
+			if (tile.isNodeOnStraightPosition(node) && !node.isConnectingTiles()) {
 				completed = false;
 			}
 
@@ -260,14 +261,13 @@ public class Gameboard extends Observable<Gameboard> {
 					// in case of a tie: every player gets the points
 					for (Player p : playersWithMostMeeples) {
 						p.addScore(score);
-						System.out.println("Player " + p.getName() + " gets " + score + " points.");
+						LOG.info("Player " + p.getName() + " scored " + score + " points completing a " + node.getType().toString().toLowerCase() + ".");
 					}
 
 					// Now that the score is added, the meeple are returned to the players
 					// inventories and removed from the tile.
 					for (FeatureNode n : nodesWithMeeple) {
 						n.getPlayer().returnMeeple();
-						System.out.println("Removing a meeple.");
 						n.setPlayer(null);
 					}
 				}
@@ -330,7 +330,6 @@ public class Gameboard extends Observable<Gameboard> {
 				return true;
 
 			List<WeightedEdge<FeatureType>> edges = graph.getEdges(node);
-			System.out.println("Edge length: " + edges.size());
 			for (WeightedEdge<FeatureType> edge : edges) {
 				Node<FeatureType> nextNode = edge.getOtherNode(node);
 				if (!visitedNodes.contains(nextNode)) {

@@ -2,13 +2,13 @@
 <tiletypes>
 	<!-- Beispielformat
 
-	<tile type="" ammount="" coatofarms="">
+	<tile type="" ammount="" pennant="">
 		<node feature="" position="" direction=""/>
 		<edge a="" b=""/>
 	</tile>
 
 	"type" name of tile, as named in the official rules (also it is the filename of the tiles image)
-	"coatofarms" can be true or left out
+	"pennant" can be true or left out
 	"feature" can be FIELDS, ROAD, CASTLE, MONASTERY
 	"position" can be TOPLEFT, TOP, TOPRIGHT, LEFT, CENTER, RIGHT, BOTTOMLEFT, BOTTOM, BOTTOMRIGHT
 	"direction" can be X, Y or BOTH
@@ -50,7 +50,7 @@
 		<edge a="RIGHT" b="BOTTOM"/>
 	</tile>
 
-	<tile type="C" ammount="1" coatofarms="true">
+	<tile type="C" ammount="1" pennant="true">
 		<node feature="CASTLE" position="TOP"/>
 		<node feature="CASTLE" position="LEFT"/>
 		<node feature="CASTLE" position="CENTER" meeplespot="true"/>
@@ -86,7 +86,7 @@
 		<edge a="BOTTOM" b="CENTER"/>
 	</tile>
 
-	<tile type="F" ammount="2" coatofarms="true">
+	<tile type="F" ammount="2" pennant="true">
 		<node feature="FIELDS" position="TOP" meeplespot="true"/>
 		<node feature="CASTLE" position="LEFT" meeplespot="true"/>
 		<node feature="CASTLE" position="RIGHT"/>
@@ -160,7 +160,7 @@
 		<edge a="TOPLEFT" b="TOPRIGHT"/>
 	</tile>
 
-	<tile type="M" ammount="2" coatofarms="true">
+	<tile type="M" ammount="2" pennant="true">
 		<node feature="CASTLE" position="TOP"/>
 		<node feature="CASTLE" position="LEFT" meeplespot="true"/>
 		<node feature="FIELDS" position="RIGHT" meeplespot="true"/>
@@ -169,7 +169,7 @@
 		<edge a="RIGHT" b="BOTTOM"/>
 	</tile>
 
-	<tile type="N" ammount="3" coatofarms="">
+	<tile type="N" ammount="3" pennant="">
 		<node feature="CASTLE" position="TOP"/>
 		<node feature="CASTLE" position="LEFT" meeplespot="true"/>
 		<node feature="FIELDS" position="RIGHT" meeplespot="true"/>
@@ -178,7 +178,7 @@
 		<edge a="RIGHT" b="BOTTOM"/>
 	</tile>
 
-	<tile type="O" ammount="2" coatofarms="true">
+	<tile type="O" ammount="2" pennant="true">
 		<node feature="CASTLE" position="TOP"/>
 		<node feature="FIELDS" position="TOPRIGHT" direction="X" meeplespot="true"/>
 		<node feature="CASTLE" position="LEFT" meeplespot="true"/>
@@ -204,7 +204,7 @@
 		<edge a="BOTTOM" b="RIGHT"/>
 	</tile>
 
-	<tile type="Q" ammount="1" coatofarms="true">
+	<tile type="Q" ammount="1" pennant="true">
 		<node feature="CASTLE" position="TOP"/>
 		<node feature="CASTLE" position="LEFT"/>
 		<node feature="CASTLE" position="CENTER" meeplespot="true"/>
@@ -226,7 +226,7 @@
 		<edge a="RIGHT" b="CENTER"/>
 	</tile>
 
-	<tile type="S" ammount="2" coatofarms="true">
+	<tile type="S" ammount="2" pennant="true">
 		<node feature="CASTLE" position="TOP"/>
 		<node feature="CASTLE" position="LEFT"/>
 		<node feature="CASTLE" position="CENTER" meeplespot="true"/>

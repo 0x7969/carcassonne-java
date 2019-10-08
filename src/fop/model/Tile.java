@@ -24,7 +24,7 @@ public class Tile {
 													// from left to right, top to bottom (following the Position enums
 													// order).
 	private final List<WeightedEdge<FeatureType>> edges;
-	private final boolean coatOfArms;
+	private final boolean pennant;
 	private int rotation;
 	public int x;
 	public int y;
@@ -33,14 +33,14 @@ public class Tile {
 		this.type = type;
 		nodes = new TreeMap<Position, FeatureNode>();
 		edges = new LinkedList<WeightedEdge<FeatureType>>();
-		coatOfArms = false;
+		pennant = false;
 	}
 
 	public Tile(String type, boolean coatOfArms) {
 		this.type = type;
 		nodes = new TreeMap<Position, FeatureNode>();
 		edges = new LinkedList<WeightedEdge<FeatureType>>();
-		this.coatOfArms = coatOfArms;
+		this.pennant = coatOfArms;
 	}
 
 	public String getType() {
@@ -89,6 +89,19 @@ public class Tile {
 
 	public FeatureNode getNodeAtPosition(Position p) {
 		return nodes.get(p);
+	}
+
+	public boolean isNodeOnStraightPosition(FeatureNode n) {
+		if (nodes.get(TOP) == n)
+			return true;
+		else if (nodes.get(LEFT) == n)
+			return true;
+		else if (nodes.get(RIGHT) == n)
+			return true;
+		else if (nodes.get(BOTTOM) == n)
+			return true;
+		else
+			return false;
 	}
 
 	public void rotateRight() {
@@ -148,8 +161,8 @@ public class Tile {
 				+ featureAtPosition(BOTTOM) + ", rotation: " + rotation;
 	}
 
-	public boolean hasCoatOfArms() {
-		return coatOfArms;
+	public boolean hasPennant() {
+		return pennant;
 	}
 
 	/**

@@ -3,14 +3,13 @@ package fop.view;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.Point;
-import java.awt.event.ActionListener;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 
 import javax.swing.JPanel;
+import javax.swing.JTextArea;
 
 import fop.controller.GameController;
-import fop.model.TileStack;
 
 public class GameView extends JPanel {
 
@@ -18,6 +17,7 @@ public class GameView extends JPanel {
 	JPanel gameBoardPanelWrapper;
 	ToolbarPanel toolbarPanel;
 	TileStackPanel tileStackPanel;
+	JTextArea statusbarPanel;
 
 	public GameView(GameController gc) {
 		setLayout(new BorderLayout());
@@ -48,6 +48,11 @@ public class GameView extends JPanel {
 
 			}
 		});
+		
+		// bottom status bar
+		statusbarPanel = new JTextArea();
+		statusbarPanel.setEditable(false);
+		this.add(statusbarPanel, BorderLayout.SOUTH);
 	}
 	
 	public Point getOverlayedTileGridPosition() {
@@ -64,6 +69,10 @@ public class GameView extends JPanel {
 	
 	public ToolbarPanel getToolbarPanel() {
 		return toolbarPanel;
+	}
+	
+	public void setStatusbar(String status) {
+		statusbarPanel.setText(status);
 	}
 
 }

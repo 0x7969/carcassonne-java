@@ -48,9 +48,9 @@ public class TileFactory {
 
 					Tile newTile;
 
-					// If the tile has a coat of arms, pass that to the constructor
-					if (tileAttributes.getNamedItem("coatofarms") != null
-							&& tileAttributes.getNamedItem("coatofarms").getNodeValue().equals("true"))
+					// If the tile has a pennant, pass that to the constructor
+					if (tileAttributes.getNamedItem("pennant") != null
+							&& tileAttributes.getNamedItem("pennant").getNodeValue().equals("true"))
 						newTile = new Tile(tileAttributes.getNamedItem("type").getNodeValue(), true);
 					else
 						newTile = new Tile(tileAttributes.getNamedItem("type").getNodeValue());
@@ -69,12 +69,10 @@ public class TileFactory {
 						if (nodeAttributes.getNamedItem("direction") != null) {
 							fn = new FeatureNode(
 									FeatureType.valueOf(nodeAttributes.getNamedItem("feature").getNodeValue()),
-									Position.valueOf(nodeAttributes.getNamedItem("position").getNodeValue()),
 									Direction.valueOf(nodeAttributes.getNamedItem("direction").getNodeValue()));
 						} else {
 							fn = new FeatureNode(
-									FeatureType.valueOf(nodeAttributes.getNamedItem("feature").getNodeValue()),
-									Position.valueOf(nodeAttributes.getNamedItem("position").getNodeValue()));
+									FeatureType.valueOf(nodeAttributes.getNamedItem("feature").getNodeValue()));
 						}
 
 						if (nodeAttributes.getNamedItem("meeplespot") != null

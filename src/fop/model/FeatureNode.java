@@ -4,8 +4,7 @@ import fop.base.Node;
 
 public class FeatureNode extends Node<FeatureType> {
 
-	private Position position;
-	private Direction direction;
+	private Direction direction; // TODO not yet used
 	private boolean connectsTiles;
 	private boolean meepleSpot;
 	private Player meeple;
@@ -18,9 +17,8 @@ public class FeatureNode extends Node<FeatureType> {
 	 * @param position  Its position on a tile.
 	 * @param direction The direction in which it is present.
 	 */
-	public FeatureNode(FeatureType type, Position position, Direction direction) {
+	public FeatureNode(FeatureType type, Direction direction) {
 		super(type);
-		this.position = position;
 		this.direction = direction;
 		this.connectsTiles = false;
 	}
@@ -32,9 +30,8 @@ public class FeatureNode extends Node<FeatureType> {
 	 * @param type     The features type.
 	 * @param position Its position on a tile.
 	 */
-	public FeatureNode(FeatureType type, Position position) {
+	public FeatureNode(FeatureType type) {
 		super(type);
-		this.position = position;
 		this.direction = Direction.BOTH;
 		this.connectsTiles = false;
 	}

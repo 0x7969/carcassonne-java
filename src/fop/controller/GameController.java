@@ -109,24 +109,24 @@ public class GameController extends Observable<Player[]> {
 			push(players); // push players to observers (= ToolbarPanel)
 			stack.push(stack); // pushes tile stack to observers (= TileStackPanel)
 			view.getToolbarPanel().toggleSkipButton();
-			System.out.println("Please place a tile.");
+			view.setStatusbar("Player " + currentPlayer().getName() + ", please place a tile.");
 			// Now waiting for user input
 			break;
 		case PLACING_MEEPLE:
 			System.out.println("Entered PLACING_MEEPLE");
 			
 			// When the current player does not have any meeple left, go to next round immediately.
-			if (players[currentRound % players.length].getMeeples() == 0) {
+			if (currentPlayer().getMeeples() == 0) {
 				board.calculatePoints();
 				nextRound();
 				break;
 			}
 
 			Tile newestTile = board.getNewestTile();
-			boardPanel.showTemporaryMeepleOverlay(board.getMeepleSpots(), newestTile.x, newestTile.y, players[currentRound % players.length]);
+			boardPanel.showTemporaryMeepleOverlay(board.getMeepleSpots(), newestTile.x, newestTile.y, currentPlayer());
 			stackPanel.hideTileStack();
 			view.getToolbarPanel().toggleSkipButton();
-			System.out.println("Please place a meeple or skip.");
+			view.setStatusbar("Player " + currentPlayer().getName() + ", please place a meeple or skip.");
 			// Now waiting for user input
 			break;
 		case GAME_SCORE:
@@ -135,6 +135,10 @@ public class GameController extends Observable<Player[]> {
 		default:
 			break;
 		}
+	}
+	
+	private Player currentPlayer() {
+		return players[currentRound % players.length];
 	}
 
 	public State getState() {
@@ -228,7 +232,7 @@ public class GameController extends Observable<Player[]> {
 	}
 
 	public void placeMeeple(Position position) {
-		board.placeMeeple(position, players[currentRound % players.length]); // the current player is determinded by the
+		board.placeMeeple(position, currentPlayer()); // the current player is determinded by the
 																				// current round modulo amount of
 																				// players
 	}
