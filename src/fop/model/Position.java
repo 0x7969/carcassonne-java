@@ -6,7 +6,7 @@ public enum Position {
 	TOP,
 	TOPRIGHT,
 	LEFT,
-	CENTER, // TODO ungenutzt?
+	CENTER,
 	RIGHT,
 	BOTTOMLEFT,
 	BOTTOM,

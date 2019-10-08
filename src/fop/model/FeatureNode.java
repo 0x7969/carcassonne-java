@@ -66,11 +66,6 @@ public class FeatureNode extends Node<FeatureType> {
 		return getValue();
 	}
 
-	@Deprecated
-	public Position getPosition() {
-		return position;
-	}
-
 	public Direction getDirection() {
 		return direction;
 	}

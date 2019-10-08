@@ -55,6 +55,14 @@ public class Tile {
 		return nodes.get(position);
 	}
 
+	public boolean containsNode(FeatureNode node) {
+		for (FeatureNode n : nodes.values()) {
+			if (n == node)
+				return true;
+		}
+		return false;
+	}
+
 	public boolean addEdge(WeightedEdge<FeatureType> edge) {
 		return edges.add(edge);
 	}
@@ -78,7 +86,7 @@ public class Tile {
 	public List<WeightedEdge<FeatureType>> getEdges() {
 		return edges;
 	}
-	
+
 	public FeatureNode getNodeAtPosition(Position p) {
 		return nodes.get(p);
 	}
@@ -120,7 +128,6 @@ public class Tile {
 
 		for (FeatureNode n : rotatedNodes.values()) {
 			n.switchDirection();
-//			n.rotatePositionRight(); // Wird jetzt über die Map gemacht. TODO entfernen.
 		}
 
 		nodes = rotatedNodes;

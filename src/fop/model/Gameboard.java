@@ -10,7 +10,6 @@ import static fop.model.Position.TOP;
 
 import java.util.ArrayDeque;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -128,7 +127,7 @@ public class Gameboard extends Observable<Gameboard> {
 	}
 
 	public void calculatePoints() {
-		calculatePoints(ROAD); // TODO soll eigentlich durch state change ausgelöst werden
+		calculatePoints(ROAD);
 		calculatePoints(CASTLE);
 		calculateMonasteries();
 		// TODO eigentlich müsste man das gar nicht trennen. wir wollen nur wiesen noch
@@ -194,24 +193,34 @@ public class Gameboard extends Observable<Gameboard> {
 
 	private void calculatePoints(FeatureType type) {
 		List<Node<FeatureType>> nodeList = new ArrayList<>(graph.getNodes(type));
-		ArrayDeque<Node<FeatureType>> queue = new ArrayDeque<>(); // TODO hat deque hier einen vorteil? habs übernommen
+		ArrayDeque<Node<FeatureType>> queue = new ArrayDeque<>();
 
 		HashMap<Player, Integer> meeplesPerPlayer = new HashMap<Player, Integer>(); // Counts the meeples met while
 																					// traversing
-		List<FeatureNode> nodesWithMeeple = new LinkedList<FeatureNode>();
+		List<FeatureNode> nodesWithMeeple = new LinkedList<FeatureNode>(); // Collects all nodes with meeple so we can
+																			// remove them later, in case the feature is
+																			// completed.
+		List<Tile> visitedTiles = new LinkedList<Tile>(); // Collects all visited tiles
 
-		int score = 1; // As we only get points for transitioning between tiles, we start with 1.
-		boolean connects = true; // Is set to false if a node is visited that does not connect to any other tile
+		int score = 0; // As we only get points for transitioning between tiles, we start with 1.
+		boolean completed = true; // Is the feature completed? Is set to false if a node is visited that does not
+									// connect to any other tile
 
 		queue.push(nodeList.remove(0));
 		while (!queue.isEmpty()) {
 			FeatureNode node = (FeatureNode) queue.pop();
-
-			// TODO review.. etwas unschön.. und deprecated
-			if (Arrays.stream(Position.getStraightPositions()).anyMatch(node.getPosition()::equals)) {
-				if (!node.isConnectingTiles()) {
-					connects = false;
-				}
+			Tile tile = getTileContainingNode(node);
+			
+			if (!visitedTiles.contains(tile)) {
+				score++;
+				visitedTiles.add(tile);
+			}
+			
+			// If there is one node that does not connect to another tile, the feature
+			// cannot be completed.
+			if (!node.isConnectingTiles()) {
+				System.out.println("There is a node that is not connected: " + node.getType() + "at x " + getTileContainingNode(node).x + " and y " + getTileContainingNode(node).x);
+				completed = false;
 			}
 
 			// Collect the meeples encountered on traversal, so we know who has the most
@@ -229,7 +238,7 @@ public class Gameboard extends Observable<Gameboard> {
 				if (nodeList.contains(nextNode)) {
 					LOG.info("Adding points of edge connecting a " + node.getValue() + " and a "
 							+ edge.getOtherNode(node).getValue() + ", weight " + edge.getWeight());
-					score += edge.getWeight();
+//					score += edge.getWeight();
 
 					queue.push(nextNode);
 					nodeList.remove(nextNode);
@@ -241,7 +250,7 @@ public class Gameboard extends Observable<Gameboard> {
 				if (type == CASTLE)
 					score *= 2;
 
-				if (connects && meeplesPerPlayer.size() > 0) {
+				if (completed && meeplesPerPlayer.size() > 0) {
 					int maxMeepleCount = Collections.max(meeplesPerPlayer.values());
 					List<Player> playersWithMostMeeples = meeplesPerPlayer.entrySet().stream()
 							.filter(e -> e.getValue().equals(maxMeepleCount)).map(e -> e.getKey())
@@ -263,12 +272,13 @@ public class Gameboard extends Observable<Gameboard> {
 					}
 				}
 
-				System.out.println(type.toString() + " of " + score + " points. Connects? " + connects + ".");
+				System.out.println(type.toString() + " of " + score + " points. Connects? " + completed + ".");
 
 				nodesWithMeeple = new LinkedList<FeatureNode>();
 				meeplesPerPlayer = new HashMap<Player, Integer>(); // reset collected meeples
-				score = 1; // reset score
-				connects = true; // reset connects
+				score = 0; // reset score
+				completed = true; // reset connects
+				visitedTiles = new LinkedList<Tile>(); // rest visited tiles
 				// If there are nonetheless nodes left, there must be another subgraph
 				if (!nodeList.isEmpty())
 					queue.push(nodeList.remove(0));
@@ -278,6 +288,14 @@ public class Gameboard extends Observable<Gameboard> {
 
 	public List<Tile> getTiles() {
 		return tiles;
+	}
+
+	public Tile getTileContainingNode(FeatureNode node) {
+		for (Tile t : tiles) {
+			if (t.containsNode(node))
+				return t;
+		}
+		return null;
 	}
 
 	/**
