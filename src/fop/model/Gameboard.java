@@ -150,36 +150,60 @@ public class Gameboard extends Observable<Gameboard> {
 				int y = t.y;
 
 				// Check top left tile
-				if (board[x - 1][y - 1] != null)
+				if (board[x - 1][y - 1] != null) {
 					score++;
+					System.out.print(score + " ");
+					System.out.println(board[x - 1][y - 1].getType());
+				}
 
 				// Check top tile
-				if (board[x][y - 1] != null)
+				if (board[x][y - 1] != null) {
 					score++;
+					System.out.print(score + " ");
+					System.out.println(board[x][y - 1].getType());
+				}
 
 				// Check top right tile
-				if (board[x + 1][y - 1] != null)
+				if (board[x + 1][y - 1] != null) {
 					score++;
+					System.out.print(score + " ");
+					System.out.println(board[x + 1][y - 1].getType());
+				}
 
 				// Check left tile
-				if (board[x - 1][y] != null)
+				if (board[x - 1][y] != null) {
 					score++;
+					System.out.print(score + " ");
+					System.out.println(board[x - 1][y].getType());
+				}
 
 				// Check right tile
-				if (board[x + 1][y] != null)
+				if (board[x + 1][y] != null) {
 					score++;
+					System.out.print(score + " ");
+					System.out.println(board[x + 1][y].getType());
+				}
 
 				// Check bottom left tile
-				if (board[x - 1][y + 1] != null)
+				if (board[x - 1][y + 1] != null) {
 					score++;
+					System.out.print(score + " ");
+					System.out.println(board[x - 1][y + 1].getType());
+				}
 
 				// Check bottom tile
-				if (board[x][y + 1] != null)
+				if (board[x][y + 1] != null) {
 					score++;
+					System.out.print(score + " ");
+					System.out.println(board[x][y + 1].getType());
+				}
 
 				// Check bottom right tile
-				if (board[x + 1][y + 1] != null)
+				if (board[x + 1][y + 1] != null) {
 					score++;
+					System.out.print(score + " ");
+					System.out.println(board[x + 1][y + 1].getType());
+				}
 
 				if (score == 9) {
 					node.getPlayer().addScore(score);
@@ -188,6 +212,7 @@ public class Gameboard extends Observable<Gameboard> {
 					node.setPlayer(null);
 				}
 			}
+			score = 1;
 		}
 	}
 

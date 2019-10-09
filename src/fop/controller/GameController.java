@@ -1,9 +1,12 @@
 package fop.controller;
 
 import java.awt.Dimension;
+import java.io.IOException;
 import java.util.logging.ConsoleHandler;
+import java.util.logging.FileHandler;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.logging.SimpleFormatter;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -47,10 +50,22 @@ public class GameController extends Observable<Player[]> {
 		currentRound = 0;
 
 		// set up logging
-		LOG.setLevel(Level.OFF);
+		LOG.setLevel(Level.FINEST);
 		ConsoleHandler consoleHandler = new ConsoleHandler();
 		consoleHandler.setLevel(LOG.getLevel());
-		LOG.addHandler(consoleHandler);
+//		LOG.addHandler(consoleHandler);
+		try {
+			FileHandler fileHandler = new FileHandler("Game.log");
+			fileHandler.setLevel(LOG.getLevel());
+			SimpleFormatter formatter = new SimpleFormatter();  
+	        fileHandler.setFormatter(formatter);  
+			LOG.addHandler(fileHandler);
+		} catch (SecurityException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		
 	}
 
 	/**
