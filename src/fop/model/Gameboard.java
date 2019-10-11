@@ -227,7 +227,7 @@ public class Gameboard extends Observable<Gameboard> {
 																			// completed.
 		List<Tile> visitedTiles = new LinkedList<Tile>(); // Collects all visited tiles
 
-		int score = 0; // As we only get points for transitioning between tiles, we start with 1.
+		int score = 0;
 		boolean completed = true; // Is the feature completed? Is set to false if a node is visited that does not
 									// connect to any other tile
 
@@ -238,7 +238,7 @@ public class Gameboard extends Observable<Gameboard> {
 
 			if (!visitedTiles.contains(tile)) {
 				score++;
-				if (tile.hasPennant())
+				if (type == CASTLE && tile.hasPennant())
 					score += 1;
 				visitedTiles.add(tile);
 			}
@@ -262,7 +262,7 @@ public class Gameboard extends Observable<Gameboard> {
 			for (WeightedEdge<FeatureType> edge : edges) {
 				Node<FeatureType> nextNode = edge.getOtherNode(node);
 				if (nodeList.contains(nextNode)) {
-					LOG.info("Adding points of edge connecting a " + node.getValue() + " and a "
+					LOG.finer("Adding points of edge connecting a " + node.getValue() + " on " + tile.x + "/" + tile.y + "and a "
 							+ edge.getOtherNode(node).getValue() + ", weight " + edge.getWeight());
 //					score += edge.getWeight();
 
@@ -373,8 +373,6 @@ public class Gameboard extends Observable<Gameboard> {
 	public void placeMeeple(Position position, Player player) {
 		board[newestTile.x][newestTile.y].getNode(position).setPlayer(player);
 		player.removeMeeple();
-		calculatePoints(); // calculating needs to be done before pushing
-		push(this);
 	}
 
 }

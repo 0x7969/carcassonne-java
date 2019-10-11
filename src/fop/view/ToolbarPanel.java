@@ -21,7 +21,8 @@ public class ToolbarPanel extends JPanel implements Observer<Player[]> {
 
 		playerLabels = new JLabel[players.length];
 		for (int i = 0; i < players.length; i++) {
-			playerLabels[i] = new JLabel(players[i].getName() + " Score:  " + players[i].getScore() + " Meeples: " + players[i].getMeeples());
+			playerLabels[i] = new JLabel(players[i].getName() + " Score:  " + players[i].getScore() + " Meeples: "
+					+ players[i].getMeeples());
 			add(playerLabels[i]);
 		}
 
@@ -37,17 +38,19 @@ public class ToolbarPanel extends JPanel implements Observer<Player[]> {
 		skipButton.addActionListener(l);
 	}
 
-	public void toggleSkipButton() {
-		if (skipButton.isVisible())
-			skipButton.setVisible(false);
-		else
-			skipButton.setVisible(true);
+	public void showSkipButton() {
+		skipButton.setVisible(true);
+	}
+
+	public void hideSkipButton() {
+		skipButton.setVisible(false);
 	}
 
 	@Override
 	public void update(Player[] players) {
 		for (int i = 0; i < players.length; i++) {
-			playerLabels[i].setText(players[i].getName() + " Score:  " + players[i].getScore() + " Meeples: " +  players[i].getMeeples());
+			playerLabels[i].setText(players[i].getName() + " Score:  " + players[i].getScore() + " Meeples: "
+					+ players[i].getMeeples());
 		}
 	}
 

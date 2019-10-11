@@ -123,7 +123,7 @@ public class GameController extends Observable<Player[]> {
 			System.out.println("Entered PLACING_TILE");
 			push(players); // push players to observers (= ToolbarPanel)
 			stack.push(stack); // pushes tile stack to observers (= TileStackPanel)
-			view.getToolbarPanel().toggleSkipButton();
+			view.getToolbarPanel().hideSkipButton();
 			view.setStatusbar("Player " + currentPlayer().getName() + ", please place a tile.");
 			// Now waiting for user input
 			break;
@@ -132,7 +132,6 @@ public class GameController extends Observable<Player[]> {
 			
 			// When the current player does not have any meeple left, go to next round immediately.
 			if (currentPlayer().getMeeples() == 0) {
-				board.calculatePoints();
 				nextRound();
 				break;
 			}
@@ -140,8 +139,8 @@ public class GameController extends Observable<Player[]> {
 			Tile newestTile = board.getNewestTile();
 			boardPanel.showTemporaryMeepleOverlay(board.getMeepleSpots(), newestTile.x, newestTile.y, currentPlayer());
 			stackPanel.hideTileStack();
-			view.getToolbarPanel().toggleSkipButton();
-			view.setStatusbar("Player " + currentPlayer().getName() + ", please place a meeple or skip.");
+			view.getToolbarPanel().showSkipButton();
+			view.setStatusbar("Player " + currentPlayer().getName() + ", please place a meeple or skip (right mouse button).");
 			// Now waiting for user input
 			break;
 		case GAME_SCORE:
@@ -168,8 +167,6 @@ public class GameController extends Observable<Player[]> {
 				break;
 			case "Skip":
 				boardPanel.removeTempMeepleOverlay();
-				board.calculatePoints();
-				board.push(board);
 				nextRound();
 				break;
 			}
@@ -211,6 +208,9 @@ public class GameController extends Observable<Player[]> {
 	}
 	
 	public void nextRound() {
+		boardPanel.removeTempMeepleOverlay();
+		board.calculatePoints();
+		board.push(board);
 		currentRound++;
 		setState(State.PLACING_TILE);
 	}
@@ -247,9 +247,8 @@ public class GameController extends Observable<Player[]> {
 	}
 
 	public void placeMeeple(Position position) {
-		board.placeMeeple(position, currentPlayer()); // the current player is determinded by the
-																				// current round modulo amount of
-																				// players
+		board.placeMeeple(position, currentPlayer());
+		nextRound();
 	}
 
 	public void addGameBoardObserver(GameboardObserver o) {
