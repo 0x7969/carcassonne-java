@@ -57,15 +57,15 @@ public class GameController extends Observable<Player[]> {
 		try {
 			FileHandler fileHandler = new FileHandler("Game.log");
 			fileHandler.setLevel(LOG.getLevel());
-			SimpleFormatter formatter = new SimpleFormatter();  
-	        fileHandler.setFormatter(formatter);  
+			SimpleFormatter formatter = new SimpleFormatter();
+			fileHandler.setFormatter(formatter);
 			LOG.addHandler(fileHandler);
 		} catch (SecurityException e) {
 			e.printStackTrace();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		
+
 	}
 
 	/**
@@ -104,9 +104,9 @@ public class GameController extends Observable<Player[]> {
 			break;
 		case GAME_START:
 			System.out.println("Entered GAME_START");
-			
+
 			// TODO soll dann vom menu aus gesetzt werden
-			players = new Player[]{new Player("P1", MeepleColour.RED), new Player("P2", MeepleColour.BLUE)};
+			players = new Player[] { new Player("P1", MeepleColour.RED), new Player("P2", MeepleColour.BLUE) };
 			board = new Gameboard();
 			stack = new TileStack();
 			view = new GameView(this);
@@ -116,7 +116,7 @@ public class GameController extends Observable<Player[]> {
 			setupListeners();
 			setupObservers();
 			initGameBoard();
-			
+
 			setState(State.PLACING_TILE);
 			break;
 		case PLACING_TILE:
@@ -129,8 +129,9 @@ public class GameController extends Observable<Player[]> {
 			break;
 		case PLACING_MEEPLE:
 			System.out.println("Entered PLACING_MEEPLE");
-			
-			// When the current player does not have any meeple left, go to next round immediately.
+
+			// When the current player does not have any meeple left, go to next round
+			// immediately.
 			if (currentPlayer().getMeeples() == 0) {
 				nextRound();
 				break;
@@ -140,17 +141,20 @@ public class GameController extends Observable<Player[]> {
 			boardPanel.showTemporaryMeepleOverlay(board.getMeepleSpots(), newestTile.x, newestTile.y, currentPlayer());
 			stackPanel.hideTileStack();
 			view.getToolbarPanel().showSkipButton();
-			view.setStatusbar("Player " + currentPlayer().getName() + ", please place a meeple or skip (right mouse button).");
+			view.setStatusbar(
+					"Player " + currentPlayer().getName() + ", please place a meeple or skip (right mouse button).");
 			// Now waiting for user input
+			break;
+		case GAME_OVER:
+			board.calculatePoints(getState());
+			// Show final score popup or w/e
 			break;
 		case GAME_SCORE:
 			// score anzeigen
 			break;
-		default:
-			break;
 		}
 	}
-	
+
 	private Player currentPlayer() {
 		return players[currentRound % players.length];
 	}
@@ -206,13 +210,18 @@ public class GameController extends Observable<Player[]> {
 //				}
 //			});
 	}
-	
+
 	public void nextRound() {
-		boardPanel.removeTempMeepleOverlay();
-		board.calculatePoints();
-		board.push(board);
-		currentRound++;
-		setState(State.PLACING_TILE);
+		System.out.println(stack.remainingTiles());
+		if (stack.remainingTiles() == 0)
+			setState(State.GAME_OVER);
+		else {
+			boardPanel.removeTempMeepleOverlay();
+			board.calculatePoints(getState());
+			board.push(board);
+			currentRound++;
+			setState(State.PLACING_TILE);
+		}
 	}
 
 	private void setupObservers() {
@@ -258,7 +267,7 @@ public class GameController extends Observable<Player[]> {
 	public void addTileStackObserver(Observer<TileStack> o) {
 		stack.addObserver(o);
 	}
-	
+
 	public Player[] getPlayers() {
 		return players;
 	}

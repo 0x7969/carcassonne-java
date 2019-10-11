@@ -19,6 +19,7 @@ import java.util.stream.Collectors;
 
 import fop.base.Node;
 import fop.base.WeightedEdge;
+import fop.controller.State;
 
 public class Gameboard extends Observable<Gameboard> {
 
@@ -126,10 +127,10 @@ public class Gameboard extends Observable<Gameboard> {
 		return true;
 	}
 
-	public void calculatePoints() {
-		calculatePoints(ROAD);
-		calculatePoints(CASTLE);
-		calculateMonasteries();
+	public void calculatePoints(State state) {
+		calculatePoints(ROAD, state);
+		calculatePoints(CASTLE, state);
+		calculateMonasteries(state);
 		// TODO eigentlich müsste man das gar nicht trennen. wir wollen nur wiesen noch
 		// nicht behandeln.
 		// sobald die verbindung/berechnung der wiesen funktioniert, können alle punkte
@@ -141,7 +142,7 @@ public class Gameboard extends Observable<Gameboard> {
 	/**
 	 * Calculates points for monasteries (one point for each adjacent tile).
 	 */
-	private void calculateMonasteries() {
+	private void calculateMonasteries(State state) {
 		int score = 1;
 		for (Tile t : tiles) {
 			FeatureNode node = t.getNode(Position.CENTER);
@@ -205,10 +206,11 @@ public class Gameboard extends Observable<Gameboard> {
 					System.out.println(board[x + 1][y + 1].getType());
 				}
 
-				if (score == 9) {
+				if (score == 9 || state == State.GAME_OVER) {
 					node.getPlayer().addScore(score);
 					node.getPlayer().returnMeeple();
-					LOG.info("Player " + node.getPlayer().getName() + " scored " + score + " points completing a monastery.");
+					LOG.info("Player " + node.getPlayer().getName() + " scored " + score
+							+ " points completing a monastery.");
 					node.setPlayer(null);
 				}
 			}
@@ -216,7 +218,7 @@ public class Gameboard extends Observable<Gameboard> {
 		}
 	}
 
-	private void calculatePoints(FeatureType type) {
+	private void calculatePoints(FeatureType type, State state) {
 		List<Node<FeatureType>> nodeList = new ArrayList<>(graph.getNodes(type));
 		ArrayDeque<Node<FeatureType>> queue = new ArrayDeque<>();
 
@@ -233,7 +235,7 @@ public class Gameboard extends Observable<Gameboard> {
 
 		queue.push(nodeList.remove(0));
 		while (!queue.isEmpty()) {
-			FeatureNode node = (FeatureNode) queue.pop(); 
+			FeatureNode node = (FeatureNode) queue.pop();
 			Tile tile = getTileContainingNode(node);
 
 			if (!visitedTiles.contains(tile)) {
@@ -262,8 +264,8 @@ public class Gameboard extends Observable<Gameboard> {
 			for (WeightedEdge<FeatureType> edge : edges) {
 				Node<FeatureType> nextNode = edge.getOtherNode(node);
 				if (nodeList.contains(nextNode)) {
-					LOG.finer("Adding points of edge connecting a " + node.getValue() + " on " + tile.x + "/" + tile.y + "and a "
-							+ edge.getOtherNode(node).getValue() + ", weight " + edge.getWeight());
+					LOG.finer("Adding points of edge connecting a " + node.getValue() + " on " + tile.x + "/" + tile.y
+							+ "and a " + edge.getOtherNode(node).getValue() + ", weight " + edge.getWeight());
 //					score += edge.getWeight();
 
 					queue.push(nextNode);
@@ -273,10 +275,13 @@ public class Gameboard extends Observable<Gameboard> {
 
 			// If the queue is empty, all nodes of a subgraph were visited
 			if (queue.isEmpty()) {
-				if (type == CASTLE)
+				// On final scoring, the castles and pennants only give one point.
+				if (type == CASTLE && state != State.GAME_OVER)
 					score *= 2;
 
-				if (completed && meeplesPerPlayer.size() > 0) {
+				// If there are meeple placed on this subgraph and we are either calculating the
+				// final score or the subgraph is completed.
+				if (meeplesPerPlayer.size() > 0 && (state == State.GAME_OVER || completed)) {
 					int maxMeepleCount = Collections.max(meeplesPerPlayer.values());
 					List<Player> playersWithMostMeeples = meeplesPerPlayer.entrySet().stream()
 							.filter(e -> e.getValue().equals(maxMeepleCount)).map(e -> e.getKey())
@@ -286,7 +291,8 @@ public class Gameboard extends Observable<Gameboard> {
 					// in case of a tie: every player gets the points
 					for (Player p : playersWithMostMeeples) {
 						p.addScore(score);
-						LOG.info("Player " + p.getName() + " scored " + score + " points completing a " + node.getType().toString().toLowerCase() + ".");
+						LOG.info("Player " + p.getName() + " scored " + score + " points completing a "
+								+ node.getType().toString().toLowerCase() + ".");
 					}
 
 					// Now that the score is added, the meeple are returned to the players
@@ -297,14 +303,16 @@ public class Gameboard extends Observable<Gameboard> {
 					}
 				}
 
-				System.out.println(type.toString() + " of " + score + " points. Connects? " + completed + ".");
+				LOG.finer(type.toString() + " of " + score + " points. Connects? " + completed + ".");
 
-				nodesWithMeeple = new LinkedList<FeatureNode>();
+				// reset all variables that correspond to a single subgraph
+				nodesWithMeeple = new LinkedList<FeatureNode>(); // reset nodes with meeple
 				meeplesPerPlayer = new HashMap<Player, Integer>(); // reset collected meeples
 				score = 0; // reset score
 				completed = true; // reset connects
 				visitedTiles = new LinkedList<Tile>(); // rest visited tiles
-				// If there are nonetheless nodes left, there must be another subgraph
+
+				// If there are still nodes left, there must be another subgraph
 				if (!nodeList.isEmpty())
 					queue.push(nodeList.remove(0));
 			}
@@ -324,8 +332,8 @@ public class Gameboard extends Observable<Gameboard> {
 	}
 
 	/**
-	 * Returns the spots on which it is allowed to place a meeple on the most
-	 * recently placed tile.
+	 * Returns the spots on the most recently placed tile on which it is allowed to
+	 * place a meeple .
 	 * 
 	 * @return The spots on which it is allowed to place a meeple as a boolean array
 	 *         representing the tile split in nine cells from top left, to right, to
