@@ -63,13 +63,15 @@
 	</tile>
 
 	<tile type="D" ammount="4">
-		<!-- FIELDS ON TOP STILL MISSING -->
+		<node feature="FIELDS" position="TOPLEFT" direction="X"/>
 		<node feature="CASTLE" position="TOP" meeplespot="true"/>
+		<node feature="FIELDS" position="TOPRIGHT" direction="X"/>
 		<node feature="ROAD" position="LEFT" meeplespot="true"/>
 		<node feature="ROAD" position="RIGHT"/>
 		<node feature="FIELDS" position="BOTTOMLEFT" direction="X"/>
 		<node feature="FIELDS" position="BOTTOM" meeplespot="true"/>
 		<node feature="FIELDS" position="BOTTOMRIGHT" direction="X"/>
+		<edge a="TOPLEFT" b="TOPRIGHT"/>
 		<edge a="LEFT" b="RIGHT"/>
 		<edge a="BOTTOMLEFT" b="BOTTOM"/>
 		<edge a="BOTTOMRIGHT" b="BOTTOM"/>
@@ -124,7 +126,7 @@
 		<node feature="FIELDS" position="LEFT" meeplespot="true"/>
 		<node feature="FIELDS" position="CENTER"/>
 		<node feature="ROAD" position="RIGHT"/>
-		<node feature="FIELDS" position="BOTTOMLEFT" direction="BOTH"/>
+		<node feature="FIELDS" position="BOTTOMLEFT" direction="Y"/>
 		<node feature="ROAD" position="BOTTOM" meeplespot="true"/>
 		<node feature="FIELDS" position="BOTTOMRIGHT" direction="BOTH"/>
 		<edge a="LEFT" b="CENTER"/>
@@ -141,7 +143,7 @@
 		<node feature="FIELDS" position="RIGHT" meeplespot="true"/>
 		<node feature="FIELDS" position="BOTTOMLEFT" direction="BOTH"/>
 		<node feature="ROAD" position="BOTTOM"/>
-		<node feature="FIELDS" position="BOTTOMRIGHT" direction="X"/> <!-- wg. RIGHT -->
+		<node feature="FIELDS" position="BOTTOMRIGHT" direction="Y"/>
 		<edge a="LEFT" b="BOTTOM"/>
 		<edge a="TOPLEFT" b="CENTER"/>
 		<edge a="RIGHT" b="CENTER"/>

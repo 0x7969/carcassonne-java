@@ -3,10 +3,15 @@ package fop.model;
 import static fop.model.FeatureType.CASTLE;
 import static fop.model.FeatureType.ROAD;
 import static fop.model.FeatureType.MONASTERY;
+import static fop.model.FeatureType.FIELDS;
 import static fop.model.Position.BOTTOM;
 import static fop.model.Position.LEFT;
 import static fop.model.Position.RIGHT;
 import static fop.model.Position.TOP;
+import static fop.model.Position.TOPRIGHT;
+import static fop.model.Position.TOPLEFT;
+import static fop.model.Position.BOTTOMLEFT;
+import static fop.model.Position.BOTTOMRIGHT;
 
 import java.util.ArrayDeque;
 import java.util.ArrayList;
@@ -68,21 +73,44 @@ public class Gameboard extends Observable<Gameboard> {
 		// Check top tile
 		if (board[x][y - 1] != null) {
 			graph.addEdge(board[x][y - 1].getNode(BOTTOM), t.getNode(TOP), 1);
+
+			// If there are two diagonal nodes facing each other on both tiles, it is safe
+			// to say that they are fields and that they will be found on both sides of each
+			// tile (both left and right).
+			if (board[x][y - 1].getNode(BOTTOMLEFT) != null && board[x][y - 1].getNode(BOTTOMLEFT).getDirection() != Direction.X  && t.getNode(TOPLEFT) != null && t.getNode(TOPLEFT).getDirection() != Direction.X) {
+				graph.addEdge(board[x][y - 1].getNode(BOTTOMLEFT), t.getNode(TOPLEFT));
+				graph.addEdge(board[x][y - 1].getNode(BOTTOMRIGHT), t.getNode(TOPRIGHT));
+			}
 		}
 
 		// Check left tile
 		if (board[x - 1][y] != null) {
 			graph.addEdge(board[x - 1][y].getNode(RIGHT), t.getNode(LEFT), 1);
+			
+			if (board[x - 1][y].getNode(TOPRIGHT) != null && board[x - 1][y].getNode(TOPRIGHT).getDirection() != Direction.Y && t.getNode(TOPLEFT) != null && t.getNode(TOPLEFT).getDirection() != Direction.Y) {
+				graph.addEdge(board[x - 1][y].getNode(TOPRIGHT), t.getNode(TOPLEFT));
+				graph.addEdge(board[x - 1][y].getNode(BOTTOMRIGHT), t.getNode(BOTTOMLEFT));
+			}
 		}
 
 		// Check right tile
 		if (board[x + 1][y] != null) {
 			graph.addEdge(board[x + 1][y].getNode(LEFT), t.getNode(RIGHT), 1);
+			
+			if (board[x + 1][y].getNode(TOPLEFT) != null && board[x + 1][y].getNode(TOPLEFT).getDirection() != Direction.Y && t.getNode(TOPRIGHT) != null && t.getNode(TOPRIGHT).getDirection() != Direction.Y) {
+				graph.addEdge(board[x + 1][y].getNode(TOPLEFT), t.getNode(TOPRIGHT));
+				graph.addEdge(board[x + 1][y].getNode(BOTTOMLEFT), t.getNode(BOTTOMRIGHT));
+			}
 		}
 
 		// Check bottom tile
 		if (board[x][y + 1] != null) {
 			graph.addEdge(board[x][y + 1].getNode(TOP), t.getNode(BOTTOM), 1);
+			
+			if (board[x][y + 1].getNode(TOPLEFT) != null && board[x][y + 1].getNode(TOPLEFT).getDirection() != Direction.X && t.getNode(BOTTOMLEFT) != null && t.getNode(BOTTOMLEFT).getDirection() != Direction.X) {
+				graph.addEdge(board[x][y + 1].getNode(TOPLEFT), t.getNode(BOTTOMLEFT));
+				graph.addEdge(board[x][y + 1].getNode(TOPRIGHT), t.getNode(BOTTOMRIGHT));
+			}
 		}
 	}
 
@@ -130,6 +158,7 @@ public class Gameboard extends Observable<Gameboard> {
 	public void calculatePoints(State state) {
 		calculatePoints(ROAD, state);
 		calculatePoints(CASTLE, state);
+		calculatePoints(FIELDS, state);
 		calculateMonasteries(state);
 		// TODO eigentlich müsste man das gar nicht trennen. wir wollen nur wiesen noch
 		// nicht behandeln.
@@ -153,57 +182,41 @@ public class Gameboard extends Observable<Gameboard> {
 				// Check top left tile
 				if (board[x - 1][y - 1] != null) {
 					score++;
-					System.out.print(score + " ");
-					System.out.println(board[x - 1][y - 1].getType());
 				}
 
 				// Check top tile
 				if (board[x][y - 1] != null) {
 					score++;
-					System.out.print(score + " ");
-					System.out.println(board[x][y - 1].getType());
 				}
 
 				// Check top right tile
 				if (board[x + 1][y - 1] != null) {
 					score++;
-					System.out.print(score + " ");
-					System.out.println(board[x + 1][y - 1].getType());
 				}
 
 				// Check left tile
 				if (board[x - 1][y] != null) {
 					score++;
-					System.out.print(score + " ");
-					System.out.println(board[x - 1][y].getType());
 				}
 
 				// Check right tile
 				if (board[x + 1][y] != null) {
 					score++;
-					System.out.print(score + " ");
-					System.out.println(board[x + 1][y].getType());
 				}
 
 				// Check bottom left tile
 				if (board[x - 1][y + 1] != null) {
 					score++;
-					System.out.print(score + " ");
-					System.out.println(board[x - 1][y + 1].getType());
 				}
 
 				// Check bottom tile
 				if (board[x][y + 1] != null) {
 					score++;
-					System.out.print(score + " ");
-					System.out.println(board[x][y + 1].getType());
 				}
 
 				// Check bottom right tile
 				if (board[x + 1][y + 1] != null) {
 					score++;
-					System.out.print(score + " ");
-					System.out.println(board[x + 1][y + 1].getType());
 				}
 
 				if (score == 9 || state == State.GAME_OVER) {
@@ -247,7 +260,7 @@ public class Gameboard extends Observable<Gameboard> {
 
 			// If there is one straight positioned node that does not connect to another
 			// tile, the feature cannot be completed.
-			if (tile.isNodeOnStraightPosition(node) && !node.isConnectingTiles()) {
+			if (!node.isConnectingTiles()) {
 				completed = false;
 			}
 
