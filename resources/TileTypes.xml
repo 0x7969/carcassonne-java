@@ -37,8 +37,8 @@
 		<node feature="FIELDS" position="RIGHT"/>
 		<node feature="FIELDS" position="BOTTOM"/>
 		<edge a="TOP" b="LEFT"/>
-		<edge a="TOP" b="RIGHT"/>
 		<edge a="LEFT" b="RIGHT"/>
+		<edge a="RIGHT" b="BOTTOM"/>
 	</tile>
 
 	<tile type="C" ammount="1" pennant="true">
