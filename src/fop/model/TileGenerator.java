@@ -15,8 +15,7 @@ import org.w3c.dom.NodeList;
 
 import fop.base.WeightedEdge;
 
-// TODO da wider erwarten keine unterklassen von tile gebraucht werden, ist das hier eigtl. auch keine factory...
-public class TileFactory {
+public class TileGenerator {
 
 	private List<Tile> tiles;
 	Tile startTile;
@@ -24,7 +23,7 @@ public class TileFactory {
 	static final String TILETYPES_FILE_LOCATION = "resources/TileTypes.xml";
 	static final String START_TILE_TYPE = "D";
 
-	public TileFactory() {
+	public TileGenerator() {
 
 		tiles = new LinkedList<Tile>();
 

@@ -8,12 +8,13 @@ import fop.view.Observer;
 
 public class TileStack extends Observable<TileStack> {
 	private List<Tile> cardstack; // stack wäre natürlich naheliegender aber eignet sich weniger gut zum mischen
-	// TODO in stack umwandeln. einfach vorher factory.gettiles.. und das shufflen. danach erst auf stack legen.
-	private TileFactory factory;
+	// TODO in stack umwandeln. einfach vorher factory.gettiles.. und das shufflen.
+	// danach erst auf stack legen.
+	private TileGenerator factory;
 
 	public TileStack() {
 		cardstack = new LinkedList<Tile>();
-		factory = new TileFactory();
+		factory = new TileGenerator();
 
 		for (Tile tile : factory.getTiles()) {
 			cardstack.add(0, tile);
@@ -42,5 +43,12 @@ public class TileStack extends Observable<TileStack> {
 		cardstack.get(0).rotateRight();
 		for (Observer<TileStack> o : observers)
 			o.update(this);
+	}
+
+	/**
+	 * Simply removes the top tile.
+	 */
+	public void discardTopTile() {
+		cardstack.remove(0);
 	}
 }

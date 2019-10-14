@@ -74,6 +74,7 @@ public class GameBoardPanel extends JPanel implements Observer<Gameboard> {
 							rotateUntilAllowed();
 						}
 					}
+					break;
 				case PLACING_MEEPLE:
 					if (SwingUtilities.isLeftMouseButton(event)) {
 						Component c = event.getComponent();

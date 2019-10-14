@@ -91,6 +91,7 @@ public class Tile {
 		return nodes.get(p);
 	}
 
+	// TODO unused?
 	public boolean isNodeOnStraightPosition(FeatureNode n) {
 		if (nodes.get(TOP) == n)
 			return true;

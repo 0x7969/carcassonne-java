@@ -31,7 +31,7 @@ public class Gameboard extends Observable<Gameboard> {
 	private final static Logger LOG = Logger.getLogger("Carcassonne");
 
 	private Tile[][] board;
-	private List<Tile> tiles; // secondary structure as a helper, should be replaced
+	private List<Tile> tiles;
 	private final FeatureGraph graph;
 	private Tile newestTile;
 
@@ -47,7 +47,7 @@ public class Gameboard extends Observable<Gameboard> {
 	}
 
 	public void newTile(Tile t, int x, int y) {
-		t.x = x; // TODO unschön
+		t.x = x;
 		t.y = y;
 		board[x][y] = newestTile = t;
 		tiles.add(t);
@@ -77,39 +77,69 @@ public class Gameboard extends Observable<Gameboard> {
 			// If there are two diagonal nodes facing each other on both tiles, it is safe
 			// to say that they are fields and that they will be found on both sides of each
 			// tile (both left and right).
-			if (board[x][y - 1].getNode(BOTTOMLEFT) != null && board[x][y - 1].getNode(BOTTOMLEFT).getDirection() != Direction.X  && t.getNode(TOPLEFT) != null && t.getNode(TOPLEFT).getDirection() != Direction.X) {
-				graph.addEdge(board[x][y - 1].getNode(BOTTOMLEFT), t.getNode(TOPLEFT));
-				graph.addEdge(board[x][y - 1].getNode(BOTTOMRIGHT), t.getNode(TOPRIGHT));
+//			if (board[x][y - 1].getNode(BOTTOMLEFT) != null
+//					&& board[x][y - 1].getNode(BOTTOMLEFT).getDirection() != Direction.X && t.getNode(TOPLEFT) != null
+//					&& t.getNode(TOPLEFT).getDirection() != Direction.X) {
+//				graph.addEdge(board[x][y - 1].getNode(BOTTOMLEFT), t.getNode(TOPLEFT));
+//				graph.addEdge(board[x][y - 1].getNode(BOTTOMRIGHT), t.getNode(TOPRIGHT));
+//			}
+
+			// As we already ensured that the tile on top exists and fits the tile at x, y,
+			// we know that if the feature of its top is a ROAD, the feature at the bottom
+			// of the tile on top is a ROAD aswell. As every ROAD has FIELD nodes as
+			// neighbours on both sides, we can connect those nodes of the two tiles. The
+			// same logic applies to the next three routines.
+			if (t.getNode(TOP).getType() == ROAD) {
+				graph.addEdge(board[x][y - 1].getNode(BOTTOMLEFT), t.getNode(TOPLEFT), 1);
+				graph.addEdge(board[x][y - 1].getNode(BOTTOMRIGHT), t.getNode(TOPRIGHT), 1);
 			}
 		}
 
 		// Check left tile
 		if (board[x - 1][y] != null) {
 			graph.addEdge(board[x - 1][y].getNode(RIGHT), t.getNode(LEFT), 1);
-			
-			if (board[x - 1][y].getNode(TOPRIGHT) != null && board[x - 1][y].getNode(TOPRIGHT).getDirection() != Direction.Y && t.getNode(TOPLEFT) != null && t.getNode(TOPLEFT).getDirection() != Direction.Y) {
-				graph.addEdge(board[x - 1][y].getNode(TOPRIGHT), t.getNode(TOPLEFT));
-				graph.addEdge(board[x - 1][y].getNode(BOTTOMRIGHT), t.getNode(BOTTOMLEFT));
+
+//			if (board[x - 1][y].getNode(TOPRIGHT) != null
+//					&& board[x - 1][y].getNode(TOPRIGHT).getDirection() != Direction.Y && t.getNode(TOPLEFT) != null
+//					&& t.getNode(TOPLEFT).getDirection() != Direction.Y) {
+//				graph.addEdge(board[x - 1][y].getNode(TOPRIGHT), t.getNode(TOPLEFT));
+//				graph.addEdge(board[x - 1][y].getNode(BOTTOMRIGHT), t.getNode(BOTTOMLEFT));
+//			}
+			if (t.getNode(LEFT).getType() == ROAD) {
+				graph.addEdge(board[x - 1][y].getNode(TOPRIGHT), t.getNode(TOPLEFT), 1);
+				graph.addEdge(board[x - 1][y].getNode(BOTTOMRIGHT), t.getNode(BOTTOMLEFT), 1);
 			}
 		}
 
 		// Check right tile
 		if (board[x + 1][y] != null) {
 			graph.addEdge(board[x + 1][y].getNode(LEFT), t.getNode(RIGHT), 1);
-			
-			if (board[x + 1][y].getNode(TOPLEFT) != null && board[x + 1][y].getNode(TOPLEFT).getDirection() != Direction.Y && t.getNode(TOPRIGHT) != null && t.getNode(TOPRIGHT).getDirection() != Direction.Y) {
-				graph.addEdge(board[x + 1][y].getNode(TOPLEFT), t.getNode(TOPRIGHT));
-				graph.addEdge(board[x + 1][y].getNode(BOTTOMLEFT), t.getNode(BOTTOMRIGHT));
+
+//			if (board[x + 1][y].getNode(TOPLEFT) != null
+//					&& board[x + 1][y].getNode(TOPLEFT).getDirection() != Direction.Y && t.getNode(TOPRIGHT) != null
+//					&& t.getNode(TOPRIGHT).getDirection() != Direction.Y) {
+//				graph.addEdge(board[x + 1][y].getNode(TOPLEFT), t.getNode(TOPRIGHT));
+//				graph.addEdge(board[x + 1][y].getNode(BOTTOMLEFT), t.getNode(BOTTOMRIGHT));
+//			}
+			if (t.getNode(RIGHT).getType() == ROAD) {
+				graph.addEdge(board[x + 1][y].getNode(TOPLEFT), t.getNode(TOPRIGHT), 1);
+				graph.addEdge(board[x + 1][y].getNode(BOTTOMLEFT), t.getNode(BOTTOMRIGHT), 1);
 			}
 		}
 
 		// Check bottom tile
 		if (board[x][y + 1] != null) {
 			graph.addEdge(board[x][y + 1].getNode(TOP), t.getNode(BOTTOM), 1);
-			
-			if (board[x][y + 1].getNode(TOPLEFT) != null && board[x][y + 1].getNode(TOPLEFT).getDirection() != Direction.X && t.getNode(BOTTOMLEFT) != null && t.getNode(BOTTOMLEFT).getDirection() != Direction.X) {
-				graph.addEdge(board[x][y + 1].getNode(TOPLEFT), t.getNode(BOTTOMLEFT));
-				graph.addEdge(board[x][y + 1].getNode(TOPRIGHT), t.getNode(BOTTOMRIGHT));
+
+//			if (board[x][y + 1].getNode(TOPLEFT) != null
+//					&& board[x][y + 1].getNode(TOPLEFT).getDirection() != Direction.X && t.getNode(BOTTOMLEFT) != null
+//					&& t.getNode(BOTTOMLEFT).getDirection() != Direction.X) {
+//				graph.addEdge(board[x][y + 1].getNode(TOPLEFT), t.getNode(BOTTOMLEFT));
+//				graph.addEdge(board[x][y + 1].getNode(TOPRIGHT), t.getNode(BOTTOMRIGHT));
+//			}
+			if (t.getNode(BOTTOM).getType() == ROAD) {
+				graph.addEdge(board[x][y + 1].getNode(TOPLEFT), t.getNode(BOTTOMLEFT), 1);
+				graph.addEdge(board[x][y + 1].getNode(TOPRIGHT), t.getNode(BOTTOMRIGHT), 1);
 			}
 		}
 	}
@@ -155,11 +185,48 @@ public class Gameboard extends Observable<Gameboard> {
 		return true;
 	}
 
-	public void calculatePoints(State state) {
-		calculatePoints(ROAD, state);
-		calculatePoints(CASTLE, state);
-		calculatePoints(FIELDS, state);
-		calculateMonasteries(state);
+	public boolean isTileAllowedAnywhere(Tile newTile) {
+		for (Tile tile : tiles) {
+			// check top
+			if (board[tile.x][tile.y - 1] == null)
+				for (int i = 0; i < 4; i++) {
+					if (isTileAllowed(newTile, tile.x, tile.y - 1))
+						return true;
+					newTile.rotateRight();
+				}
+
+			// check left
+			if (board[tile.x - 1][tile.y] == null)
+				for (int i = 0; i < 4; i++) {
+					if (isTileAllowed(newTile, tile.x - 1, tile.y))
+						return true;
+					newTile.rotateRight();
+				}
+
+			// check right
+			if (board[tile.x + 1][tile.y] == null)
+				for (int i = 0; i < 4; i++) {
+					if (isTileAllowed(newTile, tile.x + 1, tile.y))
+						return true;
+					newTile.rotateRight();
+				}
+
+			// check bottom
+			if (board[tile.x][tile.y + 1] == null)
+				for (int i = 0; i < 4; i++) {
+					if (isTileAllowed(newTile, tile.x, tile.y + 1))
+						return true;
+					newTile.rotateRight();
+				}
+		}
+		return false;
+	}
+
+	public void calculatePoints(State s) {
+		calculatePoints(ROAD, s);
+		calculatePoints(CASTLE, s);
+		calculatePoints(FIELDS, s);
+		calculateMonasteries(s);
 		// TODO eigentlich müsste man das gar nicht trennen. wir wollen nur wiesen noch
 		// nicht behandeln.
 		// sobald die verbindung/berechnung der wiesen funktioniert, können alle punkte
@@ -171,7 +238,7 @@ public class Gameboard extends Observable<Gameboard> {
 	/**
 	 * Calculates points for monasteries (one point for each adjacent tile).
 	 */
-	private void calculateMonasteries(State state) {
+	private void calculateMonasteries(State s) {
 		int score = 1;
 		for (Tile t : tiles) {
 			FeatureNode node = t.getNode(Position.CENTER);
@@ -219,7 +286,7 @@ public class Gameboard extends Observable<Gameboard> {
 					score++;
 				}
 
-				if (score == 9 || state == State.GAME_OVER) {
+				if (score == 9 || s == State.GAME_OVER) {
 					node.getPlayer().addScore(score);
 					node.getPlayer().returnMeeple();
 					LOG.info("Player " + node.getPlayer().getName() + " scored " + score
@@ -276,9 +343,11 @@ public class Gameboard extends Observable<Gameboard> {
 			List<WeightedEdge<FeatureType>> edges = graph.getEdges(node);
 			for (WeightedEdge<FeatureType> edge : edges) {
 				Node<FeatureType> nextNode = edge.getOtherNode(node);
+				if (((FeatureNode) nextNode).getType() != type)
+					System.out.println("FATAL ERROR LAWL");
 				if (nodeList.contains(nextNode)) {
 					LOG.finer("Adding points of edge connecting a " + node.getValue() + " on " + tile.x + "/" + tile.y
-							+ "and a " + edge.getOtherNode(node).getValue() + ", weight " + edge.getWeight());
+							+ " and a " + edge.getOtherNode(node).getValue() + ", weight " + edge.getWeight());
 //					score += edge.getWeight();
 
 					queue.push(nextNode);

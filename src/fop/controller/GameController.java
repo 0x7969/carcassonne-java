@@ -50,7 +50,7 @@ public class GameController extends Observable<Player[]> {
 		currentRound = 0;
 
 		// set up logging
-		LOG.setLevel(Level.FINEST);
+		LOG.setLevel(Level.FINER);
 		ConsoleHandler consoleHandler = new ConsoleHandler();
 		consoleHandler.setLevel(LOG.getLevel());
 //		LOG.addHandler(consoleHandler);
@@ -116,12 +116,17 @@ public class GameController extends Observable<Player[]> {
 			setupListeners();
 			setupObservers();
 			initGameBoard();
-
 			setState(State.PLACING_TILE);
 			break;
 		case PLACING_TILE:
 			System.out.println("Entered PLACING_TILE");
 			push(players); // push players to observers (= ToolbarPanel)
+			// According to the rules, a tile that does not fit anywhere is not mixed into
+			// the stack again, but simply discarded.
+			if (!board.isTileAllowedAnywhere(stack.peekTile())) {
+				LOG.info("A tile of type " + stack.peekTile().getType() + " did not have any legal placement options and was discarded.");
+				stack.discardTopTile();
+			}
 			stack.push(stack); // pushes tile stack to observers (= TileStackPanel)
 			view.getToolbarPanel().hideSkipButton();
 			view.setStatusbar("Player " + currentPlayer().getName() + ", please place a tile.");
