@@ -358,7 +358,7 @@ public class Gameboard extends Observable<Gameboard> {
 					score *= 2;
 				
 				// In our simple variant of counting every tile with fields, scoring fields
-				// gets rather imbalanced, so we just divide the points by four.
+				// gets rather imbalanced, so we just divide the points for fields by four.
 				if (type == FIELDS)
 					score /= 4;
 

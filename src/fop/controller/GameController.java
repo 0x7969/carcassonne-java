@@ -262,6 +262,10 @@ public class GameController extends Observable<List<Player>> {
 		});
 	}
 
+	/**
+	 * Go to next round or set state to GAME_OVER (final scoring), when there are no
+	 * remaining tiles.
+	 */
 	public void nextRound() {
 		boardPanel.removeTempMeepleOverlay();
 		if (stack.remainingTiles() == 0)
