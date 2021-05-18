@@ -1,9 +1,11 @@
 package fop.view;
 
+import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.event.ActionListener;
 import java.util.List;
 
+import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -21,8 +23,9 @@ public class ToolbarPanel extends JPanel implements Observer<List<Player>> {
 
 		playerLabels = new JLabel[players.size()];
 		for (int i = 0; i < players.size(); i++) {
-			playerLabels[i] = new JLabel(players.get(i).getName() + " Score:  " + players.get(i).getScore() + " Meeples: "
-					+ players.get(i).getMeepleAmount());
+			playerLabels[i] = new JLabel();
+			playerLabels[i].setBorder(BorderFactory.createTitledBorder(players.get(i).getName()));
+			playerLabels[i].setPreferredSize(new Dimension(100, 65));
 			add(playerLabels[i]);
 		}
 
@@ -64,8 +67,8 @@ public class ToolbarPanel extends JPanel implements Observer<List<Player>> {
 	 */
 	private void updatePlayers(List<Player> players) {
 		for (int i = 0; i < players.size(); i++) {
-			playerLabels[i].setText(players.get(i).getName() + " Score:  " + players.get(i).getScore() + " Meeples: "
-					+ players.get(i).getMeepleAmount());
+			playerLabels[i].setText("<html>Score:  " + players.get(i).getScore() + "<br>Meeples: "
+					+ players.get(i).getMeepleAmount() + "<br></html>");
 		}
 	}
 
