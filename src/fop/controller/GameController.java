@@ -171,7 +171,8 @@ public class GameController extends Observable<Player[]> {
 	private void setupListeners() {
 		view.getToolbarPanel().addToolbarActionListeners((event) -> {
 			switch (event.getActionCommand()) {
-			case "Quit":
+			case "Zum Hauptmenü":
+				setState(State.GAME_MENU);
 				window.dispose();
 				break;
 			case "Skip":

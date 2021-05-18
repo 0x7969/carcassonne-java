@@ -23,7 +23,7 @@ import fop.model.Position;
  */
 public class MeeplePanel extends JPanel {
 
-	protected static final String FOLDER = "resources/meeple/";
+	protected static final String FOLDER = "res/meeple/";
 
 	protected BufferedImage meepleImage;
 	protected Position position; // the meeple spots position inside the tile its on

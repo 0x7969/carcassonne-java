@@ -12,7 +12,7 @@ import javax.swing.JPanel;
 
 public class TilePanel extends JPanel {
 	
-	private static final String FOLDER = "resources/tiles_/";
+	private static final String FOLDER = "res/tiles_/";
 
 	private BufferedImage tileImage;
 	private String type;

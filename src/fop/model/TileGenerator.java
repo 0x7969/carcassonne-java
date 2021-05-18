@@ -20,7 +20,7 @@ public class TileGenerator {
 	private List<Tile> tiles;
 	Tile startTile;
 
-	static final String TILETYPES_FILE_LOCATION = "resources/TileTypes.xml";
+	static final String TILETYPES_FILE_LOCATION = "res/TileTypes.xml";
 	static final String START_TILE_TYPE = "D";
 
 	public TileGenerator() {

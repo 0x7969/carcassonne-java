@@ -26,7 +26,7 @@ public class ToolbarPanel extends JPanel implements Observer<Player[]> {
 			add(playerLabels[i]);
 		}
 
-		quitButton = new JButton("Quit");
+		quitButton = new JButton("Zum Hauptmenü");
 		add(quitButton);
 
 		skipButton = new JButton("Skip");
