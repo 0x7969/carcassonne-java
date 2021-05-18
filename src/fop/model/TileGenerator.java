@@ -13,7 +13,7 @@ import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
-import fop.base.WeightedEdge;
+import fop.base.Edge;
 
 public class TileGenerator {
 
@@ -89,7 +89,7 @@ public class TileGenerator {
 
 						Node node = enl.item(k);
 						NamedNodeMap nodeAttributes = node.getAttributes();
-						newTile.addEdge(new WeightedEdge<FeatureType>(
+						newTile.addEdge(new Edge<FeatureType>(
 								newTile.getNode(Position.valueOf(nodeAttributes.getNamedItem("a").getNodeValue())),
 								newTile.getNode(Position.valueOf(nodeAttributes.getNamedItem("b").getNodeValue()))));
 					}

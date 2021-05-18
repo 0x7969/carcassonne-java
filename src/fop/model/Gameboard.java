@@ -23,7 +23,7 @@ import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
 import fop.base.Node;
-import fop.base.WeightedEdge;
+import fop.base.Edge;
 import fop.controller.State;
 
 public class Gameboard extends Observable<Gameboard> {
@@ -340,16 +340,12 @@ public class Gameboard extends Observable<Gameboard> {
 				meeplesPerPlayer.put(meeple, previousMeeplesFromPlayer + 1);
 			}
 
-			List<WeightedEdge<FeatureType>> edges = graph.getEdges(node);
-			for (WeightedEdge<FeatureType> edge : edges) {
+			List<Edge<FeatureType>> edges = graph.getEdges(node);
+			for (Edge<FeatureType> edge : edges) {
 				Node<FeatureType> nextNode = edge.getOtherNode(node);
 				if (((FeatureNode) nextNode).getType() != type)
 					System.out.println("FATAL ERROR LAWL");
 				if (nodeList.contains(nextNode)) {
-					LOG.finer("Adding points of edge connecting a " + node.getValue() + " on " + tile.x + "/" + tile.y
-							+ " and a " + edge.getOtherNode(node).getValue() + ", weight " + edge.getWeight());
-//					score += edge.getWeight();
-
 					queue.push(nextNode);
 					nodeList.remove(nextNode);
 				}
@@ -444,8 +440,8 @@ public class Gameboard extends Observable<Gameboard> {
 			if (node.hasMeeple())
 				return true;
 
-			List<WeightedEdge<FeatureType>> edges = graph.getEdges(node);
-			for (WeightedEdge<FeatureType> edge : edges) {
+			List<Edge<FeatureType>> edges = graph.getEdges(node);
+			for (Edge<FeatureType> edge : edges) {
 				Node<FeatureType> nextNode = edge.getOtherNode(node);
 				if (!visitedNodes.contains(nextNode)) {
 					queue.push(nextNode);

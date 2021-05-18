@@ -19,7 +19,7 @@ import java.util.stream.Collectors;
  */
 public class Graph<T> {
 
-	private List<WeightedEdge<T>> edges;
+	private List<Edge<T>> edges;
 	private List<Node<T>> nodes;
 
 	/**
@@ -57,29 +57,29 @@ public class Graph<T> {
 	 * @return Die erstellte oder bereits vorhandene Kante zwischen beiden gegebenen
 	 *         Knoten
 	 */
-	public WeightedEdge<T> addEdge(Node<T> nodeA, Node<T> nodeB) {
-		WeightedEdge<T> edge = getEdge(nodeA, nodeB);
+	public Edge<T> addEdge(Node<T> nodeA, Node<T> nodeB) {
+		Edge<T> edge = getEdge(nodeA, nodeB);
 		if (edge != null) {
 			return edge;
 		}
 
-		edge = new WeightedEdge<>(nodeA, nodeB);
+		edge = new Edge<>(nodeA, nodeB);
 		this.edges.add(edge);
 		return edge;
 	}
 
-	public WeightedEdge<T> addEdge(Node<T> nodeA, Node<T> nodeB, int weight) {
-		WeightedEdge<T> edge = getEdge(nodeA, nodeB);
+	public Edge<T> addEdge(Node<T> nodeA, Node<T> nodeB, int weight) {
+		Edge<T> edge = getEdge(nodeA, nodeB);
 		if (edge != null) {
 			return edge;
 		}
 
-		edge = new WeightedEdge<>(nodeA, nodeB, weight);
+		edge = new Edge<>(nodeA, nodeB, weight);
 		this.edges.add(edge);
 		return edge;
 	}
 
-	public boolean addAllEdges(Collection<WeightedEdge<T>> edges) {
+	public boolean addAllEdges(Collection<Edge<T>> edges) {
 		return this.edges.addAll(edges); // TODO kann das probleme machen? die methode addEdge prüft vorher noch ob sie
 											// bereits vorhanden ist.
 	}
@@ -98,7 +98,7 @@ public class Graph<T> {
 	 * 
 	 * @return die Liste aller Kanten
 	 */
-	public List<WeightedEdge<T>> getEdges() {
+	public List<Edge<T>> getEdges() {
 		return this.edges;
 	}
 
@@ -123,7 +123,7 @@ public class Graph<T> {
 	 * @see java.util.stream.Stream#collect(Collector)
 	 * @return Die Liste aller zum Knoten zugehörigen Kanten
 	 */
-	public List<WeightedEdge<T>> getEdges(Node<T> node) {
+	public List<Edge<T>> getEdges(Node<T> node) {
 		return this.edges.stream().filter(edge -> edge.contains(node)).collect(Collectors.toList());
 	}
 
@@ -135,7 +135,7 @@ public class Graph<T> {
 	 * @param nodeB Der zweite Knoten
 	 * @return Die Kante zwischen beiden Knoten oder null
 	 */
-	public WeightedEdge<T> getEdge(Node<T> nodeA, Node<T> nodeB) {
+	public Edge<T> getEdge(Node<T> nodeA, Node<T> nodeB) {
 		return this.edges.stream().filter(edge -> (edge.getNodeA() == nodeA && edge.getNodeB() == nodeB)
 				|| (edge.getNodeA() == nodeB && edge.getNodeB() == nodeA)).findFirst().orElse(null);
 	}
@@ -176,8 +176,8 @@ public class Graph<T> {
 
 		while (!queue.isEmpty()) {
 			Node<T> node = queue.pop();
-			List<WeightedEdge<T>> edges = this.getEdges(node);
-			for (WeightedEdge<T> edge : edges) {
+			List<Edge<T>> edges = this.getEdges(node);
+			for (Edge<T> edge : edges) {
 				Node<T> nextNode = edge.getOtherNode(node);
 				if (nodeList.contains(nextNode)) {
 					queue.push(nextNode);
