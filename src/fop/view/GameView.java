@@ -74,5 +74,4 @@ public class GameView extends JPanel {
 	public void setStatusbar(String status) {
 		statusbarPanel.setText(status);
 	}
-
 }

@@ -2,6 +2,7 @@ package fop.view;
 
 import java.awt.FlowLayout;
 import java.awt.event.ActionListener;
+import java.util.List;
 
 import javax.swing.JButton;
 import javax.swing.JLabel;
@@ -9,19 +10,19 @@ import javax.swing.JPanel;
 
 import fop.model.Player;
 
-public class ToolbarPanel extends JPanel implements Observer<Player[]> {
+public class ToolbarPanel extends JPanel implements Observer<List<Player>> {
 
 	JButton menuButton;
 	JButton skipButton;
 	JLabel[] playerLabels;
 
-	public ToolbarPanel(Player[] players) {
+	public ToolbarPanel(List<Player> players) {
 		setLayout(new FlowLayout(FlowLayout.LEFT));
 
-		playerLabels = new JLabel[players.length];
-		for (int i = 0; i < players.length; i++) {
-			playerLabels[i] = new JLabel(players[i].getName() + " Score:  " + players[i].getScore() + " Meeples: "
-					+ players[i].getMeepleAmount());
+		playerLabels = new JLabel[players.size()];
+		for (int i = 0; i < players.size(); i++) {
+			playerLabels[i] = new JLabel(players.get(i).getName() + " Score:  " + players.get(i).getScore() + " Meeples: "
+					+ players.get(i).getMeepleAmount());
 			add(playerLabels[i]);
 		}
 
@@ -61,15 +62,15 @@ public class ToolbarPanel extends JPanel implements Observer<Player[]> {
 	 * 
 	 * @param players An Array of the players
 	 */
-	private void updatePlayers(Player[] players) {
-		for (int i = 0; i < players.length; i++) {
-			playerLabels[i].setText(players[i].getName() + " Score:  " + players[i].getScore() + " Meeples: "
-					+ players[i].getMeepleAmount());
+	private void updatePlayers(List<Player> players) {
+		for (int i = 0; i < players.size(); i++) {
+			playerLabels[i].setText(players.get(i).getName() + " Score:  " + players.get(i).getScore() + " Meeples: "
+					+ players.get(i).getMeepleAmount());
 		}
 	}
 
 	@Override
-	public void update(Player[] players) {
+	public void update(List<Player> players) {
 		updatePlayers(players);
 	}
 

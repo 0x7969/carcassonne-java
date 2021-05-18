@@ -71,6 +71,7 @@ public class Tile {
 		return nodes.get(p).getType();
 	}
 
+	// TODO unused?
 	public FeatureType featureAtPositionComingFromDirection(Position p, Direction d) {
 		FeatureNode n = nodes.get(p);
 		if (n != null && n.getDirection() == d)
