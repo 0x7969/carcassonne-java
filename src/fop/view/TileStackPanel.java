@@ -5,6 +5,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import fop.model.TileStack;
+import static fop.model.TileType.FLIPSIDE;
 
 public class TileStackPanel extends JPanel implements Observer<TileStack> {
 	TilePanel topTile;
@@ -13,7 +14,7 @@ public class TileStackPanel extends JPanel implements Observer<TileStack> {
 	public TileStackPanel() {
 		setBorder(BorderFactory.createTitledBorder("Stack"));
 		
-		topTile = new TilePanel("FLIPSIDE", 100);
+		topTile = new TilePanel(FLIPSIDE, 100);
 		add(topTile);
 		
 		tileCounter = new JLabel();
@@ -28,8 +29,11 @@ public class TileStackPanel extends JPanel implements Observer<TileStack> {
 		tileCounter.setText(Integer.toString(tilestack.remainingTiles()));
 	}
 	
-	public void hideTileStack() {
-		topTile.setType("FLIPSIDE");
+	/**
+	 * Hides the top tile and shows its flipside instead.
+	 */
+	public void flipTopTile() {
+		topTile.setType(FLIPSIDE);
 		topTile.setRotation(0);
 		topTile.repaint();
 	}

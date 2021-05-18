@@ -145,7 +145,7 @@ public class GameController extends Observable<Player[]> {
 
 			Tile newestTile = board.getNewestTile();
 			boardPanel.showTemporaryMeepleOverlay(board.getMeepleSpots(), newestTile.x, newestTile.y, currentPlayer());
-			stackPanel.hideTileStack();
+			stackPanel.flipTopTile();
 			view.getToolbarPanel().showSkipButton();
 			view.setStatusbar(
 					"Player " + currentPlayer().getName() + ", please place a meeple or skip (right mouse button).");

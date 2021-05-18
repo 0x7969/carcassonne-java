@@ -19,7 +19,7 @@ import java.util.TreeMap;
 import fop.base.WeightedEdge;
 
 public class Tile {
-	private String type;
+	private TileType type;
 	private SortedMap<Position, FeatureNode> nodes; // by using a sorted map, the key and value pairs will be sorted
 													// from left to right, top to bottom (following the Position enums
 													// order).
@@ -29,21 +29,21 @@ public class Tile {
 	public int x;
 	public int y;
 
-	public Tile(String type) {
+	public Tile(TileType type) {
 		this.type = type;
 		nodes = new TreeMap<Position, FeatureNode>();
 		edges = new LinkedList<WeightedEdge<FeatureType>>();
 		pennant = false;
 	}
 
-	public Tile(String type, boolean coatOfArms) {
+	public Tile(TileType type, boolean coatOfArms) {
 		this.type = type;
 		nodes = new TreeMap<Position, FeatureNode>();
 		edges = new LinkedList<WeightedEdge<FeatureType>>();
 		this.pennant = coatOfArms;
 	}
 
-	public String getType() {
+	public TileType getType() {
 		return type;
 	}
 

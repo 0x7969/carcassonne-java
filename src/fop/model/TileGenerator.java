@@ -21,7 +21,7 @@ public class TileGenerator {
 	Tile startTile;
 
 	static final String TILETYPES_FILE_LOCATION = "res/TileTypes.xml";
-	static final String START_TILE_TYPE = "D";
+	static final TileType START_TILE_TYPE = TileType.D;
 
 	public TileGenerator() {
 
@@ -50,9 +50,9 @@ public class TileGenerator {
 					// If the tile has a pennant, pass that to the constructor
 					if (tileAttributes.getNamedItem("pennant") != null
 							&& tileAttributes.getNamedItem("pennant").getNodeValue().equals("true"))
-						newTile = new Tile(tileAttributes.getNamedItem("type").getNodeValue(), true);
+						newTile = new Tile(TileType.valueOf(tileAttributes.getNamedItem("type").getNodeValue()), true);
 					else
-						newTile = new Tile(tileAttributes.getNamedItem("type").getNodeValue());
+						newTile = new Tile(TileType.valueOf(tileAttributes.getNamedItem("type").getNodeValue()));
 
 					NodeList nnl = ((Element) tile).getElementsByTagName("node");
 

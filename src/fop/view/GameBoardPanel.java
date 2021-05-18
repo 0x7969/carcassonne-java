@@ -20,13 +20,15 @@ import fop.model.Player;
 import fop.model.Position;
 import fop.model.Tile;
 import fop.model.TileStack;
+import fop.model.TileType;
+import static fop.model.TileType.FLIPSIDE;
 
 public class GameBoardPanel extends JPanel implements Observer<Gameboard> {
 
 	private class TileOverlayPanel extends TilePanel implements Observer<TileStack> {
 
-		TileOverlayPanel(String id, int size) {
-			super(id, size);
+		TileOverlayPanel(TileType type, int size) {
+			super(type, size);
 		}
 
 		@Override
@@ -57,7 +59,7 @@ public class GameBoardPanel extends JPanel implements Observer<Gameboard> {
 		setLayout(gbl);
 		gbc = new GridBagConstraints();
 
-		tileOverlay = new TileOverlayPanel("FLIPSIDE", scale);
+		tileOverlay = new TileOverlayPanel(FLIPSIDE, scale);
 //		gc.addTileStackObserver(tileOverlay);
 
 		this.addMouseListener(new MouseAdapter() {
@@ -134,17 +136,17 @@ public class GameBoardPanel extends JPanel implements Observer<Gameboard> {
 		gbc.gridy = y;
 		gbc.gridx = x - 1;
 		if (!hasTileAt(gbc.gridx, gbc.gridy))
-			add(new TilePanel("FLIPSIDE", scale), gbc);
+			add(new TilePanel(FLIPSIDE, scale), gbc);
 		gbc.gridx = x + 1;
 		if (!hasTileAt(gbc.gridx, gbc.gridy))
-			add(new TilePanel("FLIPSIDE", scale), gbc);
+			add(new TilePanel(FLIPSIDE, scale), gbc);
 		gbc.gridx = x;
 		gbc.gridy = y + 1;
 		if (!hasTileAt(gbc.gridx, gbc.gridy))
-			add(new TilePanel("FLIPSIDE", scale), gbc);
+			add(new TilePanel(FLIPSIDE, scale), gbc);
 		gbc.gridy = y - 1;
 		if (!hasTileAt(gbc.gridx, gbc.gridy))
-			add(new TilePanel("FLIPSIDE", scale), gbc);
+			add(new TilePanel(FLIPSIDE, scale), gbc);
 		repaint(); // TODO not sure if necessary
 	}
 
@@ -233,7 +235,7 @@ public class GameBoardPanel extends JPanel implements Observer<Gameboard> {
 	 * @param x
 	 * @param y
 	 */
-	public void newTile(String type, int rotation, int x, int y) {
+	public void newTile(TileType type, int rotation, int x, int y) {
 		for (TilePanel t : getTiles()) {
 			if (gbl.getConstraints(t).gridx == x)
 				if (gbl.getConstraints(t).gridy == y) {
@@ -351,7 +353,7 @@ public class GameBoardPanel extends JPanel implements Observer<Gameboard> {
 			hideTileOverlay();
 		}
 
-		if (tile != null && !contains(tileOverlay) && tile.getType() == "FLIPSIDE") {
+		if (tile != null && !contains(tileOverlay) && tile.getType() == FLIPSIDE) {
 			for (int i = 0; i < 4; i++) {
 				if (gc.isTopTileAllowed(getGridX(tile), getGridY(tile))) {
 					tileWithOverlay = tile;
@@ -369,6 +371,9 @@ public class GameBoardPanel extends JPanel implements Observer<Gameboard> {
 		}
 	}
 
+	/**
+	 * Hides the tile overlay and shows the underlying tile.
+	 */
 	private void hideTileOverlay() {
 		remove(tileOverlay);
 		tileWithOverlay.setVisible(true);
@@ -376,6 +381,12 @@ public class GameBoardPanel extends JPanel implements Observer<Gameboard> {
 		repaint();
 	}
 
+	/**
+	 * Checks if a given component is part of this panel.
+	 * 
+	 * @param c The component
+	 * @return True if the component is part of this panels components.
+	 */
 	private boolean contains(Component c) {
 		for (Component component : getComponents())
 			if (component.equals(c))

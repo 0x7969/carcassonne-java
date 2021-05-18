@@ -10,27 +10,29 @@ import java.io.IOException;
 import javax.imageio.ImageIO;
 import javax.swing.JPanel;
 
+import fop.model.TileType;
+
 public class TilePanel extends JPanel {
 	
 	private static final String FOLDER = "res/tiles_/";
 
 	private BufferedImage tileImage;
-	private String type;
+	private TileType type;
 	private int rotation; // in degrees
 
-	TilePanel(String id, int size) {
+	TilePanel(TileType type, int size) {
 		super(true); // enables double buffering
 		this.rotation = 0;
 		this.setPreferredSize(new Dimension(size, size));
-		setType(id);
+		setType(type);
 	}
 
-	public void setType(String id) {
-		this.type = id;
+	public void setType(TileType type) {
+		this.type = type;
 		updateIcon();
 	}
 
-	public String getType() {
+	public TileType getType() {
 		return type;
 	}
 
@@ -52,11 +54,6 @@ public class TilePanel extends JPanel {
 
 	public void setRotation(int rotation) {
 		this.rotation = rotation;
-	}
-	
-	// TODO nur debug
-	public int getRotation() {
-		return rotation;
 	}
 
 }
