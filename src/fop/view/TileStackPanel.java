@@ -31,10 +31,13 @@ public class TileStackPanel extends JPanel implements Observer<TileStack> {
 	 */
 	@Override
 	public void update(TileStack tilestack) {
-		topTile.setType(tilestack.peekTile().getType());
-		topTile.setRotation(tilestack.peekTile().getRotation());
-		topTile.repaint(); // !
 		tileCounter.setText(Integer.toString(tilestack.remainingTiles()) + " tiles left");
+		
+		if (tilestack.remainingTiles() > 0) {
+			topTile.setType(tilestack.peekTile().getType());
+			topTile.setRotation(tilestack.peekTile().getRotation());
+			topTile.repaint(); // !
+		}
 	}
 
 	/**

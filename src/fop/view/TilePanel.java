@@ -14,7 +14,7 @@ import fop.model.TileType;
 
 public class TilePanel extends JPanel {
 	
-	private static final String FOLDER = "res/tiles_/";
+	private static final String FOLDER = "res/tiles/";
 
 	private BufferedImage tileImage;
 	private TileType type;

@@ -33,6 +33,8 @@ public class GameBoardPanel extends JPanel implements Observer<Gameboard> {
 
 		@Override
 		public void update(TileStack ts) {
+			if (ts.remainingTiles() == 0)
+				return;
 			setType(ts.peekTile().getType());
 			setRotation(ts.peekTile().getRotation());
 			repaint();
@@ -60,7 +62,6 @@ public class GameBoardPanel extends JPanel implements Observer<Gameboard> {
 		gbc = new GridBagConstraints();
 
 		tileOverlay = new TileOverlayPanel(FLIPSIDE, scale);
-//		gc.addTileStackObserver(tileOverlay);
 
 		this.addMouseListener(new MouseAdapter() {
 			@Override
@@ -403,6 +404,8 @@ public class GameBoardPanel extends JPanel implements Observer<Gameboard> {
 			Tile newTile = board.getNewestTile();
 			newTile(newTile.getType(), newTile.getRotation(), newTile.x, newTile.y);
 			break;
+		case GAME_OVER:
+			// same behaviour as when PLACING_MEEPLE, so we just omit the break statement
 		case PLACING_MEEPLE:
 			showMeeples(board.getTiles());
 			repaint();

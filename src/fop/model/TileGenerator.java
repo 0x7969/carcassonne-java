@@ -28,7 +28,6 @@ public class TileGenerator {
 		tiles = new LinkedList<Tile>();
 
 		try {
-
 			File tileTypesFile = new File(TILETYPES_FILE_LOCATION);
 			DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newInstance();
 			DocumentBuilder documentBuilder = documentBuilderFactory.newDocumentBuilder();

@@ -25,7 +25,7 @@ public class ToolbarPanel extends JPanel implements Observer<List<Player>> {
 		for (int i = 0; i < players.size(); i++) {
 			playerLabels[i] = new JLabel();
 			playerLabels[i].setBorder(BorderFactory.createTitledBorder(players.get(i).getName()));
-			playerLabels[i].setPreferredSize(new Dimension(100, 65));
+			playerLabels[i].setPreferredSize(new Dimension(80, 65));
 			add(playerLabels[i]);
 		}
 

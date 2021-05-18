@@ -163,6 +163,7 @@ public class GameController extends Observable<List<Player>> {
 			board.calculatePoints(getState());
 			board.push(board);
 			push(players);
+			stack.push(stack);
 			view.getToolbarPanel().hideSkipButton();
 			view.setStatusbar(getWinnersMessage());
 			break;
