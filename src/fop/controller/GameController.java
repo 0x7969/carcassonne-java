@@ -183,8 +183,7 @@ public class GameController extends Observable<List<Player>> {
 			JOptionPane.showMessageDialog(null, winnersMessage);
 			
 			break;
-		case GAME_SCORE:
-			// score anzeigen
+		default:
 			break;
 		}
 	}

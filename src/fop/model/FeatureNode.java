@@ -4,24 +4,9 @@ import fop.base.Node;
 
 public class FeatureNode extends Node<FeatureType> {
 
-	private Direction direction; // TODO not yet used
 	private boolean connectsTiles;
 	private boolean meepleSpot;
 	private Player meeple;
-
-	/**
-	 * Creates a new FeatureNode. It is only present when coming from the given
-	 * direction.
-	 * 
-	 * @param type      The features type.
-	 * @param position  Its position on a tile.
-	 * @param direction The direction in which it is present.
-	 */
-	public FeatureNode(FeatureType type, Direction direction) {
-		super(type);
-		this.direction = direction;
-		this.connectsTiles = false;
-	}
 
 	/**
 	 * Creates a new FeatureNode. It is assumed that the feature is present in both
@@ -32,7 +17,6 @@ public class FeatureNode extends Node<FeatureType> {
 	 */
 	public FeatureNode(FeatureType type) {
 		super(type);
-		this.direction = Direction.BOTH;
 		this.connectsTiles = false;
 	}
 
@@ -61,17 +45,6 @@ public class FeatureNode extends Node<FeatureType> {
 
 	public FeatureType getType() {
 		return getValue();
-	}
-
-	public Direction getDirection() {
-		return direction;
-	}
-
-	public void switchDirection() {
-		if (direction == Direction.BOTH)
-			return;
-		else
-			direction = direction.getOpposite();
 	}
 
 	public void setConnectsTiles() {

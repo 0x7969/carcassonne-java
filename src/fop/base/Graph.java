@@ -42,8 +42,6 @@ public class Graph<T> {
 		return node;
 	}
 
-	// TODO könnte man hier jetzt eigentlich auch ein Node<T> einfügen oder muss es
-	// eine klasse sein, die von Node<T> erbt?
 	public boolean addAllNodes(Collection<? extends Node<T>> nodes) {
 		return this.nodes.addAll(nodes);
 	}

@@ -71,15 +71,6 @@ public class Tile {
 		return nodes.get(p).getType();
 	}
 
-	// TODO unused?
-	public FeatureType featureAtPositionComingFromDirection(Position p, Direction d) {
-		FeatureNode n = nodes.get(p);
-		if (n != null && n.getDirection() == d)
-			return n.getType();
-		else
-			return null;
-	}
-
 	public Collection<FeatureNode> getNodes() {
 		return nodes.values();
 	}
@@ -96,20 +87,6 @@ public class Tile {
 	 */
 	public FeatureNode getNodeAtPosition(Position p) {
 		return nodes.get(p);
-	}
-
-	// TODO unused?
-	public boolean isNodeOnStraightPosition(FeatureNode n) {
-		if (nodes.get(TOP) == n)
-			return true;
-		else if (nodes.get(LEFT) == n)
-			return true;
-		else if (nodes.get(RIGHT) == n)
-			return true;
-		else if (nodes.get(BOTTOM) == n)
-			return true;
-		else
-			return false;
 	}
 
 	/**
@@ -149,10 +126,6 @@ public class Tile {
 				rotatedNodes.put(BOTTOMLEFT, nodes.get(p));
 				break;
 			}
-		}
-
-		for (FeatureNode n : rotatedNodes.values()) {
-			n.switchDirection();
 		}
 
 		nodes = rotatedNodes;

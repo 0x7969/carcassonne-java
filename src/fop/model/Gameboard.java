@@ -36,14 +36,14 @@ public class Gameboard extends Observable<Gameboard> {
 	private Tile newestTile;
 
 	public Gameboard() {
-		board = new Tile[1000][1000]; // TODO variabel je nach anzahl an tiles?
+		board = new Tile[144][144];
 		tiles = new LinkedList<Tile>();
 		graph = new FeatureGraph();
 	}
 
 	// kann nicht im konstrukor erfolgen, weil erst observer gesetzt werden muss
 	public void initGameboard(Tile t) {
-		newTile(t, 500, 500); // TODO variabel je nach anzahl an tiles?
+		newTile(t, 72, 72);
 	}
 
 	public void newTile(Tile t, int x, int y) {
@@ -74,16 +74,6 @@ public class Gameboard extends Observable<Gameboard> {
 		if (board[x][y - 1] != null) {
 			graph.addEdge(board[x][y - 1].getNode(BOTTOM), t.getNode(TOP), 1);
 
-			// If there are two diagonal nodes facing each other on both tiles, it is safe
-			// to say that they are fields and that they will be found on both sides of each
-			// tile (both left and right).
-//			if (board[x][y - 1].getNode(BOTTOMLEFT) != null
-//					&& board[x][y - 1].getNode(BOTTOMLEFT).getDirection() != Direction.X && t.getNode(TOPLEFT) != null
-//					&& t.getNode(TOPLEFT).getDirection() != Direction.X) {
-//				graph.addEdge(board[x][y - 1].getNode(BOTTOMLEFT), t.getNode(TOPLEFT));
-//				graph.addEdge(board[x][y - 1].getNode(BOTTOMRIGHT), t.getNode(TOPRIGHT));
-//			}
-
 			// As we already ensured that the tile on top exists and fits the tile at x, y,
 			// we know that if the feature of its top is a ROAD, the feature at the bottom
 			// of the tile on top is a ROAD aswell. As every ROAD has FIELD nodes as
@@ -99,12 +89,6 @@ public class Gameboard extends Observable<Gameboard> {
 		if (board[x - 1][y] != null) {
 			graph.addEdge(board[x - 1][y].getNode(RIGHT), t.getNode(LEFT), 1);
 
-//			if (board[x - 1][y].getNode(TOPRIGHT) != null
-//					&& board[x - 1][y].getNode(TOPRIGHT).getDirection() != Direction.Y && t.getNode(TOPLEFT) != null
-//					&& t.getNode(TOPLEFT).getDirection() != Direction.Y) {
-//				graph.addEdge(board[x - 1][y].getNode(TOPRIGHT), t.getNode(TOPLEFT));
-//				graph.addEdge(board[x - 1][y].getNode(BOTTOMRIGHT), t.getNode(BOTTOMLEFT));
-//			}
 			if (t.getNode(LEFT).getType() == ROAD) {
 				graph.addEdge(board[x - 1][y].getNode(TOPRIGHT), t.getNode(TOPLEFT), 1);
 				graph.addEdge(board[x - 1][y].getNode(BOTTOMRIGHT), t.getNode(BOTTOMLEFT), 1);
@@ -115,12 +99,6 @@ public class Gameboard extends Observable<Gameboard> {
 		if (board[x + 1][y] != null) {
 			graph.addEdge(board[x + 1][y].getNode(LEFT), t.getNode(RIGHT), 1);
 
-//			if (board[x + 1][y].getNode(TOPLEFT) != null
-//					&& board[x + 1][y].getNode(TOPLEFT).getDirection() != Direction.Y && t.getNode(TOPRIGHT) != null
-//					&& t.getNode(TOPRIGHT).getDirection() != Direction.Y) {
-//				graph.addEdge(board[x + 1][y].getNode(TOPLEFT), t.getNode(TOPRIGHT));
-//				graph.addEdge(board[x + 1][y].getNode(BOTTOMLEFT), t.getNode(BOTTOMRIGHT));
-//			}
 			if (t.getNode(RIGHT).getType() == ROAD) {
 				graph.addEdge(board[x + 1][y].getNode(TOPLEFT), t.getNode(TOPRIGHT), 1);
 				graph.addEdge(board[x + 1][y].getNode(BOTTOMLEFT), t.getNode(BOTTOMRIGHT), 1);
@@ -131,12 +109,6 @@ public class Gameboard extends Observable<Gameboard> {
 		if (board[x][y + 1] != null) {
 			graph.addEdge(board[x][y + 1].getNode(TOP), t.getNode(BOTTOM), 1);
 
-//			if (board[x][y + 1].getNode(TOPLEFT) != null
-//					&& board[x][y + 1].getNode(TOPLEFT).getDirection() != Direction.X && t.getNode(BOTTOMLEFT) != null
-//					&& t.getNode(BOTTOMLEFT).getDirection() != Direction.X) {
-//				graph.addEdge(board[x][y + 1].getNode(TOPLEFT), t.getNode(BOTTOMLEFT));
-//				graph.addEdge(board[x][y + 1].getNode(TOPRIGHT), t.getNode(BOTTOMRIGHT));
-//			}
 			if (t.getNode(BOTTOM).getType() == ROAD) {
 				graph.addEdge(board[x][y + 1].getNode(TOPLEFT), t.getNode(BOTTOMLEFT), 1);
 				graph.addEdge(board[x][y + 1].getNode(TOPRIGHT), t.getNode(BOTTOMRIGHT), 1);
@@ -144,6 +116,15 @@ public class Gameboard extends Observable<Gameboard> {
 		}
 	}
 
+	/**
+	 * Checks if the given tile could be placed at position x, y on the board
+	 * according to the rules.
+	 * 
+	 * @param t The tile
+	 * @param x The x position on the board
+	 * @param y The y position on the board
+	 * @return True if it would be allowed, false if not.
+	 */
 	public boolean isTileAllowed(Tile t, int x, int y) {
 		LOG.finest("Checking if tile would be allowed at cursors position.");
 
@@ -185,6 +166,14 @@ public class Gameboard extends Observable<Gameboard> {
 		return true;
 	}
 
+	/**
+	 * Checks if the given tile would be allowed anywhere on the board adjacent to
+	 * other tiles and according to the rules.
+	 * 
+	 * @param newTile The tile.
+	 * @return True if it is allowed to place the tile somewhere on the board, false
+	 *         if not.
+	 */
 	public boolean isTileAllowedAnywhere(Tile newTile) {
 		for (Tile tile : tiles) {
 			// check top
@@ -220,19 +209,6 @@ public class Gameboard extends Observable<Gameboard> {
 				}
 		}
 		return false;
-	}
-
-	public void calculatePoints(State s) {
-		calculatePoints(ROAD, s);
-		calculatePoints(CASTLE, s);
-		calculatePoints(FIELDS, s);
-		calculateMonasteries(s);
-		// TODO eigentlich müsste man das gar nicht trennen. wir wollen nur wiesen noch
-		// nicht behandeln.
-		// sobald die verbindung/berechnung der wiesen funktioniert, können alle punkte
-		// in einem rutsch berechnet werden
-		// (für die wiese muss dann trotzdem noch zusätzlich die anzahl der berührten
-		// fertigen castles gesammelt werden).
 	}
 
 	/**
@@ -298,6 +274,30 @@ public class Gameboard extends Observable<Gameboard> {
 		}
 	}
 
+	/**
+	 * Calculates points and adds them to the players score, if a feature was
+	 * completed. FIELDS are only calculated when the game is over.
+	 * 
+	 * @param state The current game state.
+	 */
+	public void calculatePoints(State state) {
+		// Fields are only calculated on final scoring.
+		if (state == State.GAME_OVER)
+			calculatePoints(FIELDS, state);
+
+		calculatePoints(CASTLE, state);
+		calculatePoints(ROAD, state);
+		calculateMonasteries(state);
+	}
+
+	/**
+	 * Calculates and adds points to the players that scored a feature. If the given
+	 * state is GAME_OVER, points are added to the player with the most meeple on a
+	 * subgraph, even if it is not completed.
+	 * 
+	 * @param type  The FeatureType that is supposed to be calculated.
+	 * @param state The current game state.
+	 */
 	private void calculatePoints(FeatureType type, State state) {
 		List<Node<FeatureType>> nodeList = new ArrayList<>(graph.getNodes(type));
 		ArrayDeque<Node<FeatureType>> queue = new ArrayDeque<>();
@@ -397,10 +397,21 @@ public class Gameboard extends Observable<Gameboard> {
 		}
 	}
 
+	/**
+	 * Returns all Tiles on the Gameboard.
+	 * 
+	 * @return all Tiles on the Gameboard.
+	 */
 	public List<Tile> getTiles() {
 		return tiles;
 	}
 
+	/**
+	 * Returns the Tile containing the given FeatureNode.
+	 * 
+	 * @param node A FeatureNode.
+	 * @return the Tile containing the given FeatureNode.
+	 */
 	public Tile getTileContainingNode(FeatureNode node) {
 		for (Tile t : tiles) {
 			if (t.containsNode(node))
@@ -434,6 +445,14 @@ public class Gameboard extends Observable<Gameboard> {
 			return null;
 	}
 
+	/**
+	 * Checks if there are any meeple on the subgraph that FeatureNode n is a part
+	 * of.
+	 * 
+	 * @param n The FeatureNode to be checked.
+	 * @return True if the given FeatureNode has any meeple on its subgraph, false
+	 *         if not.
+	 */
 	private boolean hasMeepleOnSubGraph(FeatureNode n) {
 		List<Node<FeatureType>> visitedNodes = new ArrayList<>();
 		ArrayDeque<Node<FeatureType>> queue = new ArrayDeque<>();
@@ -456,10 +475,23 @@ public class Gameboard extends Observable<Gameboard> {
 		return false;
 	}
 
+	/**
+	 * Returns the newest tile.
+	 * 
+	 * @return the newest tile.
+	 */
 	public Tile getNewestTile() {
 		return newestTile;
 	}
 
+	/**
+	 * Places a meeple of given player at given position on the most recently placed
+	 * tile (it is only allowed to place meeple on the most recent tile).
+	 * 
+	 * @param position The position the meeple is supposed to be placed on on the
+	 *                 tile (separated in a 3x3 grid).
+	 * @param player   The owner of the meeple.
+	 */
 	public void placeMeeple(Position position, Player player) {
 		board[newestTile.x][newestTile.y].getNode(position).setPlayer(player);
 		player.removeMeeple();

@@ -60,18 +60,8 @@ public class TileGenerator {
 						Node node = nnl.item(k);
 						NamedNodeMap nodeAttributes = node.getAttributes();
 
-						FeatureNode fn;
-
-						// If a direction is specified, pass it to the constructor, alongside feature
-						// and position
-						if (nodeAttributes.getNamedItem("direction") != null) {
-							fn = new FeatureNode(
-									FeatureType.valueOf(nodeAttributes.getNamedItem("feature").getNodeValue()),
-									Direction.valueOf(nodeAttributes.getNamedItem("direction").getNodeValue()));
-						} else {
-							fn = new FeatureNode(
-									FeatureType.valueOf(nodeAttributes.getNamedItem("feature").getNodeValue()));
-						}
+						FeatureNode fn = new FeatureNode(
+								FeatureType.valueOf(nodeAttributes.getNamedItem("feature").getNodeValue()));
 
 						if (nodeAttributes.getNamedItem("meeplespot") != null
 								&& nodeAttributes.getNamedItem("meeplespot").getNodeValue().equals("true"))

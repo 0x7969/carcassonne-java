@@ -25,6 +25,13 @@ import static fop.model.TileType.FLIPSIDE;
 
 public class GameBoardPanel extends JPanel implements Observer<Gameboard> {
 
+	/**
+	 * This represents a tile that might be placed but was not yet placed, so it is
+	 * only temporarily overlayed. Other than tiles that have already been placed,
+	 * it might still change its rotation. It gets its type and rotation by
+	 * listening to the TileStack (it is always the top tile on the tile stack).
+	 * 
+	 */
 	private class TileOverlayPanel extends TilePanel implements Observer<TileStack> {
 
 		TileOverlayPanel(TileType type, int size) {
@@ -33,8 +40,6 @@ public class GameBoardPanel extends JPanel implements Observer<Gameboard> {
 
 		@Override
 		public void update(TileStack ts) {
-			if (ts.remainingTiles() == 0)
-				return;
 			setType(ts.peekTile().getType());
 			setRotation(ts.peekTile().getRotation());
 			repaint();
@@ -133,6 +138,13 @@ public class GameBoardPanel extends JPanel implements Observer<Gameboard> {
 		});
 	}
 
+	/**
+	 * Adds TilePanels of type FLIPSIDE everywhere around a given position, where
+	 * there is no TilePanel yet.
+	 * 
+	 * @param x coordinate
+	 * @param y coordinate
+	 */
 	private void addSurroundingFlipsides(int x, int y) {
 		gbc.gridy = y;
 		gbc.gridx = x - 1;
@@ -148,27 +160,35 @@ public class GameBoardPanel extends JPanel implements Observer<Gameboard> {
 		gbc.gridy = y - 1;
 		if (!hasTileAt(gbc.gridx, gbc.gridy))
 			add(new TilePanel(FLIPSIDE, scale), gbc);
-		repaint(); // TODO not sure if necessary
 	}
 
-	public TilePanel findTileAt(Point p) {
-		Component c = findComponentAt(p);
-		if (c instanceof TilePanel)
-			return (TilePanel) c;
-		else
-			return null;
-	}
-
+	/**
+	 * Returns the x and y position of a TilePanel in the grid of the GridBagLayout
+	 * as a Point.
+	 * 
+	 * @param t A TilePanel.
+	 * @return A Point representing the x and y position of the given TilePanel.
+	 */
 	private Point getGridPosition(TilePanel t) {
 		return new Point(gbl.getConstraints(t).gridx, gbl.getConstraints(t).gridy);
 	}
 
-	// TODO unused?
+	/**
+	 * Returns the x position of a TilePanel in the grid of the GridBagLayout.
+	 * 
+	 * @param t A TilePanel.
+	 * @return The TilePanels x position.
+	 */
 	private int getGridX(TilePanel t) {
 		return gbl.getConstraints(t).gridx;
 	}
 
-	// TODO unused?
+	/**
+	 * Returns the y position of a TilePanel in the grid of the GridBagLayout.
+	 * 
+	 * @param t A TilePanel.
+	 * @return The TilePanels y position.
+	 */
 	private int getGridY(TilePanel t) {
 		return gbl.getConstraints(t).gridy;
 	}
@@ -185,10 +205,13 @@ public class GameBoardPanel extends JPanel implements Observer<Gameboard> {
 		return scale;
 	}
 
-	//TODO unused?
-	// getComponentAt gibt im Gegensatz zu findComponentAt die unterste/älteste?
-	// tile zurück. kann man sich darauf verlassen?
-	// ist nicht direkt teil der spezifikation...
+	/**
+	 * Returns the TilePanel at a given Point, which is a pixel location relative to
+	 * the GameBoardPanel.
+	 * 
+	 * @param p A pixel coordinate as a Point
+	 * @return The TilePanel at given Point or null, if there is none.
+	 */
 	public TilePanel getTileAt(Point p) {
 		Component c = getComponentAt(p);
 		if (c instanceof TilePanel)
@@ -202,6 +225,11 @@ public class GameBoardPanel extends JPanel implements Observer<Gameboard> {
 				.toArray(TilePanel[]::new);
 	}
 
+	/**
+	 * Returns the currently overlayed TileOverlayPanel or null if there is none.
+	 * 
+	 * @return the currently overlayed TileOverlayPanel or null if there is none.
+	 */
 	public TileOverlayPanel getTileOverlay() {
 		return tileOverlay;
 	}

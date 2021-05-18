@@ -36,41 +36,46 @@ public class GameView extends JPanel {
 		gameBoardPanel = new GameBoardPanel(gc);
 		gameBoardPanelWrapper = new JPanel();
 		gameBoardPanelWrapper.setLayout(null);
-		gameBoardPanel.setBounds(-49950 + gameBoardPanelWrapper.getWidth() / 2,
-				-50000 + gameBoardPanelWrapper.getHeight() / 2, 100000, 100000);
+		gameBoardPanel.setBounds(-72 * 100 + 50 + gameBoardPanelWrapper.getWidth() / 2,
+				-72 * 100 + gameBoardPanelWrapper.getHeight() / 2, 72 * 2 * 100, 72 * 2 * 100);
 		gameBoardPanelWrapper.add(gameBoardPanel);
 		this.add(gameBoardPanelWrapper);
 
 		this.addComponentListener(new ComponentAdapter() {
 			public void componentResized(ComponentEvent e) {
-				gameBoardPanel.setBounds(-49950 + gameBoardPanelWrapper.getWidth() / 2,
-						-50000 + gameBoardPanelWrapper.getHeight() / 2, 100000, 100000);
-
+				// There is a total of 72 tiles so if they were – in a worst case – placed in
+				// one horizontal or vertical line starting from the center it could reach from
+				// -72 to 0 or from 0 to 72 (either in x or y direction). Each tile is 100 pixel
+				// in width and height, so we set the width and height of the board panel to 72
+				// * 2 * 100 and move it relative the the wrappers width and height, so the
+				// board is centered.
+				gameBoardPanel.setBounds(-72 * 100 + 50 + gameBoardPanelWrapper.getWidth() / 2,
+						-72 * 100 + gameBoardPanelWrapper.getHeight() / 2, 72 * 2 * 100, 72 * 2 * 100);
 			}
 		});
-		
+
 		// bottom status bar
 		statusbarPanel = new JTextArea();
 		statusbarPanel.setEditable(false);
 		this.add(statusbarPanel, BorderLayout.SOUTH);
 	}
-	
+
 	public Point getOverlayedTileGridPosition() {
 		return gameBoardPanel.getOverlayedTileGridPosition();
 	}
-	
+
 	public GameBoardPanel getGameBoardPanel() {
 		return gameBoardPanel;
 	}
-	
+
 	public TileStackPanel getTileStackPanel() {
 		return tileStackPanel;
 	}
-	
+
 	public ToolbarPanel getToolbarPanel() {
 		return toolbarPanel;
 	}
-	
+
 	public void setStatusbar(String status) {
 		statusbarPanel.setText(status);
 	}
