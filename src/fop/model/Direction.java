@@ -1,5 +1,6 @@
 package fop.model;
 
+@Deprecated
 public enum Direction {
 	
 	X, Y, BOTH;

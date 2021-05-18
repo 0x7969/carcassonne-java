@@ -115,7 +115,7 @@ public class GameController extends Observable<Player[]> {
 			stackPanel = view.getTileStackPanel();
 			setupListeners();
 			setupObservers();
-			initGameBoard();
+			initGameboard();
 			setState(State.PLACING_TILE);
 			break;
 		case PLACING_TILE:
@@ -124,7 +124,8 @@ public class GameController extends Observable<Player[]> {
 			// According to the rules, a tile that does not fit anywhere is not mixed into
 			// the stack again, but simply discarded.
 			if (!board.isTileAllowedAnywhere(stack.peekTile())) {
-				LOG.info("A tile of type " + stack.peekTile().getType() + " did not have any legal placement options and was discarded.");
+				LOG.info("A tile of type " + stack.peekTile().getType()
+						+ " did not have any legal placement options and was discarded.");
 				stack.discardTopTile();
 			}
 			stack.push(stack); // pushes tile stack to observers (= TileStackPanel)
@@ -137,7 +138,7 @@ public class GameController extends Observable<Player[]> {
 
 			// When the current player does not have any meeple left, go to next round
 			// immediately.
-			if (currentPlayer().getMeeples() == 0) {
+			if (currentPlayer().getMeepleAmount() == 0) {
 				nextRound();
 				break;
 			}
@@ -168,8 +169,11 @@ public class GameController extends Observable<Player[]> {
 		return state;
 	}
 
+	/**
+	 * Set up the listeners listening to user input
+	 */
 	private void setupListeners() {
-		view.getToolbarPanel().addToolbarActionListeners((event) -> {
+		view.getToolbarPanel().addToolbarActionListener((event) -> {
 			switch (event.getActionCommand()) {
 			case "Zum Hauptmenü":
 				setState(State.GAME_MENU);
@@ -181,44 +185,9 @@ public class GameController extends Observable<Player[]> {
 				break;
 			}
 		});
-
-//			view.addMouseListener(new MouseAdapter() {
-//				public void mouseClicked(MouseEvent event) {
-//					if (state == State.PLACING_TILE && view.hasOverlay()) {
-//						if (SwingUtilities.isLeftMouseButton(event)) {
-//							Point p = view.getOverlayedTileGridPosition();
-//							newTile(pickUpTile(), p.x, p.y);
-//							view.repaint(); // !
-//						} else if (SwingUtilities.isRightMouseButton(event)) {
-//							rotateUntilAllowed();
-//						}
-//					} else if (state == State.PLACING_MEEPLE) {
-//						if (SwingUtilities.isLeftMouseButton(event)) {
-//							// place meeple
-//						}
-//					}
-//				}
-//
-//				private void rotateUntilAllowed() {
-//					rotateTopTile();
-//					Point p = view.getOverlayedTileGridPosition();
-//					
-//					for (int i = 0; i < 3; i++) {
-//						if (isTileAllowed(peekTile(), p.x, p.y)) {
-//							view.getOverlayedTile().setRotation(peekTile().getRotation());
-//							view.repaint();
-//							return;
-//						} else {
-//							rotateTopTile();
-//							view.repaint();
-//						}
-//					}
-//				}
-//			});
 	}
 
 	public void nextRound() {
-		System.out.println(stack.remainingTiles());
 		if (stack.remainingTiles() == 0)
 			setState(State.GAME_OVER);
 		else {
@@ -237,7 +206,7 @@ public class GameController extends Observable<Player[]> {
 		board.addObserver(boardPanel);
 	}
 
-	public void initGameBoard() {
+	public void initGameboard() {
 		board.initGameboard(stack.pickUpTile()); // The topmost tile of the tilestack is always the start tile.
 	}
 

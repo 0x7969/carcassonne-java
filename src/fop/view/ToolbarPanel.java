@@ -11,47 +11,66 @@ import fop.model.Player;
 
 public class ToolbarPanel extends JPanel implements Observer<Player[]> {
 
-	JButton quitButton;
+	JButton menuButton;
 	JButton skipButton;
 	JLabel[] playerLabels;
 
 	public ToolbarPanel(Player[] players) {
-//		setBorder(BorderFactory.createTitledBorder("Menu"));
 		setLayout(new FlowLayout(FlowLayout.LEFT));
 
 		playerLabels = new JLabel[players.length];
 		for (int i = 0; i < players.length; i++) {
 			playerLabels[i] = new JLabel(players[i].getName() + " Score:  " + players[i].getScore() + " Meeples: "
-					+ players[i].getMeeples());
+					+ players[i].getMeepleAmount());
 			add(playerLabels[i]);
 		}
 
-		quitButton = new JButton("Zum Hauptmenü");
-		add(quitButton);
+		menuButton = new JButton("Zum Hauptmenü");
+		add(menuButton);
 
 		skipButton = new JButton("Skip");
 		add(skipButton);
 	}
 
-	public void addToolbarActionListeners(ActionListener l) {
-		quitButton.addActionListener(l);
+	/**
+	 * Adds an action listener to the menu and skip buttons.
+	 * 
+	 * @param l The action listener
+	 */
+	public void addToolbarActionListener(ActionListener l) {
+		menuButton.addActionListener(l);
 		skipButton.addActionListener(l);
 	}
 
+	/**
+	 * Reveals the skip button in the top toolbar.
+	 */
 	public void showSkipButton() {
 		skipButton.setVisible(true);
 	}
 
+	/**
+	 * Hides the skip button in the top toolbar.
+	 */
 	public void hideSkipButton() {
 		skipButton.setVisible(false);
 	}
 
-	@Override
-	public void update(Player[] players) {
+	/**
+	 * Updates the current score and meeple count for each player.
+	 * 
+	 * @param players An Array of the players
+	 */
+	private void updatePlayers(Player[] players) {
 		for (int i = 0; i < players.length; i++) {
 			playerLabels[i].setText(players[i].getName() + " Score:  " + players[i].getScore() + " Meeples: "
-					+ players[i].getMeeples());
+					+ players[i].getMeepleAmount());
 		}
+	}
+
+	@Override
+	public void update(Player[] players) {
+		updatePlayers(players);
 	}
 
 }
