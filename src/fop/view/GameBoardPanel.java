@@ -14,10 +14,10 @@ import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 
 import fop.controller.GameController;
-import fop.controller.State;
 import fop.model.Gameboard;
 import fop.model.Player;
 import fop.model.Position;
+import fop.model.State;
 import fop.model.Tile;
 import fop.model.TileStack;
 import fop.model.TileType;

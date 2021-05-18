@@ -1,17 +1,17 @@
 package fop.model;
 
 import static fop.model.FeatureType.CASTLE;
-import static fop.model.FeatureType.ROAD;
-import static fop.model.FeatureType.MONASTERY;
 import static fop.model.FeatureType.FIELDS;
+import static fop.model.FeatureType.MONASTERY;
+import static fop.model.FeatureType.ROAD;
 import static fop.model.Position.BOTTOM;
+import static fop.model.Position.BOTTOMLEFT;
+import static fop.model.Position.BOTTOMRIGHT;
 import static fop.model.Position.LEFT;
 import static fop.model.Position.RIGHT;
 import static fop.model.Position.TOP;
-import static fop.model.Position.TOPRIGHT;
 import static fop.model.Position.TOPLEFT;
-import static fop.model.Position.BOTTOMLEFT;
-import static fop.model.Position.BOTTOMRIGHT;
+import static fop.model.Position.TOPRIGHT;
 
 import java.util.ArrayDeque;
 import java.util.ArrayList;
@@ -22,9 +22,8 @@ import java.util.List;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
-import fop.base.Node;
 import fop.base.Edge;
-import fop.controller.State;
+import fop.base.Node;
 
 public class Gameboard extends Observable<Gameboard> {
 

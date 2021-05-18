@@ -5,7 +5,6 @@ import java.io.IOException;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.logging.ConsoleHandler;
 import java.util.logging.FileHandler;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -21,6 +20,7 @@ import fop.model.MeepleColour;
 import fop.model.Observable;
 import fop.model.Player;
 import fop.model.Position;
+import fop.model.State;
 import fop.model.Tile;
 import fop.model.TileStack;
 import fop.view.GameBoardPanel;
@@ -55,9 +55,7 @@ public class GameController extends Observable<List<Player>> {
 
 		// set up logging
 		LOG.setLevel(Level.FINER);
-		ConsoleHandler consoleHandler = new ConsoleHandler();
-		consoleHandler.setLevel(LOG.getLevel());
-//		LOG.addHandler(consoleHandler);
+
 		try {
 			FileHandler fileHandler = new FileHandler("Game.log");
 			fileHandler.setLevel(LOG.getLevel());
@@ -164,7 +162,7 @@ public class GameController extends Observable<List<Player>> {
 				// Now waiting for user input
 			} else {
 				// If there are no possibilities of placing a meeple, skip to the next round
-				// right away
+				// right away.
 				LOG.info("There was no option for " + currentPlayer().getName()
 						+ " to place a meeple. Going to next round.");
 				nextRound();
@@ -325,9 +323,4 @@ public class GameController extends Observable<List<Player>> {
 	public List<Player> getPlayers() {
 		return players;
 	}
-
-	public static void main(String[] args) {
-		new GameController();
-	}
-
 }

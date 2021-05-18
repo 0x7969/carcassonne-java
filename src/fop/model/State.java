@@ -1,4 +1,4 @@
-package fop.controller;
+package fop.model;
 
 public enum State {
 

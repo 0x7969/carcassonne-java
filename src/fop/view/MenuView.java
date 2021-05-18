@@ -8,7 +8,7 @@ import javax.swing.JButton;
 import javax.swing.JPanel;
 
 import fop.controller.GameController;
-import fop.controller.State;
+import fop.model.State;
 
 public class MenuView extends JPanel {
 
