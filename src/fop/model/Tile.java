@@ -87,6 +87,12 @@ public class Tile {
 		return edges;
 	}
 
+	/**
+	 * Returns the node at given position.
+	 * 
+	 * @param p A Position
+	 * @return The node at given position or null.
+	 */
 	public FeatureNode getNodeAtPosition(Position p) {
 		return nodes.get(p);
 	}
@@ -105,6 +111,10 @@ public class Tile {
 			return false;
 	}
 
+	/**
+	 * Rotates this tile 90 degree to the right and updates the position and
+	 * direction of its nodes accordingly.
+	 */
 	public void rotateRight() {
 		SortedMap<Position, FeatureNode> rotatedNodes = new TreeMap<Position, FeatureNode>();
 
@@ -152,6 +162,11 @@ public class Tile {
 			rotation += 90;
 	}
 
+	/**
+	 * Returns this tiles current rotation in degree.
+	 * 
+	 * @return this tiles current rotation in degree.
+	 */
 	public int getRotation() {
 		return rotation;
 	}
@@ -162,6 +177,11 @@ public class Tile {
 				+ featureAtPosition(BOTTOM) + ", rotation: " + rotation;
 	}
 
+	/**
+	 * Returns if this tile has a pennant.
+	 * 
+	 * @return true if this tile has a pennant, false if not.
+	 */
 	public boolean hasPennant() {
 		return pennant;
 	}

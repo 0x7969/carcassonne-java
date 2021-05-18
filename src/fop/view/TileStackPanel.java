@@ -1,34 +1,42 @@
 package fop.view;
 
+import static fop.model.TileType.FLIPSIDE;
+
+import java.awt.Dimension;
+
 import javax.swing.BorderFactory;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import fop.model.TileStack;
-import static fop.model.TileType.FLIPSIDE;
 
 public class TileStackPanel extends JPanel implements Observer<TileStack> {
 	TilePanel topTile;
 	JLabel tileCounter;
-	
+
 	public TileStackPanel() {
 		setBorder(BorderFactory.createTitledBorder("Stack"));
-		
+		setPreferredSize(new Dimension(120, 400));
+
 		topTile = new TilePanel(FLIPSIDE, 100);
 		add(topTile);
-		
+
 		tileCounter = new JLabel();
 		add(tileCounter);
 	}
 
+	/**
+	 * Updates the type and rotation of the tile stacks top tile and the amount of
+	 * tiles left on the stack.
+	 */
 	@Override
 	public void update(TileStack tilestack) {
 		topTile.setType(tilestack.peekTile().getType());
 		topTile.setRotation(tilestack.peekTile().getRotation());
 		topTile.repaint(); // !
-		tileCounter.setText(Integer.toString(tilestack.remainingTiles()));
+		tileCounter.setText(Integer.toString(tilestack.remainingTiles()) + " tiles left");
 	}
-	
+
 	/**
 	 * Hides the top tile and shows its flipside instead.
 	 */
