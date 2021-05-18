@@ -185,6 +185,7 @@ public class GameBoardPanel extends JPanel implements Observer<Gameboard> {
 		return scale;
 	}
 
+	//TODO unused?
 	// getComponentAt gibt im Gegensatz zu findComponentAt die unterste/älteste?
 	// tile zurück. kann man sich darauf verlassen?
 	// ist nicht direkt teil der spezifikation...

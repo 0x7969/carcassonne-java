@@ -415,19 +415,23 @@ public class Gameboard extends Observable<Gameboard> {
 	 * 
 	 * @return The spots on which it is allowed to place a meeple as a boolean array
 	 *         representing the tile split in nine cells from top left, to right, to
-	 *         bottom right.
+	 *         bottom right. If there is no spot available at all, returns null.
 	 */
 	public boolean[] getMeepleSpots() {
 		boolean[] positions = new boolean[9];
+		boolean anySpot = false; // if there is not a single spot, this remains false
 
 		for (Position p : Position.values()) {
 			FeatureNode n = newestTile.getNodeAtPosition(p);
 			if (n != null)
 				if (n.hasMeepleSpot() && !hasMeepleOnSubGraph(n))
-					positions[p.ordinal()] = true;
+					positions[p.ordinal()] = anySpot = true;
 		}
 
-		return positions;
+		if (anySpot)
+			return positions;
+		else
+			return null;
 	}
 
 	private boolean hasMeepleOnSubGraph(FeatureNode n) {

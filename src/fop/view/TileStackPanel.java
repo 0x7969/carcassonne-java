@@ -43,7 +43,7 @@ public class TileStackPanel extends JPanel implements Observer<TileStack> {
 	/**
 	 * Hides the top tile and shows its flipside instead.
 	 */
-	public void flipTopTile() {
+	public void hideTopTile() {
 		topTile.setType(FLIPSIDE);
 		topTile.setRotation(0);
 		topTile.repaint();
