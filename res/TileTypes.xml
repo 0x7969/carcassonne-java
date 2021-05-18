@@ -3,7 +3,7 @@
 	<!-- Beispielformat
 
 	<tile type="" ammount="" pennant="">
-		<node feature="" position="" direction=""/>
+		<node feature="" position=""/>
 		<edge a="" b=""/>
 	</tile>
 
@@ -11,8 +11,7 @@
 	"pennant" can be true or left out
 	"feature" can be FIELDS, ROAD, CASTLE, MONASTERY
 	"position" can be TOPLEFT, TOP, TOPRIGHT, LEFT, CENTER, RIGHT, BOTTOMLEFT, BOTTOM, BOTTOMRIGHT
-	"direction" can be X, Y or BOTH
-	edge connections positions "a" and "b".
+	edge connects positions "a" and "b".
 
 	-->
 
@@ -21,9 +20,9 @@
 		<node feature="FIELDS" position="LEFT" meeplespot="true"/>
 		<node feature="MONASTERY" position="CENTER" meeplespot="true"/>
 		<node feature="FIELDS" position="RIGHT"/>
-		<node feature="FIELDS" position="BOTTOMLEFT" direction="Y"/>
+		<node feature="FIELDS" position="BOTTOMLEFT"/>
 		<node feature="ROAD" position="BOTTOM" meeplespot="true"/>
-		<node feature="FIELDS" position="BOTTOMRIGHT" direction="Y"/>
+		<node feature="FIELDS" position="BOTTOMRIGHT"/>
 		<edge a="TOP" b="LEFT" />
 		<edge a="TOP" b="RIGHT" />
 		<edge a="LEFT" b="BOTTOMLEFT" />
@@ -52,14 +51,14 @@
 	</tile>
 
 	<tile type="D" ammount="4">
-		<node feature="FIELDS" position="TOPLEFT" direction="X"/>
+		<node feature="FIELDS" position="TOPLEFT"/>
 		<node feature="CASTLE" position="TOP" meeplespot="true"/>
-		<node feature="FIELDS" position="TOPRIGHT" direction="X"/>
+		<node feature="FIELDS" position="TOPRIGHT"/>
 		<node feature="ROAD" position="LEFT" meeplespot="true"/>
 		<node feature="ROAD" position="RIGHT"/>
-		<node feature="FIELDS" position="BOTTOMLEFT" direction="X"/>
+		<node feature="FIELDS" position="BOTTOMLEFT"/>
 		<node feature="FIELDS" position="BOTTOM" meeplespot="true"/>
-		<node feature="FIELDS" position="BOTTOMRIGHT" direction="X"/>
+		<node feature="FIELDS" position="BOTTOMRIGHT"/>
 		<edge a="TOPLEFT" b="TOPRIGHT"/>
 		<edge a="LEFT" b="RIGHT"/>
 		<edge a="BOTTOMLEFT" b="BOTTOM"/>
@@ -109,39 +108,39 @@
 
 	<tile type="J" ammount="3">
 		<node feature="CASTLE" position="TOP" meeplespot="true"/>
-		<node feature="FIELDS" position="TOPRIGHT" direction="X"/>
+		<node feature="FIELDS" position="TOPRIGHT"/>
 		<node feature="FIELDS" position="LEFT" meeplespot="true"/>
 		<node feature="ROAD" position="RIGHT"/>
-		<node feature="FIELDS" position="BOTTOMLEFT" direction="Y"/>
+		<node feature="FIELDS" position="BOTTOMLEFT"/>
 		<node feature="ROAD" position="BOTTOM" meeplespot="true"/>
-		<node feature="FIELDS" position="BOTTOMRIGHT" direction="BOTH" meeplespot="true"/>
+		<node feature="FIELDS" position="BOTTOMRIGHT" meeplespot="true"/>
 		<edge a="TOPRIGHT" b="LEFT"/>
 		<edge a="LEFT" b="BOTTOMLEFT"/>
 		<edge a="BOTTOM" b="RIGHT"/>
 	</tile>
 
 	<tile type="K" ammount="3">
-		<node feature="FIELDS" position="TOPLEFT" direction="X"/>
+		<node feature="FIELDS" position="TOPLEFT"/>
 		<node feature="CASTLE" position="TOP" meeplespot="true"/>
 		<node feature="ROAD" position="LEFT" meeplespot="true"/>
 		<node feature="FIELDS" position="RIGHT" meeplespot="true"/>
-		<node feature="FIELDS" position="BOTTOMLEFT" direction="BOTH" meeplespot="true"/>
+		<node feature="FIELDS" position="BOTTOMLEFT" meeplespot="true"/>
 		<node feature="ROAD" position="BOTTOM"/>
-		<node feature="FIELDS" position="BOTTOMRIGHT" direction="Y"/>
+		<node feature="FIELDS" position="BOTTOMRIGHT"/>
 		<edge a="LEFT" b="BOTTOM"/>
 		<edge a="TOPLEFT" b="RIGHT"/>
 		<edge a="RIGHT" b="BOTTOMRIGHT"/>
 	</tile>
 
 	<tile type="L" ammount="3">
-		<node feature="FIELDS" position="TOPLEFT" direction="X" meeplespot="true"/>
+		<node feature="FIELDS" position="TOPLEFT" meeplespot="true"/>
 		<node feature="CASTLE" position="TOP" meeplespot="true"/>
-		<node feature="FIELDS" position="TOPRIGHT" direction="X"/>
+		<node feature="FIELDS" position="TOPRIGHT"/>
 		<node feature="ROAD" position="LEFT" meeplespot="true"/>
 		<node feature="ROAD" position="RIGHT" meeplespot="true"/>
-		<node feature="FIELDS" position="BOTTOMLEFT" direction="BOTH" meeplespot="true"/>
+		<node feature="FIELDS" position="BOTTOMLEFT" meeplespot="true"/>
 		<node feature="ROAD" position="BOTTOM" meeplespot="true"/>
-		<node feature="FIELDS" position="BOTTOMRIGHT" direction="BOTH" meeplespot="true"/>
+		<node feature="FIELDS" position="BOTTOMRIGHT" meeplespot="true"/>
 		<edge a="TOPLEFT" b="TOPRIGHT"/>
 	</tile>
 
@@ -165,12 +164,12 @@
 
 	<tile type="O" ammount="2" pennant="true">
 		<node feature="CASTLE" position="TOP"/>
-		<node feature="FIELDS" position="TOPRIGHT" direction="X" meeplespot="true"/>
+		<node feature="FIELDS" position="TOPRIGHT" meeplespot="true"/>
 		<node feature="CASTLE" position="LEFT" meeplespot="true"/>
 		<node feature="ROAD" position="RIGHT"/>
-		<node feature="FIELDS" position="BOTTOMLEFT" direction="Y"/>
+		<node feature="FIELDS" position="BOTTOMLEFT"/>
 		<node feature="ROAD" position="BOTTOM" meeplespot="true"/>
-		<node feature="FIELDS" position="BOTTOMRIGHT" direction="BOTH" meeplespot="true"/>
+		<node feature="FIELDS" position="BOTTOMRIGHT" meeplespot="true"/>
 		<edge a="TOP" b="LEFT"/>
 		<edge a="BOTTOMLEFT" b="TOPRIGHT"/>
 		<edge a="BOTTOM" b="RIGHT"/>
@@ -178,12 +177,12 @@
 
 	<tile type="P" ammount="3">
 		<node feature="CASTLE" position="TOP"/>
-		<node feature="FIELDS" position="TOPRIGHT" direction="X" meeplespot="true"/>
+		<node feature="FIELDS" position="TOPRIGHT" meeplespot="true"/>
 		<node feature="CASTLE" position="LEFT" meeplespot="true"/>
 		<node feature="ROAD" position="RIGHT"/>
-		<node feature="FIELDS" position="BOTTOMLEFT" direction="Y"/>
+		<node feature="FIELDS" position="BOTTOMLEFT"/>
 		<node feature="ROAD" position="BOTTOM" meeplespot="true"/>
-		<node feature="FIELDS" position="BOTTOMRIGHT" direction="BOTH" meeplespot="true"/>
+		<node feature="FIELDS" position="BOTTOMRIGHT" meeplespot="true"/>
 		<edge a="TOP" b="LEFT"/>
 		<edge a="BOTTOMLEFT" b="TOPRIGHT"/>
 		<edge a="BOTTOM" b="RIGHT"/>
@@ -211,9 +210,9 @@
 		<node feature="CASTLE" position="TOP"/>
 		<node feature="CASTLE" position="LEFT" meeplespot="true"/>
 		<node feature="CASTLE" position="RIGHT"/>
-		<node feature="FIELDS" position="BOTTOMLEFT" direction="Y" meeplespot="true"/>
+		<node feature="FIELDS" position="BOTTOMLEFT" meeplespot="true"/>
 		<node feature="ROAD" position="BOTTOM" meeplespot="true"/>
-		<node feature="FIELDS" position="BOTTOMRIGHT" direction="Y" meeplespot="true"/>
+		<node feature="FIELDS" position="BOTTOMRIGHT" meeplespot="true"/>
 		<edge a="TOP" b="LEFT"/>
 		<edge a="LEFT" b="RIGHT"/>
 	</tile>
@@ -222,22 +221,22 @@
 		<node feature="CASTLE" position="TOP"/>
 		<node feature="CASTLE" position="LEFT" meeplespot="true"/>
 		<node feature="CASTLE" position="RIGHT"/>
-		<node feature="FIELDS" position="BOTTOMLEFT" direction="Y" meeplespot="true"/>
+		<node feature="FIELDS" position="BOTTOMLEFT" meeplespot="true"/>
 		<node feature="ROAD" position="BOTTOM" meeplespot="true"/>
-		<node feature="FIELDS" position="BOTTOMRIGHT" direction="Y" meeplespot="true"/>
+		<node feature="FIELDS" position="BOTTOMRIGHT" meeplespot="true"/>
 		<edge a="TOP" b="LEFT"/>
 		<edge a="LEFT" b="RIGHT"/>
 	</tile>
 
 	<tile type="U" ammount="8">
-		<node feature="FIELDS" position="TOPLEFT" direction="X"/>
+		<node feature="FIELDS" position="TOPLEFT"/>
 		<node feature="FIELDS" position="TOP" meeplespot="true"/>
-		<node feature="FIELDS" position="TOPRIGHT" direction="X"/>
+		<node feature="FIELDS" position="TOPRIGHT"/>
 		<node feature="ROAD" position="LEFT" meeplespot="true"/>
 		<node feature="ROAD" position="RIGHT"/>
-		<node feature="FIELDS" position="BOTTOMLEFT" direction="X"/>
+		<node feature="FIELDS" position="BOTTOMLEFT"/>
 		<node feature="FIELDS" position="BOTTOM" meeplespot="true"/>
-		<node feature="FIELDS" position="BOTTOMRIGHT" direction="X"/>
+		<node feature="FIELDS" position="BOTTOMRIGHT"/>
 		<edge a="TOPLEFT" b="TOP"/>
 		<edge a="TOP" b="TOPRIGHT"/>
 		<edge a="LEFT" b="RIGHT"/>
@@ -246,13 +245,13 @@
 	</tile>
 
 	<tile type="V" ammount="9">
-		<node feature="FIELDS" position="TOPLEFT" direction="X"/>
+		<node feature="FIELDS" position="TOPLEFT"/>
 		<node feature="FIELDS" position="TOP"/>
 		<node feature="ROAD" position="LEFT" meeplespot="true"/>
 		<node feature="FIELDS" position="RIGHT" meeplespot="true"/>
-		<node feature="FIELDS" position="BOTTOMLEFT" direction="BOTH" meeplespot="true"/>
+		<node feature="FIELDS" position="BOTTOMLEFT" meeplespot="true"/>
 		<node feature="ROAD" position="BOTTOM"/>
-		<node feature="FIELDS" position="BOTTOMRIGHT" direction="Y"/>
+		<node feature="FIELDS" position="BOTTOMRIGHT"/>
 		<edge a="LEFT" b="BOTTOM"/>
 		<edge a="TOPLEFT" b="TOP"/>
 		<edge a="TOP" b="RIGHT"/>
@@ -260,26 +259,26 @@
 	</tile>
 
 	<tile type="W" ammount="4">
-		<node feature="FIELDS" position="TOPLEFT" direction="X"/>
+		<node feature="FIELDS" position="TOPLEFT"/>
 		<node feature="FIELDS" position="TOP" meeplespot="true"/>
-		<node feature="FIELDS" position="TOPRIGHT" direction="X"/>
+		<node feature="FIELDS" position="TOPRIGHT"/>
 		<node feature="ROAD" position="LEFT" meeplespot="true"/>
 		<node feature="ROAD" position="RIGHT" meeplespot="true"/>
-		<node feature="FIELDS" position="BOTTOMLEFT" direction="BOTH" meeplespot="true"/>
+		<node feature="FIELDS" position="BOTTOMLEFT" meeplespot="true"/>
 		<node feature="ROAD" position="BOTTOM" meeplespot="true"/>
-		<node feature="FIELDS" position="BOTTOMRIGHT" direction="BOTH" meeplespot="true"/>
+		<node feature="FIELDS" position="BOTTOMRIGHT" meeplespot="true"/>
 		<edge a="TOPLEFT" b="TOP"/>
 		<edge a="TOP" b="TOPRIGHT"/>
 	</tile>
 
 	<tile type="X" ammount="1">
-		<node feature="FIELDS" position="TOPLEFT" direction="BOTH" meeplespot="true"/>
+		<node feature="FIELDS" position="TOPLEFT" meeplespot="true"/>
 		<node feature="ROAD" position="TOP" meeplespot="true"/>
-		<node feature="FIELDS" position="TOPRIGHT" direction="BOTH" meeplespot="true"/>
+		<node feature="FIELDS" position="TOPRIGHT" meeplespot="true"/>
 		<node feature="ROAD" position="LEFT" meeplespot="true"/>
 		<node feature="ROAD" position="RIGHT" meeplespot="true"/>
-		<node feature="FIELDS" position="BOTTOMLEFT" direction="BOTH" meeplespot="true"/>
+		<node feature="FIELDS" position="BOTTOMLEFT" meeplespot="true"/>
 		<node feature="ROAD" position="BOTTOM" meeplespot="true"/>
-		<node feature="FIELDS" position="BOTTOMRIGHT" direction="BOTH" meeplespot="true"/>
+		<node feature="FIELDS" position="BOTTOMRIGHT" meeplespot="true"/>
 	</tile>
 </tiletypes>
