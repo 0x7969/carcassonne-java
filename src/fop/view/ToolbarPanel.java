@@ -9,6 +9,7 @@ import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.border.TitledBorder;
 
 import fop.model.Player;
 
@@ -24,8 +25,9 @@ public class ToolbarPanel extends JPanel implements Observer<List<Player>> {
 		playerLabels = new JLabel[players.size()];
 		for (int i = 0; i < players.size(); i++) {
 			playerLabels[i] = new JLabel();
-			playerLabels[i].setBorder(BorderFactory.createTitledBorder(players.get(i).getName()));
-			playerLabels[i].setPreferredSize(new Dimension(80, 65));
+			playerLabels[i].setBorder(
+					BorderFactory.createTitledBorder(null, players.get(i).getName(), TitledBorder.DEFAULT_JUSTIFICATION,
+							TitledBorder.DEFAULT_POSITION, null, players.get(i).getColour().getColor()));			playerLabels[i].setPreferredSize(new Dimension(80, 65));
 			add(playerLabels[i]);
 		}
 

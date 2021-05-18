@@ -356,7 +356,7 @@ public class Gameboard extends Observable<Gameboard> {
 				// On final scoring, the castles and pennants only give one point.
 				if (type == CASTLE && state != State.GAME_OVER)
 					score *= 2;
-				
+
 				// In our simple variant of counting every tile with fields, scoring fields
 				// gets rather imbalanced, so we just divide the points for fields by four.
 				if (type == FIELDS)

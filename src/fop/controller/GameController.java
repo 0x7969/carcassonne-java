@@ -144,7 +144,7 @@ public class GameController extends Observable<List<Player>> {
 			// Now waiting for user input
 			break;
 		case PLACING_MEEPLE:
-			LOG.info("Entered PLACING_MEEPLE");
+			LOG.finer("Entered PLACING_MEEPLE");
 
 			// When the current player does not have any meeple left, go to next round
 			// immediately.
@@ -263,7 +263,7 @@ public class GameController extends Observable<List<Player>> {
 	}
 
 	/**
-	 * Go to next round or set state to GAME_OVER (final scoring), when there are no
+	 * Go to next round or set state to GAME_OVER (initiates final scoring), when there are no
 	 * remaining tiles.
 	 */
 	public void nextRound() {
