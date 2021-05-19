@@ -29,14 +29,14 @@ public class Tile {
 	public int x;
 	public int y;
 
-	public Tile(TileType type) {
+	Tile(TileType type) {
 		this.type = type;
 		nodes = new TreeMap<Position, FeatureNode>();
 		edges = new LinkedList<Edge<FeatureType>>();
 		pennant = false;
 	}
 
-	public Tile(TileType type, boolean coatOfArms) {
+	Tile(TileType type, boolean coatOfArms) {
 		this.type = type;
 		nodes = new TreeMap<Position, FeatureNode>();
 		edges = new LinkedList<Edge<FeatureType>>();
@@ -47,15 +47,15 @@ public class Tile {
 		return type;
 	}
 
-	public void addNode(Position position, FeatureNode node) {
+	void addNode(Position position, FeatureNode node) {
 		nodes.put(position, node);
 	}
 
-	public FeatureNode getNode(Position position) {
+	FeatureNode getNode(Position position) {
 		return nodes.get(position);
 	}
 
-	public boolean containsNode(FeatureNode node) {
+	boolean containsNode(FeatureNode node) {
 		for (FeatureNode n : nodes.values()) {
 			if (n == node)
 				return true;
@@ -63,11 +63,11 @@ public class Tile {
 		return false;
 	}
 
-	public boolean addEdge(Edge<FeatureType> edge) {
+	boolean addEdge(Edge<FeatureType> edge) {
 		return edges.add(edge);
 	}
 
-	public FeatureType featureAtPosition(Position p) {
+	FeatureType featureAtPosition(Position p) {
 		return nodes.get(p).getType();
 	}
 
@@ -85,7 +85,7 @@ public class Tile {
 	 * @param p A Position
 	 * @return The node at given position or null.
 	 */
-	public FeatureNode getNodeAtPosition(Position p) {
+	FeatureNode getNodeAtPosition(Position p) {
 		return nodes.get(p);
 	}
 
@@ -93,7 +93,7 @@ public class Tile {
 	 * Rotates this tile 90 degree to the right and updates the position and
 	 * direction of its nodes accordingly.
 	 */
-	public void rotateRight() {
+	void rotateRight() {
 		SortedMap<Position, FeatureNode> rotatedNodes = new TreeMap<Position, FeatureNode>();
 
 		for (Position p : nodes.keySet()) {
@@ -156,7 +156,7 @@ public class Tile {
 	 * 
 	 * @return true if this tile has a pennant, false if not.
 	 */
-	public boolean hasPennant() {
+	boolean hasPennant() {
 		return pennant;
 	}
 

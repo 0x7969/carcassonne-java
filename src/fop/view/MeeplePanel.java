@@ -21,7 +21,7 @@ import fop.model.Position;
  * @author yi
  *
  */
-public class MeeplePanel extends JPanel {
+class MeeplePanel extends JPanel {
 
 	protected static final String FOLDER = "res/meeple/";
 

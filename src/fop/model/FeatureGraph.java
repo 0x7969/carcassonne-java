@@ -3,12 +3,16 @@ package fop.model;
 import fop.base.Edge;
 import fop.base.Graph;
 
-public class FeatureGraph extends Graph<FeatureType> {
+class FeatureGraph extends Graph<FeatureType> {
+	
+	FeatureGraph() {
+		super();
+	}
 
-	public Edge<FeatureType> addEdge(FeatureNode nodeA, FeatureNode nodeB, int weight) {
+	Edge<FeatureType> addEdge(FeatureNode nodeA, FeatureNode nodeB) {
 		nodeA.setConnectsTiles();
 		nodeB.setConnectsTiles();
-		return super.addEdge(nodeA, nodeB, weight);
+		return super.addEdge(nodeA, nodeB);
 	}
 
 }

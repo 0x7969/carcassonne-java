@@ -17,11 +17,6 @@ public class Edge<T> {
         this.nodeA = nodeA;
         this.nodeB = nodeB;
     }
-    
-    public Edge(Node<T> nodeA, Node<T> nodeB, int weight) {
-        this.nodeA = nodeA;
-        this.nodeB = nodeB;
-    }
 
     /**
      * Gibt an, ob die Kante mit dem gegebenen Knoten verbunden ist

@@ -11,8 +11,8 @@ import javax.swing.JPanel;
 import fop.model.TileStack;
 
 public class TileStackPanel extends JPanel implements Observer<TileStack> {
-	TilePanel topTile;
-	JLabel tileCounter;
+	private TilePanel topTile;
+	private JLabel tileCounter;
 
 	public TileStackPanel() {
 		setBorder(BorderFactory.createTitledBorder("Stack"));

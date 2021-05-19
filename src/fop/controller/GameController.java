@@ -25,9 +25,7 @@ import fop.model.Tile;
 import fop.model.TileStack;
 import fop.view.GameBoardPanel;
 import fop.view.GameView;
-import fop.view.GameboardObserver;
 import fop.view.MenuView;
-import fop.view.Observer;
 import fop.view.TileStackPanel;
 
 public class GameController extends Observable<List<Player>> {
@@ -285,7 +283,7 @@ public class GameController extends Observable<List<Player>> {
 		board.addObserver(boardPanel);
 	}
 
-	public void initGameboard() {
+	private void initGameboard() {
 		board.initGameboard(stack.pickUpTile()); // The topmost tile of the tilestack is always the start tile.
 	}
 
@@ -293,7 +291,7 @@ public class GameController extends Observable<List<Player>> {
 		board.newTile(t, x, y);
 	}
 
-	public Tile peekTile() {
+	private Tile peekTile() {
 		return stack.peekTile();
 	}
 
@@ -312,14 +310,6 @@ public class GameController extends Observable<List<Player>> {
 	public void placeMeeple(Position position) {
 		board.placeMeeple(position, currentPlayer());
 		nextRound();
-	}
-
-	public void addGameBoardObserver(GameboardObserver o) {
-		board.addObserver(o);
-	}
-
-	public void addTileStackObserver(Observer<TileStack> o) {
-		stack.addObserver(o);
 	}
 
 	public List<Player> getPlayers() {

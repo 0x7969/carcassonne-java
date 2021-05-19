@@ -59,7 +59,7 @@ public class GameBoardPanel extends JPanel implements Observer<Gameboard> {
 
 	private TemporaryMeepleOverlayPanel tempMeepleOverlay;
 
-	public GameBoardPanel(GameController gc) {
+	GameBoardPanel(GameController gc) {
 		this.gc = gc;
 
 		gbl = new GridBagLayout();
@@ -212,7 +212,7 @@ public class GameBoardPanel extends JPanel implements Observer<Gameboard> {
 	 * @param p A pixel coordinate as a Point
 	 * @return The TilePanel at given Point or null, if there is none.
 	 */
-	public TilePanel getTileAt(Point p) {
+	private TilePanel getTileAt(Point p) {
 		Component c = getComponentAt(p);
 		if (c instanceof TilePanel)
 			return (TilePanel) c;
@@ -232,10 +232,6 @@ public class GameBoardPanel extends JPanel implements Observer<Gameboard> {
 	 */
 	public TileOverlayPanel getTileOverlay() {
 		return tileOverlay;
-	}
-
-	public boolean hasOverlay() {
-		return contains(tileOverlay);
 	}
 
 	/**
@@ -265,7 +261,7 @@ public class GameBoardPanel extends JPanel implements Observer<Gameboard> {
 	 * @param x
 	 * @param y
 	 */
-	public void newTile(TileType type, int rotation, int x, int y) {
+	private void newTile(TileType type, int rotation, int x, int y) {
 		for (TilePanel t : getTiles()) {
 			if (gbl.getConstraints(t).gridx == x)
 				if (gbl.getConstraints(t).gridy == y) {
@@ -328,7 +324,7 @@ public class GameBoardPanel extends JPanel implements Observer<Gameboard> {
 		return tempMeepleOverlay;
 	}
 
-	public MeepleOverlayPanel showMeepleOverlay(boolean[] meepleSpots, int x, int y, Player player) {
+	private MeepleOverlayPanel showMeepleOverlay(boolean[] meepleSpots, int x, int y, Player player) {
 		gbc.gridx = x;
 		gbc.gridy = y;
 		add(new MeepleOverlayPanel(meepleSpots, scale, player), gbc, 0);

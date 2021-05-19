@@ -20,7 +20,7 @@ import fop.model.Position;
  * @author yi
  *
  */
-public class TemporaryMeeplePanel extends MeeplePanel {
+class TemporaryMeeplePanel extends MeeplePanel {
 
 	/**
 	 * A meeple panel without a position is considered not to be a spot to place a

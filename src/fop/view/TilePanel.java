@@ -12,7 +12,7 @@ import javax.swing.JPanel;
 
 import fop.model.TileType;
 
-public class TilePanel extends JPanel {
+class TilePanel extends JPanel {
 	
 	private static final String FOLDER = "res/tiles/";
 

@@ -15,13 +15,13 @@ import org.w3c.dom.NodeList;
 
 import fop.base.Edge;
 
-public class TileGenerator {
+class TileGenerator {
 
 	private List<Tile> tiles;
-	Tile startTile;
+	private Tile startTile;
 
-	static final String TILETYPES_FILE_LOCATION = "res/TileTypes.xml";
-	static final TileType START_TILE_TYPE = TileType.D;
+	private static final String TILETYPES_FILE_LOCATION = "res/TileTypes.xml";
+	private static final TileType START_TILE_TYPE = TileType.D;
 
 	public TileGenerator() {
 

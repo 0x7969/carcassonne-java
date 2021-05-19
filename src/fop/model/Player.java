@@ -36,7 +36,7 @@ public class Player {
 	 * 
 	 * @param score The score to be added.
 	 */
-	public void addScore(int score) {
+	void addScore(int score) {
 		this.score += score;
 	}
 
@@ -61,14 +61,14 @@ public class Player {
 	/**
 	 * Removes one meeple from this players amount of meeple.
 	 */
-	public void removeMeeple() {
+	void removeMeeple() {
 		meeples--;
 	}
 
 	/**
 	 * Adds one meeple to this players amount of meeple.
 	 */
-	public void returnMeeple() {
+	void returnMeeple() {
 		meeples++;
 	}
 

@@ -71,7 +71,7 @@ public class Gameboard extends Observable<Gameboard> {
 
 		// Check top tile
 		if (board[x][y - 1] != null) {
-			graph.addEdge(board[x][y - 1].getNode(BOTTOM), t.getNode(TOP), 1);
+			graph.addEdge(board[x][y - 1].getNode(BOTTOM), t.getNode(TOP));
 
 			// As we already ensured that the tile on top exists and fits the tile at x, y,
 			// we know that if the feature of its top is a ROAD, the feature at the bottom
@@ -79,38 +79,38 @@ public class Gameboard extends Observable<Gameboard> {
 			// neighbours on both sides, we can connect those nodes of the two tiles. The
 			// same logic applies to the next three routines.
 			if (t.getNode(TOP).getType() == ROAD) {
-				graph.addEdge(board[x][y - 1].getNode(BOTTOMLEFT), t.getNode(TOPLEFT), 1);
-				graph.addEdge(board[x][y - 1].getNode(BOTTOMRIGHT), t.getNode(TOPRIGHT), 1);
+				graph.addEdge(board[x][y - 1].getNode(BOTTOMLEFT), t.getNode(TOPLEFT));
+				graph.addEdge(board[x][y - 1].getNode(BOTTOMRIGHT), t.getNode(TOPRIGHT));
 			}
 		}
 
 		// Check left tile
 		if (board[x - 1][y] != null) {
-			graph.addEdge(board[x - 1][y].getNode(RIGHT), t.getNode(LEFT), 1);
+			graph.addEdge(board[x - 1][y].getNode(RIGHT), t.getNode(LEFT));
 
 			if (t.getNode(LEFT).getType() == ROAD) {
-				graph.addEdge(board[x - 1][y].getNode(TOPRIGHT), t.getNode(TOPLEFT), 1);
-				graph.addEdge(board[x - 1][y].getNode(BOTTOMRIGHT), t.getNode(BOTTOMLEFT), 1);
+				graph.addEdge(board[x - 1][y].getNode(TOPRIGHT), t.getNode(TOPLEFT));
+				graph.addEdge(board[x - 1][y].getNode(BOTTOMRIGHT), t.getNode(BOTTOMLEFT));
 			}
 		}
 
 		// Check right tile
 		if (board[x + 1][y] != null) {
-			graph.addEdge(board[x + 1][y].getNode(LEFT), t.getNode(RIGHT), 1);
+			graph.addEdge(board[x + 1][y].getNode(LEFT), t.getNode(RIGHT));
 
 			if (t.getNode(RIGHT).getType() == ROAD) {
-				graph.addEdge(board[x + 1][y].getNode(TOPLEFT), t.getNode(TOPRIGHT), 1);
-				graph.addEdge(board[x + 1][y].getNode(BOTTOMLEFT), t.getNode(BOTTOMRIGHT), 1);
+				graph.addEdge(board[x + 1][y].getNode(TOPLEFT), t.getNode(TOPRIGHT));
+				graph.addEdge(board[x + 1][y].getNode(BOTTOMLEFT), t.getNode(BOTTOMRIGHT));
 			}
 		}
 
 		// Check bottom tile
 		if (board[x][y + 1] != null) {
-			graph.addEdge(board[x][y + 1].getNode(TOP), t.getNode(BOTTOM), 1);
+			graph.addEdge(board[x][y + 1].getNode(TOP), t.getNode(BOTTOM));
 
 			if (t.getNode(BOTTOM).getType() == ROAD) {
-				graph.addEdge(board[x][y + 1].getNode(TOPLEFT), t.getNode(BOTTOMLEFT), 1);
-				graph.addEdge(board[x][y + 1].getNode(TOPRIGHT), t.getNode(BOTTOMRIGHT), 1);
+				graph.addEdge(board[x][y + 1].getNode(TOPLEFT), t.getNode(BOTTOMLEFT));
+				graph.addEdge(board[x][y + 1].getNode(TOPRIGHT), t.getNode(BOTTOMRIGHT));
 			}
 		}
 	}
@@ -416,7 +416,7 @@ public class Gameboard extends Observable<Gameboard> {
 	 * @param node A FeatureNode.
 	 * @return the Tile containing the given FeatureNode.
 	 */
-	public Tile getTileContainingNode(FeatureNode node) {
+	private Tile getTileContainingNode(FeatureNode node) {
 		for (Tile t : tiles) {
 			if (t.containsNode(node))
 				return t;

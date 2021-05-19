@@ -12,7 +12,7 @@ import fop.model.State;
 
 public class MenuView extends JPanel {
 
-	JButton b1;
+	private JButton b1;
 
 	public MenuView(GameController gc) {
 		this.setLayout(new GridBagLayout());
@@ -27,7 +27,7 @@ public class MenuView extends JPanel {
 		
 	}
 
-	public void addActionListener(ActionListener l) {
+	private void addActionListener(ActionListener l) {
 		b1.addActionListener(l);
 	}
 

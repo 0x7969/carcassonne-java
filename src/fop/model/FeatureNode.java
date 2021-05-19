@@ -2,7 +2,7 @@ package fop.model;
 
 import fop.base.Node;
 
-public class FeatureNode extends Node<FeatureType> {
+class FeatureNode extends Node<FeatureType> {
 
 	private boolean connectsTiles;
 	private boolean meepleSpot;
@@ -15,16 +15,16 @@ public class FeatureNode extends Node<FeatureType> {
 	 * @param type     The features type.
 	 * @param position Its position on a tile.
 	 */
-	public FeatureNode(FeatureType type) {
+	FeatureNode(FeatureType type) {
 		super(type);
 		this.connectsTiles = false;
 	}
 
-	public void setMeepleSpot() {
+	void setMeepleSpot() {
 		this.meepleSpot = true;
 	}
 
-	public boolean hasMeepleSpot() {
+	boolean hasMeepleSpot() {
 		return meepleSpot;
 	}
 
@@ -32,7 +32,7 @@ public class FeatureNode extends Node<FeatureType> {
 		meeple = p;
 	}
 
-	public boolean hasMeeple() {
+	boolean hasMeeple() {
 		if (meeple != null)
 			return true;
 		else
@@ -47,7 +47,7 @@ public class FeatureNode extends Node<FeatureType> {
 		return getValue();
 	}
 
-	public void setConnectsTiles() {
+	void setConnectsTiles() {
 		connectsTiles = true;
 	}
 
