@@ -20,7 +20,10 @@ public class ToolbarPanel extends JPanel implements Observer<List<Player>> {
 	private JLabel[] playerLabels;
 
 	ToolbarPanel(List<Player> players) {
-		setLayout(new FlowLayout(FlowLayout.LEFT));
+		setLayout(new FlowLayout(FlowLayout.RIGHT));
+		
+		skipButton = new JButton("Skip");
+		add(skipButton);
 
 		playerLabels = new JLabel[players.size()];
 		for (int i = 0; i < players.size(); i++) {
@@ -32,11 +35,9 @@ public class ToolbarPanel extends JPanel implements Observer<List<Player>> {
 			add(playerLabels[i]);
 		}
 
-		menuButton = new JButton("Zum Hauptmenü");
+		menuButton = new JButton("Main menu");
 		add(menuButton);
 
-		skipButton = new JButton("Skip");
-		add(skipButton);
 	}
 
 	/**

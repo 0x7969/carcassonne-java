@@ -248,12 +248,11 @@ public class GameController extends Observable<List<Player>> {
 	private void setupListeners() {
 		view.getToolbarPanel().addToolbarActionListener((event) -> {
 			switch (event.getActionCommand()) {
-			case "Zum Hauptmenü":
+			case "Main menu":
 				setState(State.GAME_MENU);
 				window.dispose();
 				break;
 			case "Skip":
-				// boardPanel.removeTempMeepleOverlay();
 				nextRound();
 				break;
 			}
