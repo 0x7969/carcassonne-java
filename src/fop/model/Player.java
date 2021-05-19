@@ -1,13 +1,13 @@
 package fop.model;
 
 public class Player {
-	private MeepleColour colour;
+	private MeepleColor color;
 	private String name;
 	private int score;
 	private int meeples; // the amount of meeples
 
-	public Player(String name, MeepleColour colour) {
-		this.colour = colour;
+	public Player(String name, MeepleColor color) {
+		this.color = color;
 		this.name = name;
 		this.score = 0;
 		this.meeples = 7;
@@ -18,8 +18,8 @@ public class Player {
 	 * 
 	 * @return the meeple colour of this player.
 	 */
-	public MeepleColour getColour() {
-		return colour;
+	public MeepleColor getMeepleColor() {
+		return color;
 	}
 
 	/**

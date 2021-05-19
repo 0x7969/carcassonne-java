@@ -1,6 +1,7 @@
 package fop.view;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Point;
 import java.awt.event.ComponentAdapter;
@@ -13,11 +14,11 @@ import fop.controller.GameController;
 
 public class GameView extends JPanel {
 
-	GameBoardPanel gameBoardPanel;
-	JPanel gameBoardPanelWrapper;
-	ToolbarPanel toolbarPanel;
-	TileStackPanel tileStackPanel;
-	JTextArea statusbarPanel;
+	private GameBoardPanel gameBoardPanel;
+	private JPanel gameBoardPanelWrapper;
+	private ToolbarPanel toolbarPanel;
+	private TileStackPanel tileStackPanel;
+	private JTextArea statusbarPanel;
 
 	public GameView(GameController gc) {
 		setLayout(new BorderLayout());
@@ -75,8 +76,13 @@ public class GameView extends JPanel {
 	public ToolbarPanel getToolbarPanel() {
 		return toolbarPanel;
 	}
-
+	
 	public void setStatusbar(String status) {
+		statusbarPanel.setText(status);
+	}
+
+	public void setStatusbar(String status, Color color) {
+		statusbarPanel.setForeground(color);
 		statusbarPanel.setText(status);
 	}
 }

@@ -15,11 +15,11 @@ import fop.model.Player;
 
 public class ToolbarPanel extends JPanel implements Observer<List<Player>> {
 
-	JButton menuButton;
-	JButton skipButton;
-	JLabel[] playerLabels;
+	private JButton menuButton;
+	private JButton skipButton;
+	private JLabel[] playerLabels;
 
-	public ToolbarPanel(List<Player> players) {
+	ToolbarPanel(List<Player> players) {
 		setLayout(new FlowLayout(FlowLayout.LEFT));
 
 		playerLabels = new JLabel[players.size()];
@@ -27,7 +27,7 @@ public class ToolbarPanel extends JPanel implements Observer<List<Player>> {
 			playerLabels[i] = new JLabel();
 			playerLabels[i].setBorder(
 					BorderFactory.createTitledBorder(null, players.get(i).getName(), TitledBorder.DEFAULT_JUSTIFICATION,
-							TitledBorder.DEFAULT_POSITION, null, players.get(i).getColour().getColor()));
+							TitledBorder.DEFAULT_POSITION, null, players.get(i).getMeepleColor().getColor()));
 			playerLabels[i].setPreferredSize(new Dimension(80, 65));
 			add(playerLabels[i]);
 		}

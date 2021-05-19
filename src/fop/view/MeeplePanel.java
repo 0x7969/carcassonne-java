@@ -9,7 +9,7 @@ import java.io.IOException;
 import javax.imageio.ImageIO;
 import javax.swing.JPanel;
 
-import fop.model.MeepleColour;
+import fop.model.MeepleColor;
 import fop.model.Player;
 import fop.model.Position;
 
@@ -27,7 +27,7 @@ public class MeeplePanel extends JPanel {
 
 	protected BufferedImage meepleImage;
 	protected Position position; // the meeple spots position inside the tile its on
-	protected MeepleColour colour;
+	protected MeepleColor colour;
 
 	/**
 	 * A meeple panel without a position is considered not to be a spot to place a
@@ -40,7 +40,7 @@ public class MeeplePanel extends JPanel {
 	MeeplePanel(Position pos, Player player) {
 		this();
 		this.position = pos;
-		this.colour = player.getColour();
+		this.colour = player.getMeepleColor();
 
 		try {
 			meepleImage = ImageIO.read(new File(FOLDER + colour.toString().toLowerCase() + ".png"));

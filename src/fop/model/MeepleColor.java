@@ -2,7 +2,7 @@ package fop.model;
 
 import java.awt.Color;
 
-public enum MeepleColour {
+public enum MeepleColor {
 
 	YELLOW, GREEN, GREY, RED, BLUE, BLACK;
 

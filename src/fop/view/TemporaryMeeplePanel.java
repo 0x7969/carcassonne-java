@@ -33,7 +33,7 @@ public class TemporaryMeeplePanel extends MeeplePanel {
 	TemporaryMeeplePanel(Position pos, Player player) {
 		super();
 		super.position = pos;
-		this.colour = player.getColour();
+		this.colour = player.getMeepleColor();
 
 		try {
 			meepleImage = ImageIO.read(new File(FOLDER + colour.toString().toLowerCase() + "_outline.png"));

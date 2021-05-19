@@ -16,7 +16,7 @@ import javax.swing.JPanel;
 import javax.swing.UIManager;
 
 import fop.model.Gameboard;
-import fop.model.MeepleColour;
+import fop.model.MeepleColor;
 import fop.model.Observable;
 import fop.model.Player;
 import fop.model.Position;
@@ -109,10 +109,10 @@ public class GameController extends Observable<List<Player>> {
 
 			// TODO soll dann vom menu aus gesetzt werden
 			players = new LinkedList<Player>();
-			players.add(new Player("P1", MeepleColour.RED));
-			players.add(new Player("P2", MeepleColour.BLUE));
-			players.add(new Player("P3", MeepleColour.GREEN));
-			
+			players.add(new Player("P1", MeepleColor.RED));
+			players.add(new Player("P2", MeepleColor.BLUE));
+			players.add(new Player("P3", MeepleColor.GREEN));
+
 			board = new Gameboard();
 			stack = new TileStack();
 			view = new GameView(this);
@@ -138,7 +138,8 @@ public class GameController extends Observable<List<Player>> {
 
 			stack.push(stack); // pushes tile stack to observers (= TileStackPanel)
 			view.getToolbarPanel().hideSkipButton();
-			view.setStatusbar("Player " + currentPlayer().getName() + ", please place a tile.");
+			view.setStatusbar("Player " + currentPlayer().getName() + ", please place a tile.",
+					currentPlayer().getMeepleColor().getColor());
 			// Now waiting for user input
 			break;
 		case PLACING_MEEPLE:
@@ -157,8 +158,9 @@ public class GameController extends Observable<List<Player>> {
 				boardPanel.showTemporaryMeepleOverlay(meepleSpots, newestTile.x, newestTile.y, currentPlayer());
 				stackPanel.hideTopTile();
 				view.getToolbarPanel().showSkipButton();
-				view.setStatusbar("Player " + currentPlayer().getName()
-						+ ", please place a meeple or skip (right mouse button).");
+				view.setStatusbar(
+						"Player " + currentPlayer().getName() + ", please place a meeple or skip (right mouse button).",
+						currentPlayer().getMeepleColor().getColor());
 				// Now waiting for user input
 			} else {
 				// If there are no possibilities of placing a meeple, skip to the next round
@@ -174,12 +176,12 @@ public class GameController extends Observable<List<Player>> {
 			push(players);
 			stack.push(stack);
 			view.getToolbarPanel().hideSkipButton();
-			
+
 			// display winners
 			String winnersMessage = getWinnersMessage();
 			view.setStatusbar(winnersMessage);
 			JOptionPane.showMessageDialog(null, winnersMessage);
-			
+
 			break;
 		default:
 			break;
@@ -253,7 +255,7 @@ public class GameController extends Observable<List<Player>> {
 				window.dispose();
 				break;
 			case "Skip":
-				//boardPanel.removeTempMeepleOverlay();
+				// boardPanel.removeTempMeepleOverlay();
 				nextRound();
 				break;
 			}
@@ -261,8 +263,8 @@ public class GameController extends Observable<List<Player>> {
 	}
 
 	/**
-	 * Go to next round or set state to GAME_OVER (initiates final scoring), when there are no
-	 * remaining tiles.
+	 * Go to next round or set state to GAME_OVER (initiates final scoring), when
+	 * there are no remaining tiles.
 	 */
 	public void nextRound() {
 		boardPanel.removeTempMeepleOverlay();
