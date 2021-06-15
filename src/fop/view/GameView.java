@@ -21,6 +21,8 @@ public class GameView extends JPanel {
 	private JTextArea statusbarPanel;
 
 	public GameView(GameController gc) {
+		super(true); // enables double buffering
+		
 		setLayout(new BorderLayout());
 		this.setPreferredSize(new Dimension(1200, 900));
 		// top toolbar

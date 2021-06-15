@@ -33,10 +33,11 @@ class TemporaryMeeplePanel extends MeeplePanel {
 	TemporaryMeeplePanel(Position pos, Player player) {
 		super();
 		super.position = pos;
-		this.colour = player.getMeepleColor();
+		this.color = player.getMeepleColor();
 
 		try {
-			meepleImage = ImageIO.read(new File(FOLDER + colour.toString().toLowerCase() + "_outline.png"));
+			meepleImage = ImageIO
+					.read(getClass().getClassLoader().getResource(FOLDER + color.toString().toLowerCase() + "_outline.png"));
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -50,7 +51,7 @@ class TemporaryMeeplePanel extends MeeplePanel {
 			@Override
 			public void mouseEntered(MouseEvent event) {
 				try {
-					meepleImage = ImageIO.read(new File(FOLDER + colour.toString().toLowerCase() + ".png"));
+					meepleImage = ImageIO.read(getClass().getClassLoader().getResource(FOLDER + color.toString().toLowerCase() + ".png"));
 				} catch (IOException e) {
 					e.printStackTrace();
 				}
@@ -60,7 +61,7 @@ class TemporaryMeeplePanel extends MeeplePanel {
 			@Override
 			public void mouseExited(MouseEvent event) {
 				try {
-					meepleImage = ImageIO.read(new File(FOLDER + colour.toString().toLowerCase() + "_outline.png"));
+					meepleImage = ImageIO.read(getClass().getClassLoader().getResource(FOLDER + color.toString().toLowerCase() + "_outline.png"));
 				} catch (IOException e) {
 					e.printStackTrace();
 				}

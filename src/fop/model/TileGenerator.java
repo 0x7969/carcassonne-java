@@ -1,6 +1,8 @@
 package fop.model;
 
 import java.io.File;
+import java.io.InputStream;
+import java.net.URL;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -20,7 +22,6 @@ class TileGenerator {
 	private List<Tile> tiles;
 	private Tile startTile;
 
-	private static final String TILETYPES_FILE_LOCATION = "res/TileTypes.xml";
 	private static final TileType START_TILE_TYPE = TileType.D;
 
 	public TileGenerator() {
@@ -28,7 +29,7 @@ class TileGenerator {
 		tiles = new LinkedList<Tile>();
 
 		try {
-			File tileTypesFile = new File(TILETYPES_FILE_LOCATION);
+			InputStream tileTypesFile = getClass().getClassLoader().getResourceAsStream("TileTypes.xml");
 			DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newInstance();
 			DocumentBuilder documentBuilder = documentBuilderFactory.newDocumentBuilder();
 			Document document = documentBuilder.parse(tileTypesFile);

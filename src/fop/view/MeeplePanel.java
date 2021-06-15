@@ -22,28 +22,28 @@ import fop.model.Position;
  *
  */
 class MeeplePanel extends JPanel {
-
-	protected static final String FOLDER = "res/meeple/";
+	protected static final String FOLDER = "meeple/";
 
 	protected BufferedImage meepleImage;
 	protected Position position; // the meeple spots position inside the tile its on
-	protected MeepleColor colour;
+	protected MeepleColor color;
 
 	/**
 	 * A meeple panel without a position is considered not to be a spot to place a
 	 * meeple on. It's just an invisible panel using up space.
 	 */
 	MeeplePanel() {
+		super(true); // enables double buffering
 		this.setOpaque(false);
 	}
 
 	MeeplePanel(Position pos, Player player) {
 		this();
 		this.position = pos;
-		this.colour = player.getMeepleColor();
+		this.color = player.getMeepleColor();
 
 		try {
-			meepleImage = ImageIO.read(new File(FOLDER + colour.toString().toLowerCase() + ".png"));
+			meepleImage = ImageIO.read(getClass().getClassLoader().getResource(FOLDER + color.toString().toLowerCase() + ".png"));
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

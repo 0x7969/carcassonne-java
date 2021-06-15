@@ -60,6 +60,7 @@ public class GameBoardPanel extends JPanel implements Observer<Gameboard> {
 	private TemporaryMeepleOverlayPanel tempMeepleOverlay;
 
 	GameBoardPanel(GameController gc) {
+		super(true); // enables double buffering
 		this.gc = gc;
 
 		gbl = new GridBagLayout();

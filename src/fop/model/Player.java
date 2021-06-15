@@ -12,6 +12,10 @@ public class Player {
 		this.score = 0;
 		this.meeples = 7;
 	}
+	
+	public void setMeepleColor(MeepleColor color) {
+		this.color = color;
+	}
 
 	/**
 	 * Returns the meeple colour of this player.
@@ -20,6 +24,10 @@ public class Player {
 	 */
 	public MeepleColor getMeepleColor() {
 		return color;
+	}
+	
+	public void setName(String name) {
+		this.name = name;
 	}
 
 	/**

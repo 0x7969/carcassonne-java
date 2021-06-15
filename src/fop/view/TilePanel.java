@@ -4,7 +4,6 @@ import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
-import java.io.File;
 import java.io.IOException;
 
 import javax.imageio.ImageIO;
@@ -13,8 +12,8 @@ import javax.swing.JPanel;
 import fop.model.TileType;
 
 class TilePanel extends JPanel {
-	
-	private static final String FOLDER = "res/tiles/";
+
+	private static final String FOLDER = "tiles/";
 
 	private BufferedImage tileImage;
 	private TileType type;
@@ -38,7 +37,7 @@ class TilePanel extends JPanel {
 
 	private void updateIcon() {
 		try {
-			tileImage = ImageIO.read(new File(FOLDER + type + ".jpg"));
+			tileImage = ImageIO.read(getClass().getClassLoader().getResourceAsStream(FOLDER + type + ".jpg"));
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

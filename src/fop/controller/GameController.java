@@ -15,8 +15,8 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.UIManager;
 
+import fop.model.Game;
 import fop.model.Gameboard;
-import fop.model.MeepleColor;
 import fop.model.Observable;
 import fop.model.Player;
 import fop.model.Position;
@@ -25,23 +25,23 @@ import fop.model.Tile;
 import fop.model.TileStack;
 import fop.view.GameBoardPanel;
 import fop.view.GameView;
-import fop.view.MenuView;
 import fop.view.TileStackPanel;
+import fop.view.menu.MenuView;
 
 public class GameController extends Observable<List<Player>> {
 
 	private final static Logger LOG = Logger.getLogger("Carcassonne");
 
 	// model
+	private Game game;
 	private State state;
 	private Gameboard board;
 	private TileStack stack;
-	private List<Player> players;
 	private int currentRound;
-
+	
 	// view
 	private JFrame window;
-	private GameView view;
+	private GameView gameView;
 	private GameBoardPanel boardPanel;
 	private TileStackPanel stackPanel;
 
@@ -97,26 +97,25 @@ public class GameController extends Observable<List<Player>> {
 	}
 
 	public void setState(State state) {
+
 		this.state = state;
+
 		switch (state) {
 		case GAME_MENU:
+			window.setResizable(false);
+			game = new Game(this);
 			setView(new MenuView(this));
 			break;
 		case GAME_START:
 			LOG.finer("Entered GAME_START");
-
-			// TODO soll dann vom menu aus gesetzt werden
-			players = new LinkedList<Player>();
-			players.add(new Player("P1", MeepleColor.RED));
-			players.add(new Player("P2", MeepleColor.BLUE));
-			players.add(new Player("P3", MeepleColor.GREEN));
-
+			
 			board = new Gameboard();
 			stack = new TileStack();
-			view = new GameView(this);
-			setView(view);
-			boardPanel = view.getGameBoardPanel();
-			stackPanel = view.getTileStackPanel();
+			gameView = new GameView(this);
+			window.setResizable(true);
+			setView(gameView);
+			boardPanel = gameView.getGameBoardPanel();
+			stackPanel = gameView.getTileStackPanel();
 			setupListeners();
 			setupObservers();
 			initGameboard();
@@ -124,7 +123,7 @@ public class GameController extends Observable<List<Player>> {
 			break;
 		case PLACING_TILE:
 			LOG.finer("Entered PLACING_TILE");
-			push(players); // push players to observers (= ToolbarPanel)
+			push(game.getPlayers()); // push players to observers (= ToolbarPanel)
 
 			// According to the rules, a tile that does not fit anywhere is not mixed into
 			// the stack again, but simply discarded.
@@ -135,8 +134,8 @@ public class GameController extends Observable<List<Player>> {
 			}
 
 			stack.push(stack); // pushes tile stack to observers (= TileStackPanel)
-			view.getToolbarPanel().hideSkipButton();
-			view.setStatusbar("Player " + currentPlayer().getName() + ", please place a tile.",
+			gameView.getToolbarPanel().hideSkipButton();
+			gameView.setStatusbar("Player " + currentPlayer().getName() + ", please place a tile.",
 					currentPlayer().getMeepleColor().getColor());
 			// Now waiting for user input
 			break;
@@ -155,8 +154,8 @@ public class GameController extends Observable<List<Player>> {
 			if (meepleSpots != null) {
 				boardPanel.showTemporaryMeepleOverlay(meepleSpots, newestTile.x, newestTile.y, currentPlayer());
 				stackPanel.hideTopTile();
-				view.getToolbarPanel().showSkipButton();
-				view.setStatusbar(
+				gameView.getToolbarPanel().showSkipButton();
+				gameView.setStatusbar(
 						"Player " + currentPlayer().getName() + ", please place a meeple or skip (right mouse button).",
 						currentPlayer().getMeepleColor().getColor());
 				// Now waiting for user input
@@ -171,13 +170,13 @@ public class GameController extends Observable<List<Player>> {
 		case GAME_OVER:
 			board.calculatePoints(getState());
 			board.push(board);
-			push(players);
+			push(game.getPlayers());
 			stack.push(stack);
-			view.getToolbarPanel().hideSkipButton();
+			gameView.getToolbarPanel().hideSkipButton();
 
 			// display winners
 			String winnersMessage = getWinnersMessage();
-			view.setStatusbar(winnersMessage);
+			gameView.setStatusbar(winnersMessage);
 			JOptionPane.showMessageDialog(null, winnersMessage);
 
 			break;
@@ -194,7 +193,7 @@ public class GameController extends Observable<List<Player>> {
 	private List<Player> getWinners() {
 		List<Player> winners = new LinkedList<Player>();
 		int highestScore = 0;
-		for (Player p : players)
+		for (Player p : game.getPlayers())
 			if (p.getScore() > highestScore) {
 				winners = new LinkedList<Player>();
 				winners.add(p);
@@ -230,7 +229,7 @@ public class GameController extends Observable<List<Player>> {
 	 * @return the player whose turn it is.
 	 */
 	private Player currentPlayer() {
-		return players.get(currentRound % players.size());
+		return game.getPlayers().get(currentRound % game.getPlayers().size());
 	}
 
 	/**
@@ -246,11 +245,10 @@ public class GameController extends Observable<List<Player>> {
 	 * Set up the listeners listening to user input
 	 */
 	private void setupListeners() {
-		view.getToolbarPanel().addToolbarActionListener((event) -> {
+		gameView.getToolbarPanel().addToolbarActionListener((event) -> {
 			switch (event.getActionCommand()) {
 			case "Main menu":
 				setState(State.GAME_MENU);
-				window.dispose();
 				break;
 			case "Skip":
 				nextRound();
@@ -276,7 +274,7 @@ public class GameController extends Observable<List<Player>> {
 	}
 
 	private void setupObservers() {
-		this.addObserver(view.getToolbarPanel());
+		this.addObserver(gameView.getToolbarPanel());
 		stack.addObserver(stackPanel);
 		stack.addObserver(boardPanel.getTileOverlay());
 		board.addObserver(boardPanel);
@@ -312,6 +310,14 @@ public class GameController extends Observable<List<Player>> {
 	}
 
 	public List<Player> getPlayers() {
-		return players;
+		return game.getPlayers();
+	}
+
+	public boolean addPlayer() {
+		return game.addPlayer();
+	}
+	
+	public boolean removePlayer(Player p) {
+		return game.removePlayer(p);
 	}
 }
